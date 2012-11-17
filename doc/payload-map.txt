@@ -1,0 +1,22 @@
+
+payload length: 659 Bytes
+
+
+offset		type	value
+-------------------------------------------------------
+
+0x067		int16	temp1
+0x069		int16	temp2
+0x071		int16	temp3
+0x073		int16	temp4
+0x075		int16	temp5
+0x077		int16	temp6
+0x079		int16	temp7
+0x081		int16	temp8
+
+0x0fb		int16	flow
+
+0x169		int16	fan1 rpm
+0x171		int16	fan2 rpm
+0x179		int16	fan3 rpm
+0x181		int16	fan4 rpm
