@@ -16,17 +16,23 @@
  * along with aerotools-ng. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include "libaquaero5.h"
+#include "libaquaero5.h" 
+*/
+#include "aerocli5.h"
+
 
 typedef enum { M_STD, M_SCRIPT } out_mode_t;
 
 int main(int argc, char *argv[])
 {
+	int	r = EXIT_SUCCESS;
+
 	if (argc < 2) {
 		fprintf(stderr, "%s: insufficient arguments.\n", argv[0]);
 		exit(EXIT_FAILURE);
@@ -43,6 +49,11 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "failed to poll '%s': %s\n", argv[1], strerror(errno));
 		exit(EXIT_FAILURE);
 	}
+
+	if (argc >= 3 && strcmp(argv[2], "--dump") == 0) {
+		printf("Dumping data to %s\n", argv[3]);
+		r = dump_data(argv[3], aquaero_get_buffer());
+	} 
 
 	/* output mode changes format strings */
 	const char *temp_fstr, *fan_fstr, *flow_fstr;;
@@ -76,4 +87,23 @@ int main(int argc, char *argv[])
 	}
 
 	return 0;
+}
+
+int dump_data(char *file, unsigned char *buffer)
+{
+	FILE *fh;
+	
+	if ((fh = fopen(file, "w")) == NULL) {
+		perror(file);
+		return EXIT_FAILURE;
+	}
+	if (fwrite(buffer, 1, AQ5_DATA_LEN, fh) != AQ5_DATA_LEN) {
+		perror(file);
+		fclose(fh);
+		return EXIT_FAILURE;
+	}
+
+	fclose(fh);
+
+	return EXIT_SUCCESS;
 }

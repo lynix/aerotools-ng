@@ -1,6 +1,6 @@
-/* Copyright 2012 lynix <lynix47@gmail.com>
+/* Copyright 2012-2013 lynix <lynix47@gmail.com>
  *
- * This file is part of aerotools-ng.
+ * This file is part of aerotools.
  *
  * aerotools-ng is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,31 +16,20 @@
  * along with aerotools-ng. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBAQUAERO5_H_
-#define LIBAQUAERO5_H_
+#ifndef AEROCLI5_H_
+#define AEROCLI5_H_
 
-#include <stdint.h>
+/* includes */
+#include <stdio.h>
+#include <errno.h>
 #include <string.h>
+#include <stdlib.h>
 
-#define AQ5_NUM_TEMP	8
-#define AQ5_NUM_FAN		4
+#include "libaquaero5.h"
 
-#define AQ_TEMP_UNDEF	-99.0
+/* program name */
+#define PROGN                           "aerocli"
 
-#define AQ5_DATA_LEN	659
+int  dump_data(char *file, unsigned char *buffer);
 
-typedef struct {
-	double		temp[AQ5_NUM_TEMP];
-	uint16_t	fan_rpm[AQ5_NUM_FAN];
-	double		flow;
-} aq5_data_t;
-
-
-int libaquaero5_poll(char *device, aq5_data_t *data_dest);
-
-/* Helpful for debugging */
-unsigned char *aquaero_get_buffer();
-
-uint32_t get_kernel_version();
-
-#endif /* LIBAQUAERO5_H_ */
+#endif /* AEROCLI5_H_ */
