@@ -18,22 +18,6 @@
 
 #include "libaquaero5.h"
 
-/* libs */
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/utsname.h>
-#include <linux/version.h>
-
-/* constats */
-/* #define AQ5_DATA_LEN	659 */
-#define AQ5_TEMP_OFFS	0x067
-#define AQ5_TEMP_DIST	2
-#define AQ5_TEMP_UNDEF	0x7fff
-#define AQ5_FRPM_OFFS	0x169
-#define AQ5_FRPM_DIST	8
-#define AQ5_FLOW_OFFS	0x0fb
 
 unsigned char buffer[AQ5_DATA_LEN];
 
@@ -66,6 +50,13 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 
 	close(fd);
 
+	/* device info */
+	data_dest->serial_major = aq5_get_int(buffer, AQ5_SERIAL_MAJ_OFFS);
+	data_dest->serial_minor = aq5_get_int(buffer, AQ5_SERIAL_MIN_OFFS);
+	data_dest->firmware_version = aq5_get_int(buffer, AQ5_FIRMWARE_VER_OFFS);
+	data_dest->bootloader_version = aq5_get_int(buffer, AQ5_BOOTLOADER_VER_OFFS);
+	data_dest->hardware_version = aq5_get_int(buffer, AQ5_HARDWARE_VER_OFFS);
+
 	/* temperature sensors */
 	int n;
 	for (int i=0; i<AQ5_NUM_TEMP; i++) {
@@ -75,8 +66,12 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 
 	/* fans */
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
-		data_dest->fan_rpm[i] = aq5_get_int(buffer, AQ5_FRPM_OFFS +
-				i * AQ5_FRPM_DIST);
+		n = aq5_get_int(buffer, AQ5_FAN_VRM_OFFS + i * AQ5_FAN_VRM_DIST);
+		data_dest->fan_vrm_temp[i] = n!=AQ5_FAN_VRM_UNDEF ? (double)n/100.0 : AQ_TEMP_UNDEF;
+		data_dest->fan_current[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + i * AQ5_FAN_DIST) / 100.0;
+		data_dest->fan_rpm[i] = aq5_get_int(buffer, AQ5_FAN_OFFS + 2 + i * AQ5_FAN_DIST);
+		data_dest->fan_duty_cycle[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 4 + i * AQ5_FAN_DIST) / 100.0;
+		data_dest->fan_voltage[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 6 + i * AQ5_FAN_DIST) / 100.0;
 	}
 
 	/* flow sensor */
