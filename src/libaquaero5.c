@@ -18,22 +18,6 @@
 
 #include "libaquaero5.h"
 
-/* libs */
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/utsname.h>
-#include <linux/version.h>
-
-/* constats */
-/* #define AQ5_DATA_LEN	659 */
-#define AQ5_TEMP_OFFS	0x067
-#define AQ5_TEMP_DIST	2
-#define AQ5_TEMP_UNDEF	0x7fff
-#define AQ5_FRPM_OFFS	0x169
-#define AQ5_FRPM_DIST	8
-#define AQ5_FLOW_OFFS	0x0fb
 
 unsigned char buffer[AQ5_DATA_LEN];
 

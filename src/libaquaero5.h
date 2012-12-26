@@ -19,15 +19,31 @@
 #ifndef LIBAQUAERO5_H_
 #define LIBAQUAERO5_H_
 
+/* libs */
+#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/utsname.h>
+#include <linux/version.h>
+
+/* constats */
+#define AQ5_DATA_LEN	659
+#define AQ5_TEMP_OFFS   0x067
+#define AQ5_TEMP_DIST   2
+#define AQ5_TEMP_UNDEF  0x7fff
+#define AQ5_FRPM_OFFS   0x169
+#define AQ5_FRPM_DIST   8
+#define AQ5_FLOW_OFFS   0x0fb
+
 
 #define AQ5_NUM_TEMP	8
 #define AQ5_NUM_FAN		4
 
 #define AQ_TEMP_UNDEF	-99.0
 
-#define AQ5_DATA_LEN	659
 
 typedef struct {
 	double		temp[AQ5_NUM_TEMP];
