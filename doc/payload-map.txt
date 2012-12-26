@@ -2,21 +2,137 @@
 payload length: 659 Bytes
 
 
-offset		type	value
+offset		type	value	description
 -------------------------------------------------------
+0x007		int16		S/N prefix
+0x009		int16		S/N suffix
+0x00b		int16		Firmware version
+0x00d		int16		Bootloader version
+0x00f		int16		Hardware version
 
-0x067		int16	temp1
-0x069		int16	temp2
-0x071		int16	temp3
-0x073		int16	temp4
-0x075		int16	temp5
-0x077		int16	temp6
-0x079		int16	temp7
-0x081		int16	temp8
+0x067		int16	temp1	Internal temp sensor 1
+0x069		int16	temp2	Internal temp sensor 2
+0x06b		int16	temp3	Internal temp sensor 3
+0x06d		int16	temp4	Internal temp sensor 4
+0x06f		int16	temp5	Internal temp sensor 5
+0x071		int16	temp6	Internal temp sensor 6
+0x073		int16	temp7	Internal temp sensor 7
+0x075		int16	temp8	Internal temp sensor 8
+
+0x077		int16	temp9	External (aquabus?) temp sensor 9
+0x079		int16	temp10	External (aquabus?) temp sensor 10
+0x07b		int16	temp11	External (aquabus?) temp sensor 11 
+0x07d		int16	temp12	External (aquabus?) temp sensor 12
+0x07f		int16	temp13	External (aquabus?) temp sensor 13
+0x081		int16	temp14	External (aquabus?) temp sensor 14
+0x083		int16	temp15	External (aquabus?) temp sensor 15
+0x085		int16	temp16	External (aquabus?) temp sensor 16
+
+0x087		int16	temp17	External (aquabus?) temp sensor 17
+0x089		int16	temp18	External (aquabus?) temp sensor 18
+0x08b		int16	temp19	External (aquabus?) temp sensor 19
+0x08d		int16	temp20	External (aquabus?) temp sensor 20	
+0x08f		int16	temp21	External (aquabus?) temp sensor 21
+0x091		int16	temp22	External (aquabus?) temp sensor 22
+0x093		int16	temp23	External (aquabus?) temp sensor 23
+0x095		int16	temp24	External (aquabus?) temp sensor 24
+
+0x097		int16	temp25	External (aquabus?) temp sensor 25
+0x099		int16	temp26	External (aquabus?) temp sensor 26
+0x09b		int16	temp27	External (aquabus?) temp sensor 27
+0x09d		int16	temp28	External (aquabus?) temp sensor 28
+0x09f		int16	temp29	External (aquabus?) temp sensor 29
+0x0a1		int16	temp30	External (aquabus?) temp sensor 30
+0x0a3		int16	temp31	External (aquabus?) temp sensor 31
+0x0a5		int16	temp32	External (aquabus?) temp sensor 32
+
+0x0a7		int16	temp33	External (aquabus?) temp sensor 33
+0x0a9		int16	temp34	External (aquabus?) temp sensor 34
+0x0ab		int16	temp35	External (aquabus?) temp sensor 35
+0x0ad		int16	temp36	External (aquabus?) temp sensor 36
+0x0af		int16	temp37	External (aquabus?) temp sensor 37
+0x0b1		int16	temp38	External (aquabus?) temp sensor 38
+0x0b3		int16	temp39	External (aquabus?) temp sensor 39
+0x0b5		int16	temp40	External (aquabus?) temp sensor 40
+
+0x0b7		int16	temp41	External (aquabus?) temp sensor 41
+0x0b9		int16	temp42	External (aquabus?) temp sensor 42
+0x0bb		int16	temp43	External (aquabus?) temp sensor 43
+0x0bd		int16	temp44	External (aquabus?) temp sensor 44
+
+0x0bf		int16		Internal fan VRM temp 1
+0x0c1		int16		Internal fan VRM temp 2
+0x0c3		int16		Internal fan VRM temp 3
+0x0c5		int16		Internal fan VRM temp 4
+
+0x0c7		int16		External (aquabus?) fan VRM temp 5
+0x0c9		int16		External (aquabus?) fan VRM temp 6
+0x0cb		int16		External (aquabus?) fan VRM temp 7
+0x0cd		int16		External (aquabus?) fan VRM temp 8
+0x0cf		int16		External (aquabus?) fan VRM temp 9
+0x0d1		int16		External (aquabus?) fan VRM temp 10
+0x0d3		int16		External (aquabus?) fan VRM temp 11
+0x0d5		int16		External (aquabus?) fan VRM temp 12
 
 0x0fb		int16	flow
 
-0x169		int16	fan1 rpm
-0x171		int16	fan2 rpm
-0x179		int16	fan3 rpm
-0x181		int16	fan4 rpm
+0x167		int16			Internal fan 1 VRM current
+0x169		int16	fan1 rpm	Internal fan 1 RPM
+0x16b		int16			Internal fan 1 Duty cycle
+0x16d		int16			Internal fan 1 Voltage
+
+0x16f		int16			Internal fan 2 VRM current
+0x171		int16	fan2 rpm	Internal fan 2 RPM
+0x173		int16			Internal fan 2 Duty cycle
+0x175		int16			Internal fan 2 Voltage
+
+0x177		int16			Internal fan 3 VRM current
+0x179		int16	fan3 rpm	Internal fan 3 RPM
+0x17b		int16			Internal fan 3 Duty cycle
+0x17d		int16			Internal fan 3 Voltage
+
+0x17f		int16			Internal fan 4 VRM current
+0x181		int16	fan4 rpm	Internal fan 4 RPM
+0x183		int16			Internal fan 4 Duty cycle
+0x185		int16			Internal fan 4 Voltage
+
+0x187		int16			External (aquabus?) fan 5 VRM current
+0x189		int16	fan5 rpm	External (aquabus?) fan 5 RPM
+0x18b		int16			External (aquabus?) fan 5 Duty cycle
+0x18d		int16			External (aquabus?) fan 5 Voltage
+
+0x18f		int16			External (aquabus?) fan 6 VRM current
+0x191		int16	fan6 rpm	External (aquabus?) fan 6 RPM
+0x193		int16			External (aquabus?) fan 6 Duty cycle
+0x195		int16			External (aquabus?) fan 6 Voltage
+
+0x197		int16			External (aquabus?) fan 7 VRM current
+0x199		int16	fan7 rpm	External (aquabus?) fan 7 RPM
+0x19b		int16			External (aquabus?) fan 7 Duty cycle
+0x19d		int16			External (aquabus?) fan 7 Voltage
+
+0x19f		int16			External (aquabus?) fan 8 VRM current
+0x1a1		int16	fan8 rpm	External (aquabus?) fan 8 RPM
+0x1a3		int16			External (aquabus?) fan 8 Duty cycle
+0x1a5		int16			External (aquabus?) fan 8 Voltage
+
+0x1a7		int16			External (aquabus?) fan 9 VRM current
+0x1a9		int16	fan9 rpm	External (aquabus?) fan 9 RPM
+0x1ab		int16			External (aquabus?) fan 9 Duty cycle
+0x1ad		int16			External (aquabus?) fan 9 Voltage
+
+0x1af		int16			External (aquabus?) fan 10 VRM current
+0x1b1		int16	fan10 rpm	External (aquabus?) fan 10 RPM
+0x1b3		int16			External (aquabus?) fan 10 Duty cycle
+0x1b5		int16			External (aquabus?) fan 10 Voltage
+
+0x1b7		int16			External (aquabus?) fan 11 VRM current
+0x1b9		int16	fan11 rpm	External (aquabus?) fan 11 RPM
+0x1bb		int16			External (aquabus?) fan 11 Duty cycle
+0x1bd		int16			External (aquabus?) fan 11 Voltage
+
+0x1bf		int16			External (aquabus?) fan 12 VRM current
+0x1c1		int16	fan12 rpm	External (aquabus?) fan 12 RPM
+0x1c3		int16			External (aquabus?) fan 12 Duty cycle
+0x1c5		int16			External (aquabus?) fan 12 Voltage
+
