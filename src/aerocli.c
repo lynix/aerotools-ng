@@ -16,17 +16,15 @@
  * along with aerotools-ng. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
+#include "aerocli5.h"
 
-#include "libaquaero5.h"
 
 typedef enum { M_STD, M_SCRIPT } out_mode_t;
 
 int main(int argc, char *argv[])
 {
+	int	r = EXIT_SUCCESS;
+
 	if (argc < 2) {
 		fprintf(stderr, "%s: insufficient arguments.\n", argv[0]);
 		exit(EXIT_FAILURE);
@@ -44,18 +42,35 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
+	if (argc >= 3 && strcmp(argv[2], "--dump") == 0) {
+		printf("Dumping data to %s\n", argv[3]);
+		r = dump_data(argv[3], aquaero_get_buffer());
+	} 
+
 	/* output mode changes format strings */
-	const char *temp_fstr, *fan_fstr, *flow_fstr;;
+	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr;;
 
 	switch (out_mode) {
 		case M_STD:
+			printf("Serial number = %d-%d\n", aquaero_data.serial_major, aquaero_data.serial_minor);
+			printf("Firmware version = %d\n", aquaero_data.firmware_version);
+			printf("Bootloader version = %d\n", aquaero_data.bootloader_version);
+			printf("Hardware version = %d\n", aquaero_data.hardware_version);
 			temp_fstr = "temp%d: %2.2f °C\n";
-			fan_fstr = "fan%d: %d rpm\n";
+			fan_vrm_temp_fstr = "fan%d VRM temp: %2.2f °C\n";
+			fan_current_fstr = "fan%d current: %4.2f mA\n";
+			fan_rpm_fstr = "fan%d RPM: %d rpm\n";
+			fan_duty_cycle_fstr = "fan%d duty cycle: %3.2f %%\n";
+			fan_voltage_fstr = "fan%d voltage: %2.2f V\n";
 			flow_fstr = "flow: %3.1f l/h\n";
 			break;
 		case M_SCRIPT:
 			temp_fstr = "TEMP%d=%2.2f\n";
-			fan_fstr = "FAN%d_RPM=%d\n";
+			fan_vrm_temp_fstr = "FAN%d_VRM_TEMP=%2.2f\n";
+			fan_current_fstr = "FAN%d_CURRENT=%4.2f\n";
+			fan_rpm_fstr = "FAN%d_RPM=%d\n";
+			fan_duty_cycle_fstr = "FAN%d_DUTY_CYCLE=%3.2f\n";
+			fan_voltage_fstr = "FAN%d_VOLTAGE=%2.2f\n";
 			flow_fstr = "FLOW=%3.1f\n";
 			break;
 	}
@@ -67,8 +82,15 @@ int main(int argc, char *argv[])
 	}
 
 	if (1) { /* print_fan */
-		for (int n=0; n<AQ5_NUM_FAN; n++)
-			printf(fan_fstr, n+1, aquaero_data.fan_rpm[n]);
+		for (int n=0; n<AQ5_NUM_FAN; n++) {
+			if (aquaero_data.fan_vrm_temp[n] != AQ_TEMP_UNDEF) {
+				printf(fan_vrm_temp_fstr, n+1, aquaero_data.fan_vrm_temp[n]);
+				printf(fan_current_fstr, n+1, aquaero_data.fan_current[n]);
+				printf(fan_rpm_fstr, n+1, aquaero_data.fan_rpm[n]);
+				printf(fan_duty_cycle_fstr, n+1, aquaero_data.fan_duty_cycle[n]);
+				printf(fan_voltage_fstr, n+1, aquaero_data.fan_voltage[n]);
+			}
+		}
 	}
 
 	if (1) { /* print flow */
@@ -76,4 +98,24 @@ int main(int argc, char *argv[])
 	}
 
 	return 0;
+}
+
+/* dump_data() borrowed from original aerotools */
+int dump_data(char *file, unsigned char *buffer)
+{
+	FILE *fh;
+	
+	if ((fh = fopen(file, "w")) == NULL) {
+		perror(file);
+		return EXIT_FAILURE;
+	}
+	if (fwrite(buffer, 1, AQ5_DATA_LEN, fh) != AQ5_DATA_LEN) {
+		perror(file);
+		fclose(fh);
+		return EXIT_FAILURE;
+	}
+
+	fclose(fh);
+
+	return EXIT_SUCCESS;
 }
