@@ -74,8 +74,10 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 		data_dest->fan_voltage[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 6 + i * AQ5_FAN_DIST) / 100.0;
 	}
 
-	/* flow sensor */
-	data_dest->flow = (double)aq5_get_int(buffer, AQ5_FLOW_OFFS) / 10.0;
+	/* flow sensors */
+	for (int i=0; i<AQ5_NUM_FLOW; i++) {
+		data_dest->flow[i] = (double)aq5_get_int(buffer, AQ5_FLOW_OFFS + i * AQ5_FLOW_DIST) / 10.0;
+	}
 
 	return 0;
 }

@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 			fan_rpm_fstr = "fan%d RPM: %d rpm\n";
 			fan_duty_cycle_fstr = "fan%d duty cycle: %3.2f %%\n";
 			fan_voltage_fstr = "fan%d voltage: %2.2f V\n";
-			flow_fstr = "flow: %3.1f l/h\n";
+			flow_fstr = "flow%d: %3.1f l/h\n";
 			break;
 		case M_SCRIPT:
 			temp_fstr = "TEMP%d=%2.2f\n";
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 			fan_rpm_fstr = "FAN%d_RPM=%d\n";
 			fan_duty_cycle_fstr = "FAN%d_DUTY_CYCLE=%3.2f\n";
 			fan_voltage_fstr = "FAN%d_VOLTAGE=%2.2f\n";
-			flow_fstr = "FLOW=%3.1f\n";
+			flow_fstr = "FLOW%d=%3.1f\n";
 			break;
 	}
 
@@ -94,7 +94,9 @@ int main(int argc, char *argv[])
 	}
 
 	if (1) { /* print flow */
-		printf(flow_fstr, aquaero_data.flow);
+		for (int n=0; n<AQ5_NUM_FLOW; n++) {
+			printf(flow_fstr, n+1, aquaero_data.flow[n]);
+		}
 	}
 
 	return 0;

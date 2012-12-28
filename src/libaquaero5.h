@@ -46,10 +46,11 @@
 #define AQ5_FAN_VRM_UNDEF	0x7fff
 
 #define AQ5_FLOW_OFFS	0x0fb
-
+#define AQ5_FLOW_DIST	2
 
 #define AQ5_NUM_TEMP	44
 #define AQ5_NUM_FAN	12
+#define AQ5_NUM_FLOW	14
 
 #define AQ_TEMP_UNDEF	-99.0
 
@@ -65,7 +66,7 @@ typedef struct {
 	double		fan_duty_cycle[AQ5_NUM_FAN];
 	double		fan_voltage[AQ5_NUM_FAN];
 	double		fan_vrm_temp[AQ5_NUM_FAN];
-	double		flow;
+	double		flow[AQ5_NUM_FLOW];
 } aq5_data_t;
 
 
