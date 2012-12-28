@@ -4,11 +4,16 @@ payload length: 659 Bytes
 
 offset		type	value		description
 -------------------------------------------------------
+0x001		int32	current_time	Time in seconds since 1/1/2009 00:00:00 UTC
+
 0x007		int16	serial_major	S/N prefix
 0x009		int16	serial_minor	S/N suffix
 0x00b		int16	firmware_version	Firmware version
 0x00d		int16	bootloader_version	Bootloader version
 0x00f		int16	hardware_version	Hardware version
+
+0x011		int32	uptime		Time in seconds since last restart
+0x015		int32	total_time	Time in seconds since firmware update?
 
 0x067		int16	temp1	Internal temp sensor 1
 0x069		int16	temp2	Internal temp sensor 2
@@ -73,6 +78,8 @@ offset		type	value		description
 0x0d1		int16	fan10 vrm_temp	External (aquabus?) fan VRM temp 10
 0x0d3		int16	fan11 vrm_temp	External (aquabus?) fan VRM temp 11
 0x0d5		int16	fan12 vrm_temp	External (aquabus?) fan VRM temp 12
+
+0x0d7		int16			CPU temp?
 
 0x0fb		int16	flow1		Internal flow sensor 1
 0x0fd		int16	flow2		Internal flow sensor 2
