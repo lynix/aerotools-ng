@@ -74,7 +74,20 @@ offset		type	value		description
 0x0d3		int16	fan11 vrm_temp	External (aquabus?) fan VRM temp 11
 0x0d5		int16	fan12 vrm_temp	External (aquabus?) fan VRM temp 12
 
-0x0fb		int16	flow
+0x0fb		int16	flow1		Internal flow sensor 1
+0x0fd		int16	flow2		Internal flow sensor 2
+0x0ff		int16	flow3		External flow sensor 3
+0x101		int16	flow4		External flow sensor 4
+0x103		int16	flow5		External flow sensor 5
+0x105		int16	flow6		External flow sensor 6
+0x107		int16	flow7		External flow sensor 7
+0x109		int16	flow8		External flow sensor 8
+0x10b		int16	flow9		External flow sensor 9
+0x10d		int16	flow10		External flow sensor 10
+0x10f		int16	flow11		External flow sensor 11
+0x111		int16	flow12		External flow sensor 12
+0x113		int16	flow13		External flow sensor 13
+0x115		int16	flow14		External flow sensor 14
 
 0x167		int16	fan1 current	Internal fan 1 VRM current
 0x169		int16	fan1 rpm	Internal fan 1 RPM
