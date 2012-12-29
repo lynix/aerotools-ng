@@ -52,10 +52,13 @@ int main(int argc, char *argv[])
 
 	switch (out_mode) {
 		case M_STD:
+			printf("Time = %d\n", aquaero_data.current_time);
 			printf("Serial number = %d-%d\n", aquaero_data.serial_major, aquaero_data.serial_minor);
 			printf("Firmware version = %d\n", aquaero_data.firmware_version);
 			printf("Bootloader version = %d\n", aquaero_data.bootloader_version);
 			printf("Hardware version = %d\n", aquaero_data.hardware_version);
+			printf("Uptime = %d\n", aquaero_data.uptime);
+			printf("Total time = %d\n", aquaero_data.total_time);
 			temp_fstr = "temp%d: %2.2f °C\n";
 			fan_vrm_temp_fstr = "fan%d VRM temp: %2.2f °C\n";
 			fan_current_fstr = "fan%d current: %4.2f mA\n";

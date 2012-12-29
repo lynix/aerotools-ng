@@ -26,6 +26,11 @@ inline int aq5_get_int(unsigned char *buffer, short offset)
 	return (buffer[offset] << 8) | buffer[offset + 1];
 }
 
+inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
+{
+	return (buffer[offset] << 24) | (buffer[offset + 1] << 16) | (buffer[offset + 2] << 8) | buffer[offset + 3];
+}
+
 int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 {
 	int fd = open(device, O_RDONLY);
@@ -50,12 +55,19 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 
 	close(fd);
 
+	/* current time */
+	data_dest->current_time = aq5_get_int32(buffer, AQ5_CURRENT_TIME_OFFS);
+
 	/* device info */
 	data_dest->serial_major = aq5_get_int(buffer, AQ5_SERIAL_MAJ_OFFS);
 	data_dest->serial_minor = aq5_get_int(buffer, AQ5_SERIAL_MIN_OFFS);
 	data_dest->firmware_version = aq5_get_int(buffer, AQ5_FIRMWARE_VER_OFFS);
 	data_dest->bootloader_version = aq5_get_int(buffer, AQ5_BOOTLOADER_VER_OFFS);
 	data_dest->hardware_version = aq5_get_int(buffer, AQ5_HARDWARE_VER_OFFS);
+
+	/* operating times */
+	data_dest->uptime = aq5_get_int32(buffer, AQ5_UPTIME_OFFS);
+	data_dest->total_time = aq5_get_int32(buffer, AQ5_TOTAL_TIME_OFFS);
 
 	/* temperature sensors */
 	int n;
