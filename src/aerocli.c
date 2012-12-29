@@ -17,7 +17,7 @@
  */
 
 #include "aerocli5.h"
-
+#include <time.h>
 
 typedef enum { M_STD, M_SCRIPT } out_mode_t;
 
@@ -50,9 +50,19 @@ int main(int argc, char *argv[])
 	/* output mode changes format strings */
 	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr;;
 
+	struct tm aq_time;
+	/* offset time from 00:00:00 1/1/2009 */
+	aq_time.tm_min = 0;
+	aq_time.tm_hour = 0;
+	aq_time.tm_mday = 1;
+	aq_time.tm_mon = 0;
+	aq_time.tm_year = 109; 
+	aq_time.tm_sec = aquaero_data.current_time;
+	mktime(&aq_time);
+
 	switch (out_mode) {
 		case M_STD:
-			printf("Time = %d\n", aquaero_data.current_time);
+			printf("Time = %s\n", asctime(&aq_time));
 			printf("Serial number = %d-%d\n", aquaero_data.serial_major, aquaero_data.serial_minor);
 			printf("Firmware version = %d\n", aquaero_data.firmware_version);
 			printf("Bootloader version = %d\n", aquaero_data.bootloader_version);
@@ -124,3 +134,7 @@ int dump_data(char *file, unsigned char *buffer)
 
 	return EXIT_SUCCESS;
 }
+
+/* Convert the given time Aquaero value to local time
+	if (strftime(datestr, 50, "%A %D %T %z", tmp) == 0) {
+*/
