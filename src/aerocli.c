@@ -50,19 +50,29 @@ int main(int argc, char *argv[])
 	/* output mode changes format strings */
 	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr;;
 
-	struct tm aq_time;
+	struct tm aq_time, *local_aq_time, *systime;
+	time_t aq_time_t, systime_t;
 	/* offset time from 00:00:00 1/1/2009 */
 	aq_time.tm_min = 0;
 	aq_time.tm_hour = 0;
 	aq_time.tm_mday = 1;
 	aq_time.tm_mon = 0;
 	aq_time.tm_year = 109; 
+	aq_time.tm_gmtoff = 0; 
 	aq_time.tm_sec = aquaero_data.current_time;
-	mktime(&aq_time);
+	aq_time_t = mktime(&aq_time);
+
+	/* A klunky way to get the offset for the local time from UTC since mktime doesn't honor gmtoff */
+	time(&systime_t);
+	systime = localtime(&systime_t);
+	aq_time_t += systime->tm_gmtoff; 
+	local_aq_time = localtime(&aq_time_t);
+
 
 	switch (out_mode) {
 		case M_STD:
-			printf("Time = %s\n", asctime(&aq_time));
+			printf("Time (UTC) = %s", asctime(&aq_time));
+			printf("Time (local) = %s", asctime(local_aq_time));
 			printf("Serial number = %d-%d\n", aquaero_data.serial_major, aquaero_data.serial_minor);
 			printf("Firmware version = %d\n", aquaero_data.firmware_version);
 			printf("Bootloader version = %d\n", aquaero_data.bootloader_version);
