@@ -17,7 +17,6 @@
  */
 
 #include "aerocli5.h"
-#include <time.h>
 
 typedef enum { M_STD, M_SCRIPT } out_mode_t;
 
@@ -68,6 +67,11 @@ int main(int argc, char *argv[])
 	aq_time_t += systime->tm_gmtoff; 
 	local_aq_time = localtime(&aq_time_t);
 
+	/* Get the uptimes */
+	uptime_t uptime, total_time;
+
+	get_uptime(aquaero_data.uptime, &uptime);
+	get_uptime(aquaero_data.total_time, &total_time);
 
 	switch (out_mode) {
 		case M_STD:
@@ -77,8 +81,8 @@ int main(int argc, char *argv[])
 			printf("Firmware version = %d\n", aquaero_data.firmware_version);
 			printf("Bootloader version = %d\n", aquaero_data.bootloader_version);
 			printf("Hardware version = %d\n", aquaero_data.hardware_version);
-			printf("Uptime = %d\n", aquaero_data.uptime);
-			printf("Total time = %d\n", aquaero_data.total_time);
+			printf("Uptime = %d days, %d hours, %d minutes, %d seconds\n", uptime.days, uptime.hours, uptime.minutes, uptime.seconds);
+			printf("Total time = %d days, %d hours, %d minutes, %d seconds\n", total_time.days, total_time.hours, total_time.minutes, total_time.seconds);
 			temp_fstr = "temp%d: %2.2f °C\n";
 			fan_vrm_temp_fstr = "fan%d VRM temp: %2.2f °C\n";
 			fan_current_fstr = "fan%d current: %4.2f mA\n";
@@ -143,6 +147,21 @@ int dump_data(char *file, unsigned char *buffer)
 	fclose(fh);
 
 	return EXIT_SUCCESS;
+}
+
+/* get the uptime for the given value in seconds */
+void get_uptime(uint32_t timeval, uptime_t *uptime)
+{
+	uptime->seconds = timeval;
+	uptime->minutes = uptime->seconds / 60;
+	uptime->hours = uptime->minutes / 60;
+	uptime->days = uptime->hours / 24;
+	if (uptime->seconds > 59) 
+		uptime->seconds -= 60 * uptime->minutes;
+	if (uptime->minutes > 59)
+		uptime->minutes -= 60 * uptime->hours;
+	if (uptime->hours > 23)
+		uptime->hours -= 24 * uptime->days;
 }
 
 /* Convert the given time Aquaero value to local time
