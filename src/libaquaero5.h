@@ -43,7 +43,7 @@
 #define AQ5_TEMP_DIST	2
 #define AQ5_TEMP_UNDEF	0x7fff
 
-#define AQ5_FAN_OFFS	0x167
+#define AQ5_FAN_OFFS	0x169
 #define AQ5_FAN_DIST	8
 #define AQ5_FAN_VRM_OFFS	0x0bf
 #define AQ5_FAN_VRM_DIST	2

@@ -80,10 +80,10 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
 		n = aq5_get_int(buffer, AQ5_FAN_VRM_OFFS + i * AQ5_FAN_VRM_DIST);
 		data_dest->fan_vrm_temp[i] = n!=AQ5_FAN_VRM_UNDEF ? (double)n/100.0 : AQ_TEMP_UNDEF;
-		data_dest->fan_current[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + i * AQ5_FAN_DIST) / 100.0;
-		data_dest->fan_rpm[i] = aq5_get_int(buffer, AQ5_FAN_OFFS + 2 + i * AQ5_FAN_DIST);
-		data_dest->fan_duty_cycle[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 4 + i * AQ5_FAN_DIST) / 100.0;
-		data_dest->fan_voltage[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 6 + i * AQ5_FAN_DIST) / 100.0;
+		data_dest->fan_rpm[i] = aq5_get_int(buffer, AQ5_FAN_OFFS + i * AQ5_FAN_DIST);
+		data_dest->fan_duty_cycle[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 2 + i * AQ5_FAN_DIST) / 100.0;
+		data_dest->fan_voltage[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 4 + i * AQ5_FAN_DIST) / 100.0;
+		data_dest->fan_current[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 6 + i * AQ5_FAN_DIST) / 10.0;
 	}
 
 	/* flow sensors */

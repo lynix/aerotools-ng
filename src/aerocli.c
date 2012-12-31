@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 			printf("Total time = %d days, %d hours, %d minutes, %d seconds\n", total_time.days, total_time.hours, total_time.minutes, total_time.seconds);
 			temp_fstr = "temp%d: %2.2f °C\n";
 			fan_vrm_temp_fstr = "fan%d VRM temp: %2.2f °C\n";
-			fan_current_fstr = "fan%d current: %4.2f mA\n";
+			fan_current_fstr = "fan%d current: %4.1f mA\n";
 			fan_rpm_fstr = "fan%d RPM: %d rpm\n";
 			fan_duty_cycle_fstr = "fan%d duty cycle: %3.2f %%\n";
 			fan_voltage_fstr = "fan%d voltage: %2.2f V\n";
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 		case M_SCRIPT:
 			temp_fstr = "TEMP%d=%2.2f\n";
 			fan_vrm_temp_fstr = "FAN%d_VRM_TEMP=%2.2f\n";
-			fan_current_fstr = "FAN%d_CURRENT=%4.2f\n";
+			fan_current_fstr = "FAN%d_CURRENT=%4.1f\n";
 			fan_rpm_fstr = "FAN%d_RPM=%d\n";
 			fan_duty_cycle_fstr = "FAN%d_DUTY_CYCLE=%3.2f\n";
 			fan_voltage_fstr = "FAN%d_VOLTAGE=%2.2f\n";
