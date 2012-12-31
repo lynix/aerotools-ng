@@ -79,7 +79,14 @@ offset		type	value		description
 0x0d3		int16	fan11 vrm_temp	External (aquabus?) fan VRM temp 11
 0x0d5		int16	fan12 vrm_temp	External (aquabus?) fan VRM temp 12
 
-0x0d7		int16			CPU temp?
+0x0d7		int16	cpu1_temp	Internal CPU temp1 
+0x0d9		int16	cpu2_temp	External CPU temp2?
+0x0db		int16	cpu3_temp	External CPU temp3?
+0x0dd		int16	cpu4_temp	External CPU temp4? 
+0x0df		int16	cpu5_temp	External CPU temp5? 
+0x0e1		int16	cpu6_temp	External CPU temp6? 
+0x0e3		int16	cpu7_temp	External CPU temp7? 
+0x0e5		int16	cpu8_temp	External CPU temp8? 
 
 0x0fb		int16	flow1		Internal flow sensor 1
 0x0fd		int16	flow2		Internal flow sensor 2

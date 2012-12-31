@@ -91,6 +91,12 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 		data_dest->flow[i] = (double)aq5_get_int(buffer, AQ5_FLOW_OFFS + i * AQ5_FLOW_DIST) / 10.0;
 	}
 
+	/* CPU temp */
+	for (int i=0; i<AQ5_NUM_CPU; i++) {
+		n = (double)aq5_get_int(buffer, AQ5_CPU_TEMP_OFFS + i * AQ5_CPU_TEMP_DIST);
+		data_dest->cpu_temp[i] = n!=AQ5_TEMP_UNDEF ? (double)n/100.0 : AQ_TEMP_UNDEF;
+	}
+
 	return 0;
 }
 

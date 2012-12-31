@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 	} 
 
 	/* output mode changes format strings */
-	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr;;
+	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr;;
 
 	struct tm aq_time, *local_aq_time, *systime;
 	time_t aq_time_t, systime_t;
@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
 			fan_duty_cycle_fstr = "fan%d duty cycle: %3.2f %%\n";
 			fan_voltage_fstr = "fan%d voltage: %2.2f V\n";
 			flow_fstr = "flow%d: %3.1f l/h\n";
+			cpu_temp_fstr = "CPU%d temp: %2.2f °C\n";
 			break;
 		case M_SCRIPT:
 			temp_fstr = "TEMP%d=%2.2f\n";
@@ -99,6 +100,7 @@ int main(int argc, char *argv[])
 			fan_duty_cycle_fstr = "FAN%d_DUTY_CYCLE=%3.2f\n";
 			fan_voltage_fstr = "FAN%d_VOLTAGE=%2.2f\n";
 			flow_fstr = "FLOW%d=%3.1f\n";
+			cpu_temp_fstr = "CPU%d_TEMP=%2.2f\n";
 			break;
 	}
 
@@ -123,6 +125,13 @@ int main(int argc, char *argv[])
 	if (1) { /* print flow */
 		for (int n=0; n<AQ5_NUM_FLOW; n++) {
 			printf(flow_fstr, n+1, aquaero_data.flow[n]);
+		}
+	}
+
+	if (1) { /* print CPU temp */
+		for (int n=0; n<AQ5_NUM_CPU; n++) {
+			if (aquaero_data.cpu_temp[n] != AQ_TEMP_UNDEF)
+				printf(cpu_temp_fstr, n+1, aquaero_data.cpu_temp[n]);
 		}
 	}
 
