@@ -26,6 +26,11 @@ inline int aq5_get_int(unsigned char *buffer, short offset)
 	return (buffer[offset] << 8) | buffer[offset + 1];
 }
 
+inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
+{
+	return (buffer[offset] << 24) | (buffer[offset + 1] << 16) | (buffer[offset + 2] << 8) | buffer[offset + 3];
+}
+
 int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 {
 	int fd = open(device, O_RDONLY);
@@ -50,12 +55,19 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 
 	close(fd);
 
+	/* current time */
+	data_dest->current_time = aq5_get_int32(buffer, AQ5_CURRENT_TIME_OFFS);
+
 	/* device info */
 	data_dest->serial_major = aq5_get_int(buffer, AQ5_SERIAL_MAJ_OFFS);
 	data_dest->serial_minor = aq5_get_int(buffer, AQ5_SERIAL_MIN_OFFS);
 	data_dest->firmware_version = aq5_get_int(buffer, AQ5_FIRMWARE_VER_OFFS);
 	data_dest->bootloader_version = aq5_get_int(buffer, AQ5_BOOTLOADER_VER_OFFS);
 	data_dest->hardware_version = aq5_get_int(buffer, AQ5_HARDWARE_VER_OFFS);
+
+	/* operating times */
+	data_dest->uptime = aq5_get_int32(buffer, AQ5_UPTIME_OFFS);
+	data_dest->total_time = aq5_get_int32(buffer, AQ5_TOTAL_TIME_OFFS);
 
 	/* temperature sensors */
 	int n;
@@ -68,14 +80,22 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
 		n = aq5_get_int(buffer, AQ5_FAN_VRM_OFFS + i * AQ5_FAN_VRM_DIST);
 		data_dest->fan_vrm_temp[i] = n!=AQ5_FAN_VRM_UNDEF ? (double)n/100.0 : AQ_TEMP_UNDEF;
-		data_dest->fan_current[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + i * AQ5_FAN_DIST) / 100.0;
-		data_dest->fan_rpm[i] = aq5_get_int(buffer, AQ5_FAN_OFFS + 2 + i * AQ5_FAN_DIST);
-		data_dest->fan_duty_cycle[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 4 + i * AQ5_FAN_DIST) / 100.0;
-		data_dest->fan_voltage[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 6 + i * AQ5_FAN_DIST) / 100.0;
+		data_dest->fan_rpm[i] = aq5_get_int(buffer, AQ5_FAN_OFFS + i * AQ5_FAN_DIST);
+		data_dest->fan_duty_cycle[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 2 + i * AQ5_FAN_DIST) / 100.0;
+		data_dest->fan_voltage[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 4 + i * AQ5_FAN_DIST) / 100.0;
+		data_dest->fan_current[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 6 + i * AQ5_FAN_DIST) / 10.0;
 	}
 
-	/* flow sensor */
-	data_dest->flow = (double)aq5_get_int(buffer, AQ5_FLOW_OFFS) / 10.0;
+	/* flow sensors */
+	for (int i=0; i<AQ5_NUM_FLOW; i++) {
+		data_dest->flow[i] = (double)aq5_get_int(buffer, AQ5_FLOW_OFFS + i * AQ5_FLOW_DIST) / 10.0;
+	}
+
+	/* CPU temp */
+	for (int i=0; i<AQ5_NUM_CPU; i++) {
+		n = (double)aq5_get_int(buffer, AQ5_CPU_TEMP_OFFS + i * AQ5_CPU_TEMP_DIST);
+		data_dest->cpu_temp[i] = n!=AQ5_TEMP_UNDEF ? (double)n/100.0 : AQ_TEMP_UNDEF;
+	}
 
 	return 0;
 }
