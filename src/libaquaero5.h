@@ -55,10 +55,14 @@
 #define AQ5_CPU_TEMP_OFFS	0x0d7
 #define AQ5_CPU_TEMP_DIST	2
 
+#define AQ5_LEVEL_OFFS	0x147
+#define AQ5_LEVEL_DIST	2
+
 #define AQ5_NUM_TEMP	44
 #define AQ5_NUM_FAN	12
 #define AQ5_NUM_FLOW	14
 #define AQ5_NUM_CPU	8
+#define AQ5_NUM_LEVEL	4
 
 #define AQ_TEMP_UNDEF	-99.0
 
@@ -79,6 +83,7 @@ typedef struct {
 	double		fan_vrm_temp[AQ5_NUM_FAN];
 	double		flow[AQ5_NUM_FLOW];
 	double		cpu_temp[AQ5_NUM_CPU];
+	double		level[AQ5_NUM_LEVEL];
 } aq5_data_t;
 
 
