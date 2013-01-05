@@ -24,12 +24,22 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "libaquaero5.h"
 
 /* program name */
 #define PROGN                           "aerocli"
 
+typedef struct {
+	uint32_t        days;
+	uint32_t        hours;
+	uint32_t        minutes;
+	uint32_t        seconds;
+} uptime_t;
+
+
 int  dump_data(char *file, unsigned char *buffer);
+void get_uptime(uint32_t timeval, uptime_t *uptime);
 
 #endif /* AEROCLI5_H_ */
