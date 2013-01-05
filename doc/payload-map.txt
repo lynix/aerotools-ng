@@ -103,6 +103,13 @@ offset		type	value		description
 0x113		int16	flow13		External flow sensor 13
 0x115		int16	flow14		External flow sensor 14
 
+0x119		int16			unknown, but this value changes from 0x7fff when a tubemeter is connected 
+
+0x147		int16	level1		Liquid level sensor 1 (tubemeter)
+0x149		int16	level2		Liquid level sensor 2
+0x14b		int16	level3		Liquid level sensor 3
+0x14d		int16	level4		Liquid level sensor 4
+
 0x167		int16			Min display current reading?
 
 0x169		int16	fan1 rpm	Internal fan 1 RPM
