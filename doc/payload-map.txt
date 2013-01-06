@@ -25,28 +25,28 @@ offset		type	value		description
 0x073		int16	temp7	Internal temp sensor 7
 0x075		int16	temp8	Internal temp sensor 8
 
-0x077		int16	temp9	External (aquabus?) temp sensor 9
-0x079		int16	temp10	External (aquabus?) temp sensor 10
-0x07b		int16	temp11	External (aquabus?) temp sensor 11 
-0x07d		int16	temp12	External (aquabus?) temp sensor 12
-0x07f		int16	temp13	External (aquabus?) temp sensor 13
-0x081		int16	temp14	External (aquabus?) temp sensor 14
-0x083		int16	temp15	External (aquabus?) temp sensor 15
-0x085		int16	temp16	External (aquabus?) temp sensor 16
+0x077		int16	temp9	External (aquabus) temp sensor 9
+0x079		int16	temp10	External (aquabus) temp sensor 10
+0x07b		int16	temp11	External (aquabus) temp sensor 11 
+0x07d		int16	temp12	External (aquabus) temp sensor 12
+0x07f		int16	temp13	External (aquabus) temp sensor 13
+0x081		int16	temp14	External (aquabus) temp sensor 14
+0x083		int16	temp15	External (aquabus) temp sensor 15
+0x085		int16	temp16	External (aquabus) temp sensor 16
 
-0x087		int16	temp17	External (aquabus?) temp sensor 17
-0x089		int16	temp18	External (aquabus?) temp sensor 18
-0x08b		int16	temp19	External (aquabus?) temp sensor 19
-0x08d		int16	temp20	External (aquabus?) temp sensor 20	
-0x08f		int16	temp21	External (aquabus?) temp sensor 21
-0x091		int16	temp22	External (aquabus?) temp sensor 22
-0x093		int16	temp23	External (aquabus?) temp sensor 23
-0x095		int16	temp24	External (aquabus?) temp sensor 24
+0x087		int16	temp17	Software temp sensor 1 (17)
+0x089		int16	temp18	Software temp sensor 2 (18)
+0x08b		int16	temp19	Software temp sensor 3 (19)
+0x08d		int16	temp20	Software temp sensor 4 (20)	
+0x08f		int16	temp21	Software temp sensor 5 (21)
+0x091		int16	temp22	Software temp sensor 6 (22)
+0x093		int16	temp23	Software temp sensor 7 (23)
+0x095		int16	temp24	Software temp sensor 8 (24)
 
-0x097		int16	temp25	External (aquabus?) temp sensor 25
-0x099		int16	temp26	External (aquabus?) temp sensor 26
-0x09b		int16	temp27	External (aquabus?) temp sensor 27
-0x09d		int16	temp28	External (aquabus?) temp sensor 28
+0x097		int16	temp25	Virtual temp sensor 1 (25)
+0x099		int16	temp26	Virtual temp sensor 2 (26)
+0x09b		int16	temp27	Virtual temp sensor 3 (27)
+0x09d		int16	temp28	Virtual temp sensor 4 (28)
 0x09f		int16	temp29	External (aquabus?) temp sensor 29
 0x0a1		int16	temp30	External (aquabus?) temp sensor 30
 0x0a3		int16	temp31	External (aquabus?) temp sensor 31
@@ -71,14 +71,14 @@ offset		type	value		description
 0x0c3		int16	fan3 vrm_temp	Internal fan VRM temp 3
 0x0c5		int16	fan4 vrm_temp	Internal fan VRM temp 4
 
-0x0c7		int16	fan5 vrm_temp	External (aquabus?) fan VRM temp 5
-0x0c9		int16	fan6 vrm_temp	External (aquabus?) fan VRM temp 6
-0x0cb		int16	fan7 vrm_temp	External (aquabus?) fan VRM temp 7
-0x0cd		int16	fan8 vrm_temp	External (aquabus?) fan VRM temp 8
-0x0cf		int16	fan9 vrm_temp	External (aquabus?) fan VRM temp 9
-0x0d1		int16	fan10 vrm_temp	External (aquabus?) fan VRM temp 10
-0x0d3		int16	fan11 vrm_temp	External (aquabus?) fan VRM temp 11
-0x0d5		int16	fan12 vrm_temp	External (aquabus?) fan VRM temp 12
+0x0c7		int16	fan5 vrm_temp	External (aquabus) fan VRM temp 5
+0x0c9		int16	fan6 vrm_temp	External (aquabus) fan VRM temp 6
+0x0cb		int16	fan7 vrm_temp	External (aquabus) fan VRM temp 7
+0x0cd		int16	fan8 vrm_temp	External (aquabus) fan VRM temp 8
+0x0cf		int16	fan9 vrm_temp	External (aquabus) fan VRM temp 9
+0x0d1		int16	fan10 vrm_temp	External (aquabus) fan VRM temp 10
+0x0d3		int16	fan11 vrm_temp	External (aquabus) fan VRM temp 11
+0x0d5		int16	fan12 vrm_temp	External (aquabus) fan VRM temp 12
 
 0x0d7		int16	cpu1_temp	Internal CPU temp1 
 0x0d9		int16	cpu2_temp	External CPU temp2?
