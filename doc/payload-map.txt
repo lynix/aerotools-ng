@@ -4,6 +4,7 @@ payload length: 659 Bytes
 
 offset		type	value		description
 -------------------------------------------------------
+0x000		int8			HID report ID (0x01)
 0x001		int32	current_time	Time in seconds since 1/1/2009 00:00:00 UTC
 
 0x007		int16	serial_major	S/N prefix
