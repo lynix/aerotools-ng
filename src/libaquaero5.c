@@ -97,6 +97,11 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 		data_dest->cpu_temp[i] = n!=AQ5_TEMP_UNDEF ? (double)n/100.0 : AQ_TEMP_UNDEF;
 	}
 
+	/* Liquid level sensors */
+	for (int i=0; i<AQ5_NUM_LEVEL; i++) {
+		data_dest->level[i] = (double)aq5_get_int(buffer, AQ5_LEVEL_OFFS + i * AQ5_LEVEL_DIST) / 100.0;
+	}
+
 	return 0;
 }
 
