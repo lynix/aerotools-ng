@@ -22,7 +22,7 @@
 unsigned char buffer[AQ5_DATA_LEN];
 
 /* local functions */ 
-static int aquaero_get_report(int fd, int report_id, unsigned report_type);
+static int aquaero_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data);
 
 inline int aq5_get_int(unsigned char *buffer, short offset)
 {
@@ -56,7 +56,7 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 	hStr.value[0] = 0;
 	ioctl(fd, HIDIOCGSTRING, &hStr);
 	printf("Found '%s'\n", hStr.value);
-	res = aquaero_get_report(fd, 0x1, HID_REPORT_TYPE_INPUT);
+	res = aquaero_get_report(fd, 0x1, HID_REPORT_TYPE_INPUT, buffer);
 	if (res == 0) {
 		close(fd);
 		printf("failed to get report!\n");
@@ -121,7 +121,7 @@ unsigned char *aquaero_get_buffer()
 }
 
 /* Get the specified HID report */
-static int aquaero_get_report(int fd, int report_id, unsigned report_type)
+static int aquaero_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data)
 {
 	struct hiddev_report_info rinfo;
 	struct hiddev_field_info finfo;
@@ -138,7 +138,7 @@ static int aquaero_get_report(int fd, int report_id, unsigned report_type)
 				finfo.field_index = 0; /* There is only one field for the Aquaero reports */
 				ioctl(fd, HIDIOCGFIELDINFO, &finfo);
 				/* Put the report ID into the first byte to be consistant with hidraw */
-				buffer[0] = report_id;
+				report_data[0] = report_id;
 				/* printf("Max usage is %d\n", finfo.maxusage); */
 				for (j = 0; j < finfo.maxusage; j++) {
 					uref.report_type = finfo.report_type;
@@ -149,7 +149,7 @@ static int aquaero_get_report(int fd, int report_id, unsigned report_type)
 					ioctl(fd, HIDIOCGUCODE, &uref);
 					/* fetch the value from report */
 					ioctl(fd, HIDIOCGUSAGE, &uref);
-					buffer[j+1] = uref.value;
+					report_data[j+1] = uref.value;
 				}
 			}
 	return j;
