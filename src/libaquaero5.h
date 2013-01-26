@@ -27,9 +27,11 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
+#include <sys/ioctl.h>
 #include <linux/version.h>
+#include <linux/hiddev.h>
 
-/* constats */
+/* constants */
 #define AQ5_DATA_LEN	659
 #define AQ5_CURRENT_TIME_OFFS	0x001
 #define AQ5_SERIAL_MAJ_OFFS	0x007
@@ -91,7 +93,5 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest);
 
 /* Helpful for debugging */
 unsigned char *aquaero_get_buffer();
-
-uint32_t get_kernel_version();
 
 #endif /* LIBAQUAERO5_H_ */
