@@ -20,6 +20,7 @@
 
 
 unsigned char buffer[AQ5_DATA_LEN];
+unsigned char settings_buf[AQ5_SETTINGS_LEN];
 
 /* local functions */ 
 static int aquaero_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data);
@@ -32,6 +33,52 @@ inline int aq5_get_int(unsigned char *buffer, short offset)
 inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
 {
 	return (buffer[offset] << 24) | (buffer[offset + 1] << 16) | (buffer[offset + 2] << 8) | buffer[offset + 3];
+}
+
+int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest)
+{
+	int fd = open(device, O_RDONLY);
+	int res;
+	struct hiddev_devinfo dinfo;
+	struct hiddev_string_descriptor hStr;
+
+	if (fd < 0)
+		return -1;
+
+	ioctl(fd, HIDIOCGDEVINFO, &dinfo);
+	/* printf("HID: vendor 0x%x product 0x%x(0x%x) version 0x%x\n", dinfo.vendor, dinfo.product & 0xffff, dinfo.product, dinfo.version); */
+	if ((dinfo.vendor != 0xc70) || ((dinfo.product & 0xffff) != 0xf001)) {
+		printf("No Aquaero 5 found on %s\n", device);
+		close(fd);
+		return -1;
+	}
+
+	hStr.index = 2; /* Vendor = 1, Product = 2 */
+	hStr.value[0] = 0;
+	ioctl(fd, HIDIOCGSTRING, &hStr);
+	printf("Found '%s'\n", hStr.value);
+	res = aquaero_get_report(fd, 0xB, HID_REPORT_TYPE_FEATURE, settings_buf);
+	if (res == 0) {
+		close(fd);
+		printf("failed to get report!\n");
+		return -1;	
+	}
+	close(fd);
+
+	/* fan settings */
+	for (int i=0; i<AQ5_NUM_FAN; i++) {
+		settings_dest->fan_min_rpm[i] = aq5_get_int(settings_buf, AQ5_SETTINGS_FAN_OFFS + i * AQ5_SETTINGS_FAN_DIST);
+		settings_dest->fan_max_rpm[i] = aq5_get_int(settings_buf, AQ5_SETTINGS_FAN_OFFS + 2 + i * AQ5_SETTINGS_FAN_DIST);
+		settings_dest->fan_min_duty_cycle[i] = (double)aq5_get_int(settings_buf, AQ5_SETTINGS_FAN_OFFS + 4 + i * AQ5_SETTINGS_FAN_DIST) /100.0;
+		settings_dest->fan_max_duty_cycle[i] = (double)aq5_get_int(settings_buf, AQ5_SETTINGS_FAN_OFFS + 6 + i * AQ5_SETTINGS_FAN_DIST) /100.0;
+		settings_dest->fan_startboost_duty_cycle[i] = (double)aq5_get_int(settings_buf, AQ5_SETTINGS_FAN_OFFS + 8 + i * AQ5_SETTINGS_FAN_DIST) /100.0;
+		settings_dest->fan_startboost_duration[i] = aq5_get_int(settings_buf, AQ5_SETTINGS_FAN_OFFS + 10 + i * AQ5_SETTINGS_FAN_DIST);
+		settings_dest->fan_pulses_per_revolution[i] = aq5_get_int(settings_buf, AQ5_SETTINGS_FAN_OFFS + 12 + i * AQ5_SETTINGS_FAN_DIST);
+		/* two unknowns */
+		settings_dest->fan_programmable_fuse[i] = aq5_get_int(settings_buf, AQ5_SETTINGS_FAN_OFFS + 18 + i * AQ5_SETTINGS_FAN_DIST);
+	}
+
+	return 0;
 }
 
 int libaquaero5_poll(char *device, aq5_data_t *data_dest)
@@ -115,10 +162,17 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 }
 
 /* Return the raw buffer data */
-unsigned char *aquaero_get_buffer()
+unsigned char *aquaero_get_data_buffer()
 {
 	return buffer;
 }
+
+/* Return the raw settings buffer data */
+unsigned char *aquaero_get_settings_buffer()
+{
+	return settings_buf;
+}
+
 
 /* Get the specified HID report */
 static int aquaero_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data)
@@ -134,7 +188,6 @@ static int aquaero_get_report(int fd, int report_id, unsigned report_type, unsig
 		/* printf("HIDIOCGREPORTINFO: report_id=0x%X (%u fields)\n", rinfo.report_id, rinfo.num_fields); */
 			finfo.report_type = rinfo.report_type;
 			finfo.report_id   = rinfo.report_id;
-			if (rinfo.report_id == report_id) {
 				finfo.field_index = 0; /* There is only one field for the Aquaero reports */
 				ioctl(fd, HIDIOCGFIELDINFO, &finfo);
 				/* Put the report ID into the first byte to be consistant with hidraw */
@@ -151,6 +204,5 @@ static int aquaero_get_report(int fd, int report_id, unsigned report_type, unsig
 					ioctl(fd, HIDIOCGUSAGE, &uref);
 					report_data[j+1] = uref.value;
 				}
-			}
 	return j;
 }

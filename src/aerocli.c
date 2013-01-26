@@ -35,19 +35,31 @@ int main(int argc, char *argv[])
 		out_mode = M_SCRIPT;
 
 	aq5_data_t aquaero_data;
+	aq5_settings_t aquaero_settings;
 
 	if (libaquaero5_poll(argv[1], &aquaero_data) < 0) {
 		fprintf(stderr, "failed to poll '%s': %s\n", argv[1], strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 
+	if (libaquaero5_getsettings(argv[1], &aquaero_settings) < 0) {
+		fprintf(stderr, "failed to get settings from '%s': %s\n", argv[1], strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	
+
 	if (argc >= 3 && strcmp(argv[2], "--dump") == 0) {
 		printf("Dumping data to %s\n", argv[3]);
-		r = dump_data(argv[3], aquaero_get_buffer());
-	} 
+		r = dump_data(argv[3], aquaero_get_data_buffer());
+	} else {
+		if (argc >= 3 && strcmp(argv[2], "--dumpsettings") == 0) {
+			printf("Dumping settings to %s\n", argv[3]);
+			r = dump_data(argv[3], aquaero_get_settings_buffer());
+		}
+	}
 
 	/* output mode changes format strings */
-	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr;;
+	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr;;
 
 	struct tm aq_time, *local_aq_time, *systime;
 	time_t aq_time_t, systime_t;
@@ -92,6 +104,14 @@ int main(int argc, char *argv[])
 			flow_fstr = "flow%d: %3.1f l/h\n";
 			cpu_temp_fstr = "CPU%d temp: %2.2f °C\n";
 			level_fstr = "level%d: %3.2f %%\n";
+			settings_fan_min_rpm_fstr = "fan%d minimum RPM: %d rpm\n";
+			settings_fan_max_rpm_fstr = "fan%d maximum RPM: %d rpm\n";
+			settings_fan_min_duty_cycle_fstr = "fan%d minimum duty cycle: %3.2f %%\n";
+			settings_fan_max_duty_cycle_fstr = "fan%d maximum duty cycle: %3.2f %%\n";
+			settings_fan_startboost_duty_cycle_fstr = "fan%d startboost duty cycle: %3.2f %%\n";
+			settings_fan_startboost_duration_fstr = "fan%d startboost duration: %d seconds\n";
+			settings_fan_pulses_per_revolution_fstr = "fan%d pulses per revolution: %d\n";
+			settings_fan_programmable_fuse_fstr = "fan%d programmable fuse: %d mA\n";
 			break;
 		case M_SCRIPT:
 			temp_fstr = "TEMP%d=%2.2f\n";
@@ -140,6 +160,22 @@ int main(int argc, char *argv[])
 	if (1) { /* print liquid level */
 		for (int n=0; n<AQ5_NUM_LEVEL; n++) {
 			printf(level_fstr, n+1, aquaero_data.level[n]);
+		}
+	}
+
+	/* print settings */
+	if (out_mode != M_SCRIPT) {
+		printf("\n------Settings------\n");
+	
+		for (int n=0; n<AQ5_NUM_FAN; n++) {
+			printf(settings_fan_min_rpm_fstr, n+1, aquaero_settings.fan_min_rpm[n]);
+			printf(settings_fan_max_rpm_fstr, n+1, aquaero_settings.fan_max_rpm[n]);
+			printf(settings_fan_min_duty_cycle_fstr, n+1, aquaero_settings.fan_min_duty_cycle[n]);
+			printf(settings_fan_max_duty_cycle_fstr, n+1, aquaero_settings.fan_max_duty_cycle[n]);
+			printf(settings_fan_startboost_duty_cycle_fstr, n+1, aquaero_settings.fan_startboost_duty_cycle[n]);
+			printf(settings_fan_startboost_duration_fstr, n+1, aquaero_settings.fan_startboost_duration[n]);
+			printf(settings_fan_pulses_per_revolution_fstr, n+1, aquaero_settings.fan_pulses_per_revolution[n]);
+			printf(settings_fan_programmable_fuse_fstr, n+1, aquaero_settings.fan_programmable_fuse[n]);
 		}
 	}
 

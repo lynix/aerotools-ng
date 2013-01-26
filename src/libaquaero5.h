@@ -68,6 +68,11 @@
 
 #define AQ_TEMP_UNDEF	-99.0
 
+/* Settings from HID feature report 0xB */
+#define AQ5_SETTINGS_LEN	2427
+#define AQ5_SETTINGS_FAN_OFFS	0x20d
+#define AQ5_SETTINGS_FAN_DIST	20
+
 typedef struct {
 	uint32_t	current_time;
 	uint16_t	serial_major;
@@ -88,10 +93,24 @@ typedef struct {
 	double		level[AQ5_NUM_LEVEL];
 } aq5_data_t;
 
+typedef struct {
+	uint16_t	fan_min_rpm[AQ5_NUM_FAN];
+	uint16_t	fan_max_rpm[AQ5_NUM_FAN];
+	double		fan_max_duty_cycle[AQ5_NUM_FAN];
+	double		fan_min_duty_cycle[AQ5_NUM_FAN];
+	double		fan_startboost_duty_cycle[AQ5_NUM_FAN];
+	uint16_t	fan_startboost_duration[AQ5_NUM_FAN];
+	uint16_t	fan_pulses_per_revolution[AQ5_NUM_FAN];
+	/* unknown 1 */
+	/* unknown 2 */
+	uint16_t	fan_programmable_fuse[AQ5_NUM_FAN];
+} aq5_settings_t;
 
 int libaquaero5_poll(char *device, aq5_data_t *data_dest);
+int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest);
 
 /* Helpful for debugging */
-unsigned char *aquaero_get_buffer();
+unsigned char *aquaero_get_data_buffer();
+unsigned char *aquaero_get_settings_buffer();
 
 #endif /* LIBAQUAERO5_H_ */
