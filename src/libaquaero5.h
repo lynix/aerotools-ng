@@ -110,7 +110,7 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest);
 int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest);
 
 /* Helpful for debugging */
-unsigned char *aquaero_get_data_buffer();
-unsigned char *aquaero_get_settings_buffer();
+unsigned char *libaquaero5_get_data_buffer();
+unsigned char *libaquaero5_get_settings_buffer();
 
 #endif /* LIBAQUAERO5_H_ */

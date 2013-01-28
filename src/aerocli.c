@@ -50,11 +50,11 @@ int main(int argc, char *argv[])
 
 	if (argc >= 3 && strcmp(argv[2], "--dump") == 0) {
 		printf("Dumping data to %s\n", argv[3]);
-		r = dump_data(argv[3], aquaero_get_data_buffer());
+		r = dump_data(argv[3], libaquaero5_get_data_buffer());
 	} else {
 		if (argc >= 3 && strcmp(argv[2], "--dumpsettings") == 0) {
 			printf("Dumping settings to %s\n", argv[3]);
-			r = dump_data(argv[3], aquaero_get_settings_buffer());
+			r = dump_data(argv[3], libaquaero5_get_settings_buffer());
 		}
 	}
 
