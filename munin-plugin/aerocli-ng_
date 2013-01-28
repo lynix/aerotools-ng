@@ -25,7 +25,7 @@
 #  [aerocli-ng_*]
 #  user YOURUSER
 #  group AQUAEROGROUP
-#  env.DEVICE /dev/hidrawX
+#  env.DEVICE /dev/usb/hiddevX
 #  env.AEROCLI /path/to/aerocli
 #  env.TEMP1_NAME Your-Caption-Here
 #  ...
