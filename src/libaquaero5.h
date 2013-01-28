@@ -28,7 +28,6 @@
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <sys/ioctl.h>
-#include <linux/version.h>
 #include <linux/hiddev.h>
 
 /* constants */
@@ -108,6 +107,7 @@ typedef struct {
 
 int libaquaero5_poll(char *device, aq5_data_t *data_dest);
 int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest);
+void libaquaero5_exit();
 
 /* Helpful for debugging */
 unsigned char *libaquaero5_get_data_buffer();

@@ -51,28 +51,29 @@ inline int aq5_open(char *device)
 	/* Only open the device if we need to */
 	if (fcntl(fd, F_GETFL) == -1) {
 		fd = open(device, O_RDONLY);
-	}
-
-	/* If the file descriptor is still undefined something is wrong */
-	if (fcntl(fd, F_GETFL) == -1) {
-		return -1;
-	} else {
-		ioctl(fd, HIDIOCGVERSION, &version);
-		printf("hiddev driver version is %d.%d.%d\n", version >> 16, (version >> 8) & 0xff, version & 0xff);
-		ioctl(fd, HIDIOCGDEVINFO, &dinfo);
-		/* printf("HID: vendor 0x%x product 0x%x(0x%x) version 0x%x\n", dinfo.vendor, dinfo.product & 0xffff, dinfo.product, dinfo.version); */
-		if ((dinfo.vendor != 0xc70) || ((dinfo.product & 0xffff) != 0xf001)) {
-			printf("No Aquaero 5 found on %s. Found vendor:0x%x, product:0x%x(0x%x), version 0x%x instead\n", device, dinfo.vendor, dinfo.product & 0xffff, dinfo.product, dinfo.version);
-			close(fd);
-			return -1;
+		if (fcntl(fd, F_GETFL) != -1) {
+			ioctl(fd, HIDIOCGVERSION, &version);
+			printf("hiddev driver version is %d.%d.%d\n", version >> 16, (version >> 8) & 0xff, version & 0xff);
+			ioctl(fd, HIDIOCGDEVINFO, &dinfo);
+			/* printf("HID: vendor 0x%x product 0x%x(0x%x) version 0x%x\n", dinfo.vendor, dinfo.product & 0xffff, dinfo.product, dinfo.version); */
+			if ((dinfo.vendor != 0xc70) || ((dinfo.product & 0xffff) != 0xf001)) {
+				printf("No Aquaero 5 found on %s. Found vendor:0x%x, product:0x%x(0x%x), version 0x%x instead\n", device, dinfo.vendor, dinfo.product & 0xffff, dinfo.product, dinfo.version);
+				libaquaero5_exit();
+				return -1;
+			} else {
+				hStr.index = 2; /* Vendor = 1, Product = 2 */
+				hStr.value[0] = 0;
+				ioctl(fd, HIDIOCGSTRING, &hStr);
+				printf("Found '%s'\n", hStr.value);
+				return 0;
+			}
 		} else {
-			hStr.index = 2; /* Vendor = 1, Product = 2 */
-			hStr.value[0] = 0;
-			ioctl(fd, HIDIOCGSTRING, &hStr);
-			printf("Found '%s'\n", hStr.value);
-			return 0;
+			/* We tried to open the device but failed */
+			return -1;
 		}
 	}
+	/* The file handle is already defined and open, just continue */
+	return 0;
 }
 
 /* Get the specified HID report */
@@ -108,6 +109,12 @@ inline int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned 
 	return j;
 }
 
+/* Close the file handle and shut down */
+void libaquaero5_exit()
+{
+	close(fd);
+}
+
 /* Get the settings feature report ID 0xB (11) */
 int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest)
 {
@@ -120,11 +127,10 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest)
 
 	res = aq5_get_report(fd, 0xB, HID_REPORT_TYPE_FEATURE, settings_buf);
 	if (res == 0) {
-		close(fd);
+		libaquaero5_exit();
 		printf("failed to get report!\n");
 		return -1;	
 	}
-	close(fd);
 
 	/* fan settings */
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
@@ -154,11 +160,10 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 
 	res = aq5_get_report(fd, 0x1, HID_REPORT_TYPE_INPUT, buffer);
 	if (res == 0) {
-		close(fd);
+		libaquaero5_exit();
 		printf("failed to get report!\n");
 		return -1;	
 	}
-	close(fd);
 
 	/* current time */
 	data_dest->current_time = aq5_get_int32(buffer, AQ5_CURRENT_TIME_OFFS);
