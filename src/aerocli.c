@@ -16,9 +16,59 @@
  * along with aerotools-ng. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "aerocli5.h"
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
+#include "libaquaero5.h"
+
+typedef struct {
+	uint32_t        days;
+	uint32_t        hours;
+	uint32_t        minutes;
+	uint32_t        seconds;
+} uptime_t;
 
 typedef enum { M_STD, M_SCRIPT } out_mode_t;
+
+
+/* dump_data() borrowed from original aerotools */
+inline int dump_data(char *file, unsigned char *buffer)
+{
+	FILE *fh;
+	
+	if ((fh = fopen(file, "w")) == NULL) {
+		perror(file);
+		return EXIT_FAILURE;
+	}
+	if (fwrite(buffer, 1, AQ5_DATA_LEN, fh) != AQ5_DATA_LEN) {
+		perror(file);
+		fclose(fh);
+		return EXIT_FAILURE;
+	}
+
+	fclose(fh);
+
+	return EXIT_SUCCESS;
+}
+
+/* get the uptime for the given value in seconds */
+inline void get_uptime(uint32_t timeval, uptime_t *uptime)
+{
+	uptime->seconds = timeval;
+	uptime->minutes = uptime->seconds / 60;
+	uptime->hours = uptime->minutes / 60;
+	uptime->days = uptime->hours / 24;
+	if (uptime->seconds > 59) 
+		uptime->seconds -= 60 * uptime->minutes;
+	if (uptime->minutes > 59)
+		uptime->minutes -= 60 * uptime->hours;
+	if (uptime->hours > 23)
+		uptime->hours -= 24 * uptime->days;
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -185,41 +235,3 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-/* dump_data() borrowed from original aerotools */
-int dump_data(char *file, unsigned char *buffer)
-{
-	FILE *fh;
-	
-	if ((fh = fopen(file, "w")) == NULL) {
-		perror(file);
-		return EXIT_FAILURE;
-	}
-	if (fwrite(buffer, 1, AQ5_DATA_LEN, fh) != AQ5_DATA_LEN) {
-		perror(file);
-		fclose(fh);
-		return EXIT_FAILURE;
-	}
-
-	fclose(fh);
-
-	return EXIT_SUCCESS;
-}
-
-/* get the uptime for the given value in seconds */
-void get_uptime(uint32_t timeval, uptime_t *uptime)
-{
-	uptime->seconds = timeval;
-	uptime->minutes = uptime->seconds / 60;
-	uptime->hours = uptime->minutes / 60;
-	uptime->days = uptime->hours / 24;
-	if (uptime->seconds > 59) 
-		uptime->seconds -= 60 * uptime->minutes;
-	if (uptime->minutes > 59)
-		uptime->minutes -= 60 * uptime->hours;
-	if (uptime->hours > 23)
-		uptime->hours -= 24 * uptime->days;
-}
-
-/* Convert the given time Aquaero value to local time
-	if (strftime(datestr, 50, "%A %D %T %z", tmp) == 0) {
-*/
