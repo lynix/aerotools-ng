@@ -116,8 +116,8 @@ sub disp ($$);
 #------------------------------------------------------------#
 my $aeroclicmd = "/usr/local/sbin/aerocli /dev/usb/hiddev0 --export";
 
-my $debug = 1;
-#my $debug = 0;
+#my $debug = 1;
+my $debug = 0;
 my $cache_secs = 60;
 my $mibtime = 0;
 
@@ -199,48 +199,48 @@ sub create_mib {
 			my ($tempnum,$tempval) = $line =~ /^TEMP(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
-			$tmpmib{"1.1.2.0.$tempnum"} = [ "counter", adjust_to_32bit(strip_decimal($tempval)) ];
+			$tmpmib{"1.1.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
 		} elsif ($line =~ /^FAN\d+_VRM_TEMP/) {
 			my ($fannum,$tempval) = $line =~ /^FAN(\d+)_VRM_TEMP=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum VRM temp = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
 			$tmpmib{"1.1.3.1.0.$fannum"} = [ "string", "Fan$fannum" ];
-			$tmpmib{"1.1.3.2.0.$fannum"} = [ "counter", adjust_to_32bit(strip_decimal($tempval)) ];
+			$tmpmib{"1.1.3.2.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
 		} elsif ($line =~ /^FAN\d+_CURRENT/) {
 			my ($fannum,$currentval) = $line =~ /^FAN(\d+)_CURRENT=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum current = $currentval (" . strip_decimal($currentval) . ")\n" if $debug;
-			$tmpmib{"1.1.3.3.0.$fannum"} = [ "counter", adjust_to_32bit(strip_decimal($currentval)) ];
+			$tmpmib{"1.1.3.3.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($currentval)) ];
 		} elsif ($line =~ /^FAN\d+_RPM/) {
 			my ($fannum,$rpmval) = $line =~ /^FAN(\d+)_RPM=(\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum current = $rpmval\n" if $debug;
-			$tmpmib{"1.1.3.4.0.$fannum"} = [ "counter", adjust_to_32bit($rpmval) ];
+			$tmpmib{"1.1.3.4.0.$fannum"} = [ "gauge", adjust_to_32bit($rpmval) ];
 		} elsif ($line =~ /^FAN\d+_DUTY_CYCLE/) {
 			my ($fannum,$dutycycleval) = $line =~ /^FAN(\d+)_DUTY_CYCLE=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum duty cycle = $dutycycleval (" . strip_decimal($dutycycleval) . ")\n" if $debug;
-			$tmpmib{"1.1.3.5.0.$fannum"} = [ "counter", adjust_to_32bit(strip_decimal($dutycycleval)) ];
+			$tmpmib{"1.1.3.5.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($dutycycleval)) ];
 		} elsif ($line =~ /^FAN\d+_VOLTAGE/) {
 			my ($fannum,$voltageval) = $line =~ /^FAN(\d+)_VOLTAGE=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum duty cycle = $voltageval (" . strip_decimal($voltageval) . ")\n" if $debug;
-			$tmpmib{"1.1.3.6.0.$fannum"} = [ "counter", adjust_to_32bit(strip_decimal($voltageval)) ];
+			$tmpmib{"1.1.3.6.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($voltageval)) ];
 		} elsif ($line =~ /^FLOW/) {
 			my ($flownum,$flowval) = $line =~ /^FLOW(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Flow sensor $flownum = $flowval (" . strip_decimal($flowval) . ")\n" if $debug;
-			$tmpmib{"1.1.4.0.$flownum"} = [ "counter", adjust_to_32bit(strip_decimal($flowval)) ];
+			$tmpmib{"1.1.4.0.$flownum"} = [ "gauge", adjust_to_32bit(strip_decimal($flowval)) ];
 		} elsif ($line =~ /^CPU\d+_TEMP/) {
 			my ($cpunum,$tempval) = $line =~ /^CPU(\d+)_TEMP=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "CPU $cpunum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
-			$tmpmib{"1.1.5.0.$cpunum"} = [ "counter", adjust_to_32bit(strip_decimal($tempval)) ];
+			$tmpmib{"1.1.5.0.$cpunum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
 		} elsif ($line =~ /^LEVEL/) {
 			my ($levelnum,$levelval) = $line =~ /^LEVEL(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "CPU $levelnum = $levelval (" . strip_decimal($levelval) . ")\n" if $debug;
-			$tmpmib{"1.1.6.0.$levelnum"} = [ "counter", adjust_to_32bit(strip_decimal($levelval)) ];
+			$tmpmib{"1.1.6.0.$levelnum"} = [ "gauge", adjust_to_32bit(strip_decimal($levelval)) ];
 		}
 	}
 	$mib = \%tmpmib;
