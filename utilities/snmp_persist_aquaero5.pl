@@ -110,8 +110,6 @@
 
 use strict;
 
-sub disp ($$);
-
 
 #------------------------------------------------------------#
 my $aeroclicmd = "/usr/local/sbin/aerocli /dev/usb/hiddev0 --export";
