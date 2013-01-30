@@ -121,10 +121,7 @@ my $debug = 0;
 my $cache_secs = 60;
 my $mibtime = 0;
 
-my ($mib,$oid_in,$oid, $found);
-
-my ($key,%bytes,%lended);
-
+my ($mib,$oid_in,$oid,$found);
 
 #------------------------------------------------------------#
 # figure out what to send back
@@ -214,7 +211,7 @@ sub create_mib {
 		} elsif ($line =~ /^FAN\d+_RPM/) {
 			my ($fannum,$rpmval) = $line =~ /^FAN(\d+)_RPM=(\d+)/i;
 			print "Line->$line<-\n" if $debug;
-			print "Fan $fannum current = $rpmval\n" if $debug;
+			print "Fan $fannum RPM = $rpmval\n" if $debug;
 			$tmpmib{"1.1.3.4.0.$fannum"} = [ "gauge", adjust_to_32bit($rpmval) ];
 		} elsif ($line =~ /^FAN\d+_DUTY_CYCLE/) {
 			my ($fannum,$dutycycleval) = $line =~ /^FAN(\d+)_DUTY_CYCLE=(\d+\.\d+)/i;
@@ -239,7 +236,7 @@ sub create_mib {
 		} elsif ($line =~ /^LEVEL/) {
 			my ($levelnum,$levelval) = $line =~ /^LEVEL(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
-			print "CPU $levelnum = $levelval (" . strip_decimal($levelval) . ")\n" if $debug;
+			print "Level sensor $levelnum = $levelval (" . strip_decimal($levelval) . ")\n" if $debug;
 			$tmpmib{"1.1.6.0.$levelnum"} = [ "gauge", adjust_to_32bit(strip_decimal($levelval)) ];
 		}
 	}
@@ -251,8 +248,12 @@ sub create_mib {
 # Strip the decimal place from floating point values
 sub strip_decimal {
 	my ($inval) = @_;
-	$inval =~ s/\.//;
-	return $inval;
+	if ($inval == 0.0) {
+		return 0;
+	} else {
+		$inval =~ s/\.//;
+ 		return $inval;
+	}
 }
 
 sub create_coid {
