@@ -43,7 +43,7 @@
 ####
 #
 # v0.01 1/29/2013 JinTu <JinTu@praecogito.com>
-# 	First working version
+# 	First working version. Only supports sensor readings, not settings.
 #
 #
 ####
@@ -57,6 +57,10 @@
 #
 # Temperature sensors
 # .1.3.6.1.4.1.2021.255.65.67.1.1.2
+#   Name
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.2.1
+#   Temp value
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.2.2
 #
 # Fans
 # .1.3.6.1.4.1.2021.255.65.67.1.1.3
@@ -75,12 +79,24 @@
 #
 # Flow sensors
 # .1.3.6.1.4.1.2021.255.65.67.1.1.4
+#   Name
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.4.1
+#   Flow value
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.4.2
 #
 # CPU temperatures
 # .1.3.6.1.4.1.2021.255.65.67.1.1.5
+#   Name
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.5.1
+#   CPU temp
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.5.2
 
 # Level sensors
 # .1.3.6.1.4.1.2021.255.65.67.1.1.6
+#   Name
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.6
+#   Level value
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.6
 #
 ###
 #
@@ -194,7 +210,8 @@ sub create_mib {
 			my ($tempnum,$tempval) = $line =~ /^TEMP(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
-			$tmpmib{"1.1.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
+			$tmpmib{"1.1.2.1.0.$tempnum"} = [ "string", "Temp$tempnum" ];
+			$tmpmib{"1.1.2.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
 		} elsif ($line =~ /^FAN\d+_VRM_TEMP/) {
 			my ($fannum,$tempval) = $line =~ /^FAN(\d+)_VRM_TEMP=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
@@ -225,17 +242,20 @@ sub create_mib {
 			my ($flownum,$flowval) = $line =~ /^FLOW(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Flow sensor $flownum = $flowval (" . strip_decimal($flowval) . ")\n" if $debug;
-			$tmpmib{"1.1.4.0.$flownum"} = [ "gauge", adjust_to_32bit(strip_decimal($flowval)) ];
+			$tmpmib{"1.1.4.1.0.$flownum"} = [ "string", "Flow$flownum" ];
+			$tmpmib{"1.1.4.2.0.$flownum"} = [ "gauge", adjust_to_32bit(strip_decimal($flowval)) ];
 		} elsif ($line =~ /^CPU\d+_TEMP/) {
 			my ($cpunum,$tempval) = $line =~ /^CPU(\d+)_TEMP=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "CPU $cpunum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
-			$tmpmib{"1.1.5.0.$cpunum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
+			$tmpmib{"1.1.5.1.0.$cpunum"} = [ "string", "CPUTemp$cpunum" ];
+			$tmpmib{"1.1.5.2.0.$cpunum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
 		} elsif ($line =~ /^LEVEL/) {
 			my ($levelnum,$levelval) = $line =~ /^LEVEL(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Level sensor $levelnum = $levelval (" . strip_decimal($levelval) . ")\n" if $debug;
-			$tmpmib{"1.1.6.0.$levelnum"} = [ "gauge", adjust_to_32bit(strip_decimal($levelval)) ];
+			$tmpmib{"1.1.6.1.0.$levelnum"} = [ "string", "Level$levelnum" ];
+			$tmpmib{"1.1.6.2.0.$levelnum"} = [ "gauge", adjust_to_32bit(strip_decimal($levelval)) ];
 		}
 	}
 	$mib = \%tmpmib;
