@@ -2,12 +2,15 @@
 #
 # snmp_persist_aquaero5.pl
 #
-# Export the Aquaero 5 sensor readings and settings provided ny aerotoons-ng to net-snmp via 
+# Export the Aquaero 5 sensor readings and settings provided ny aerotools-ng to net-snmp via 
 # pass_persist for external consumption.
 #
 # Copyright 2013 JinTu <JinTu@praecogito.com>
 #
-# This file is part of aerotools-ng.
+#
+# This file is a support utility of aerotools-ng.
+#
+# Copyright 2012-2013 lynix <lynix47@gmail.com>
 #
 # aerotools-ng is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
