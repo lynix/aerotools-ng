@@ -1,4 +1,4 @@
-/* Copyright 2012 lynix <lynix47@gmail.com>
+/* Copyright 2012-2013 lynix <lynix47@gmail.com>
  *
  * This file is part of aerotools-ng.
  *
@@ -19,28 +19,98 @@
 #ifndef LIBAQUAERO5_H_
 #define LIBAQUAERO5_H_
 
+/* libs */
+#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/utsname.h>
+#include <sys/ioctl.h>
+#include <linux/hiddev.h>
 
-#define AQ5_NUM_TEMP	8
-#define AQ5_NUM_FAN		4
+/* constants */
+#define AQ5_DATA_LEN	659
+#define AQ5_CURRENT_TIME_OFFS	0x001
+#define AQ5_SERIAL_MAJ_OFFS	0x007
+#define AQ5_SERIAL_MIN_OFFS	0x009
+#define AQ5_FIRMWARE_VER_OFFS	0x00b
+#define AQ5_BOOTLOADER_VER_OFFS	0x00d
+#define AQ5_HARDWARE_VER_OFFS	0x00f
+#define AQ5_UPTIME_OFFS	0x011
+#define AQ5_TOTAL_TIME_OFFS	0x015
+#define AQ5_TEMP_OFFS	0x067
+#define AQ5_TEMP_DIST	2
+#define AQ5_TEMP_UNDEF	0x7fff
+
+#define AQ5_FAN_OFFS	0x169
+#define AQ5_FAN_DIST	8
+#define AQ5_FAN_VRM_OFFS	0x0bf
+#define AQ5_FAN_VRM_DIST	2
+#define AQ5_FAN_VRM_UNDEF	0x7fff
+
+#define AQ5_FLOW_OFFS	0x0fb
+#define AQ5_FLOW_DIST	2
+
+#define AQ5_CPU_TEMP_OFFS	0x0d7
+#define AQ5_CPU_TEMP_DIST	2
+
+#define AQ5_LEVEL_OFFS	0x147
+#define AQ5_LEVEL_DIST	2
+
+#define AQ5_NUM_TEMP	44
+#define AQ5_NUM_FAN	12
+#define AQ5_NUM_FLOW	14
+#define AQ5_NUM_CPU	8
+#define AQ5_NUM_LEVEL	4
 
 #define AQ_TEMP_UNDEF	-99.0
 
-#define AQ5_DATA_LEN	659
+/* Settings from HID feature report 0xB */
+#define AQ5_SETTINGS_LEN	2427
+#define AQ5_SETTINGS_FAN_OFFS	0x20d
+#define AQ5_SETTINGS_FAN_DIST	20
 
 typedef struct {
+	uint32_t	current_time;
+	uint16_t	serial_major;
+	uint16_t	serial_minor;
+	uint16_t	firmware_version;
+	uint16_t	bootloader_version;
+	uint16_t	hardware_version;
+	uint32_t	uptime;
+	uint32_t	total_time;
 	double		temp[AQ5_NUM_TEMP];
+	double		fan_current[AQ5_NUM_FAN];
 	uint16_t	fan_rpm[AQ5_NUM_FAN];
-	double		flow;
+	double		fan_duty_cycle[AQ5_NUM_FAN];
+	double		fan_voltage[AQ5_NUM_FAN];
+	double		fan_vrm_temp[AQ5_NUM_FAN];
+	double		flow[AQ5_NUM_FLOW];
+	double		cpu_temp[AQ5_NUM_CPU];
+	double		level[AQ5_NUM_LEVEL];
 } aq5_data_t;
 
+typedef struct {
+	uint16_t	fan_min_rpm[AQ5_NUM_FAN];
+	uint16_t	fan_max_rpm[AQ5_NUM_FAN];
+	double		fan_max_duty_cycle[AQ5_NUM_FAN];
+	double		fan_min_duty_cycle[AQ5_NUM_FAN];
+	double		fan_startboost_duty_cycle[AQ5_NUM_FAN];
+	uint16_t	fan_startboost_duration[AQ5_NUM_FAN];
+	uint16_t	fan_pulses_per_revolution[AQ5_NUM_FAN];
+	/* unknown 1 */
+	/* unknown 2 */
+	uint16_t	fan_programmable_fuse[AQ5_NUM_FAN];
+} aq5_settings_t;
 
 int libaquaero5_poll(char *device, aq5_data_t *data_dest);
+int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest);
+void libaquaero5_exit();
 
 /* Helpful for debugging */
-unsigned char *aquaero_get_buffer();
-
-uint32_t get_kernel_version();
+unsigned char *libaquaero5_get_data_buffer();
+unsigned char *libaquaero5_get_settings_buffer();
 
 #endif /* LIBAQUAERO5_H_ */
