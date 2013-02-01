@@ -193,7 +193,7 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 		data_dest->fan_rpm[i] = aq5_get_int(buffer, AQ5_FAN_OFFS + i * AQ5_FAN_DIST);
 		data_dest->fan_duty_cycle[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 2 + i * AQ5_FAN_DIST) / 100.0;
 		data_dest->fan_voltage[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 4 + i * AQ5_FAN_DIST) / 100.0;
-		data_dest->fan_current[i] = (double)aq5_get_int(buffer, AQ5_FAN_OFFS + 6 + i * AQ5_FAN_DIST) / 10.0;
+		data_dest->fan_current[i] = aq5_get_int(buffer, AQ5_FAN_OFFS + 6 + i * AQ5_FAN_DIST);
 	}
 
 	/* flow sensors */

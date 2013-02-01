@@ -393,7 +393,7 @@
 			<t_unit_exponent_value></t_unit_exponent_value>
 			<unit_exponent_value></unit_exponent_value>
 			<t_vertical_label></t_vertical_label>
-			<vertical_label>mA</vertical_label>
+			<vertical_label>A</vertical_label>
 		</graph>
 		<items>
 			<hash_100019c5919eee885db8187ad1a8060bf456b0>
@@ -402,7 +402,7 @@
 				<alpha>FF</alpha>
 				<graph_type_id>7</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
-				<cdef_id>hash_05001958afde3b43799c3132eec71fc5f37ec3</cdef_id>
+				<cdef_id>hash_050019b714fdc920a1e3e7bb0f198cfbdc7ecc</cdef_id>
 				<value></value>
 				<gprint_id>hash_060019e9c43831e54eca8069317a2ce8c6f751</gprint_id>
 				<text_format>Current</text_format>
@@ -415,7 +415,7 @@
 				<alpha>FF</alpha>
 				<graph_type_id>9</graph_type_id>
 				<consolidation_function_id>4</consolidation_function_id>
-				<cdef_id>hash_05001958afde3b43799c3132eec71fc5f37ec3</cdef_id>
+				<cdef_id>hash_050019b714fdc920a1e3e7bb0f198cfbdc7ecc</cdef_id>
 				<value></value>
 				<gprint_id>hash_060019e9c43831e54eca8069317a2ce8c6f751</gprint_id>
 				<text_format>Last:</text_format>
@@ -428,7 +428,7 @@
 				<alpha>FF</alpha>
 				<graph_type_id>9</graph_type_id>
 				<consolidation_function_id>3</consolidation_function_id>
-				<cdef_id>hash_05001958afde3b43799c3132eec71fc5f37ec3</cdef_id>
+				<cdef_id>hash_050019b714fdc920a1e3e7bb0f198cfbdc7ecc</cdef_id>
 				<value></value>
 				<gprint_id>hash_060019e9c43831e54eca8069317a2ce8c6f751</gprint_id>
 				<text_format>Max:</text_format>
@@ -441,7 +441,7 @@
 				<alpha>FF</alpha>
 				<graph_type_id>9</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
-				<cdef_id>hash_05001958afde3b43799c3132eec71fc5f37ec3</cdef_id>
+				<cdef_id>hash_050019b714fdc920a1e3e7bb0f198cfbdc7ecc</cdef_id>
 				<value></value>
 				<gprint_id>hash_060019e9c43831e54eca8069317a2ce8c6f751</gprint_id>
 				<text_format>Average:</text_format>
@@ -1287,26 +1287,26 @@
 			</hash_140019df7b31cf7296154fd9bf8cdbaaa14d67>
 		</items>
 	</hash_0500197de86e1a6d2896abd63e928661fd90a7>
-	<hash_05001958afde3b43799c3132eec71fc5f37ec3>
-		<name>Divide by 10</name>
+	<hash_050019b714fdc920a1e3e7bb0f198cfbdc7ecc>
+		<name>Divide by 1000</name>
 		<items>
-			<hash_140019f006cbd53c5d27fb1ee46078ec5e6e6f>
+			<hash_14001958a9140225b0df489da730ee16174381>
 				<sequence>1</sequence>
 				<type>4</type>
 				<value>CURRENT_DATA_SOURCE</value>
-			</hash_140019f006cbd53c5d27fb1ee46078ec5e6e6f>
-			<hash_1400194cd3582a92464e3a3280d4aa75774184>
+			</hash_14001958a9140225b0df489da730ee16174381>
+			<hash_1400197f4c26a996d72dbe88921232e7ffe738>
 				<sequence>2</sequence>
 				<type>6</type>
-				<value>10</value>
-			</hash_1400194cd3582a92464e3a3280d4aa75774184>
-			<hash_140019b38ba056d629358494cf6c72a4b8f08b>
+				<value>1000</value>
+			</hash_1400197f4c26a996d72dbe88921232e7ffe738>
+			<hash_140019ef8c5f4e6f1bfda6fb142839e4f8d7d4>
 				<sequence>3</sequence>
 				<type>2</type>
 				<value>4</value>
-			</hash_140019b38ba056d629358494cf6c72a4b8f08b>
+			</hash_140019ef8c5f4e6f1bfda6fb142839e4f8d7d4>
 		</items>
-	</hash_05001958afde3b43799c3132eec71fc5f37ec3>
+	</hash_050019b714fdc920a1e3e7bb0f198cfbdc7ecc>
 	<hash_060019e9c43831e54eca8069317a2ce8c6f751>
 		<name>Normal</name>
 		<gprint_text>%8.2lf %s</gprint_text>
