@@ -222,10 +222,10 @@ sub create_mib {
 			$tmpmib{"1.1.3.1.0.$fannum"} = [ "string", "Fan$fannum" ];
 			$tmpmib{"1.1.3.2.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
 		} elsif ($line =~ /^FAN\d+_CURRENT/) {
-			my ($fannum,$currentval) = $line =~ /^FAN(\d+)_CURRENT=(\d+\.\d+)/i;
+			my ($fannum,$currentval) = $line =~ /^FAN(\d+)_CURRENT=(\d+)/i;
 			print "Line->$line<-\n" if $debug;
-			print "Fan $fannum current = $currentval (" . strip_decimal($currentval) . ")\n" if $debug;
-			$tmpmib{"1.1.3.3.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($currentval)) ];
+			print "Fan $fannum current = $currentval\n" if $debug;
+			$tmpmib{"1.1.3.3.0.$fannum"} = [ "gauge", adjust_to_32bit($currentval) ];
 		} elsif ($line =~ /^FAN\d+_RPM/) {
 			my ($fannum,$rpmval) = $line =~ /^FAN(\d+)_RPM=(\d+)/i;
 			print "Line->$line<-\n" if $debug;

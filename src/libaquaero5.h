@@ -82,7 +82,7 @@ typedef struct {
 	uint32_t	uptime;
 	uint32_t	total_time;
 	double		temp[AQ5_NUM_TEMP];
-	double		fan_current[AQ5_NUM_FAN];
+	uint16_t	fan_current[AQ5_NUM_FAN];
 	uint16_t	fan_rpm[AQ5_NUM_FAN];
 	double		fan_duty_cycle[AQ5_NUM_FAN];
 	double		fan_voltage[AQ5_NUM_FAN];
