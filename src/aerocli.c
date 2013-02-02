@@ -232,6 +232,6 @@ int main(int argc, char *argv[])
 	/* Shut down communications and clean up */
 	libaquaero5_exit();
 
-	return 0;
+	return r;
 }
 

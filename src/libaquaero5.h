@@ -31,44 +31,46 @@
 #include <linux/hiddev.h>
 
 /* constants */
-#define AQ5_DATA_LEN	659
+#define AQ5_USB_VID				0x0c70
+#define AQ5_USB_PID				0xf001
+#define AQ5_DATA_LEN			659
 #define AQ5_CURRENT_TIME_OFFS	0x001
-#define AQ5_SERIAL_MAJ_OFFS	0x007
-#define AQ5_SERIAL_MIN_OFFS	0x009
+#define AQ5_SERIAL_MAJ_OFFS		0x007
+#define AQ5_SERIAL_MIN_OFFS		0x009
 #define AQ5_FIRMWARE_VER_OFFS	0x00b
 #define AQ5_BOOTLOADER_VER_OFFS	0x00d
 #define AQ5_HARDWARE_VER_OFFS	0x00f
-#define AQ5_UPTIME_OFFS	0x011
-#define AQ5_TOTAL_TIME_OFFS	0x015
-#define AQ5_TEMP_OFFS	0x067
-#define AQ5_TEMP_DIST	2
-#define AQ5_TEMP_UNDEF	0x7fff
+#define AQ5_UPTIME_OFFS			0x011
+#define AQ5_TOTAL_TIME_OFFS		0x015
+#define AQ5_TEMP_OFFS			0x067
+#define AQ5_TEMP_DIST			2
+#define AQ5_TEMP_UNDEF			0x7fff
 
-#define AQ5_FAN_OFFS	0x169
-#define AQ5_FAN_DIST	8
-#define AQ5_FAN_VRM_OFFS	0x0bf
-#define AQ5_FAN_VRM_DIST	2
-#define AQ5_FAN_VRM_UNDEF	0x7fff
+#define AQ5_FAN_OFFS			0x169
+#define AQ5_FAN_DIST			8
+#define AQ5_FAN_VRM_OFFS		0x0bf
+#define AQ5_FAN_VRM_DIST		2
+#define AQ5_FAN_VRM_UNDEF		0x7fff
 
-#define AQ5_FLOW_OFFS	0x0fb
-#define AQ5_FLOW_DIST	2
+#define AQ5_FLOW_OFFS			0x0fb
+#define AQ5_FLOW_DIST			2
 
-#define AQ5_CPU_TEMP_OFFS	0x0d7
-#define AQ5_CPU_TEMP_DIST	2
+#define AQ5_CPU_TEMP_OFFS		0x0d7
+#define AQ5_CPU_TEMP_DIST		2
 
-#define AQ5_LEVEL_OFFS	0x147
-#define AQ5_LEVEL_DIST	2
+#define AQ5_LEVEL_OFFS			0x147
+#define AQ5_LEVEL_DIST			2
 
-#define AQ5_NUM_TEMP	44
-#define AQ5_NUM_FAN	12
-#define AQ5_NUM_FLOW	14
-#define AQ5_NUM_CPU	8
-#define AQ5_NUM_LEVEL	4
+#define AQ5_NUM_TEMP			44
+#define AQ5_NUM_FAN				12
+#define AQ5_NUM_FLOW			14
+#define AQ5_NUM_CPU				8
+#define AQ5_NUM_LEVEL			4
 
-#define AQ_TEMP_UNDEF	-99.0
+#define AQ_TEMP_UNDEF			-99.0
 
 /* Settings from HID feature report 0xB */
-#define AQ5_SETTINGS_LEN	2427
+#define AQ5_SETTINGS_LEN		2427
 #define AQ5_SETTINGS_FAN_OFFS	0x20d
 #define AQ5_SETTINGS_FAN_DIST	20
 
