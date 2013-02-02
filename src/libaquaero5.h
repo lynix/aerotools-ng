@@ -1,4 +1,4 @@
-/* Copyright 2012 lynix <lynix47@gmail.com>
+/* Copyright 2012-2013 lynix <lynix47@gmail.com>
  *
  * This file is part of aerotools-ng.
  *
@@ -27,9 +27,10 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
-#include <linux/version.h>
+#include <sys/ioctl.h>
+#include <linux/hiddev.h>
 
-/* constats */
+/* constants */
 #define AQ5_DATA_LEN	659
 #define AQ5_CURRENT_TIME_OFFS	0x001
 #define AQ5_SERIAL_MAJ_OFFS	0x007
@@ -66,6 +67,11 @@
 
 #define AQ_TEMP_UNDEF	-99.0
 
+/* Settings from HID feature report 0xB */
+#define AQ5_SETTINGS_LEN	2427
+#define AQ5_SETTINGS_FAN_OFFS	0x20d
+#define AQ5_SETTINGS_FAN_DIST	20
+
 typedef struct {
 	uint32_t	current_time;
 	uint16_t	serial_major;
@@ -76,7 +82,7 @@ typedef struct {
 	uint32_t	uptime;
 	uint32_t	total_time;
 	double		temp[AQ5_NUM_TEMP];
-	double		fan_current[AQ5_NUM_FAN];
+	uint16_t	fan_current[AQ5_NUM_FAN];
 	uint16_t	fan_rpm[AQ5_NUM_FAN];
 	double		fan_duty_cycle[AQ5_NUM_FAN];
 	double		fan_voltage[AQ5_NUM_FAN];
@@ -86,12 +92,25 @@ typedef struct {
 	double		level[AQ5_NUM_LEVEL];
 } aq5_data_t;
 
+typedef struct {
+	uint16_t	fan_min_rpm[AQ5_NUM_FAN];
+	uint16_t	fan_max_rpm[AQ5_NUM_FAN];
+	double		fan_max_duty_cycle[AQ5_NUM_FAN];
+	double		fan_min_duty_cycle[AQ5_NUM_FAN];
+	double		fan_startboost_duty_cycle[AQ5_NUM_FAN];
+	uint16_t	fan_startboost_duration[AQ5_NUM_FAN];
+	uint16_t	fan_pulses_per_revolution[AQ5_NUM_FAN];
+	/* unknown 1 */
+	/* unknown 2 */
+	uint16_t	fan_programmable_fuse[AQ5_NUM_FAN];
+} aq5_settings_t;
 
 int libaquaero5_poll(char *device, aq5_data_t *data_dest);
+int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest);
+void libaquaero5_exit();
 
 /* Helpful for debugging */
-unsigned char *aquaero_get_buffer();
-
-uint32_t get_kernel_version();
+unsigned char *libaquaero5_get_data_buffer();
+unsigned char *libaquaero5_get_settings_buffer();
 
 #endif /* LIBAQUAERO5_H_ */

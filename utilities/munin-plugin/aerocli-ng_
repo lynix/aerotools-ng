@@ -2,7 +2,7 @@
 #
 # Munin Plugin to read values from aerocli (aerotools-ng version)
 #
-# Copyright 2012 lynix <lynix47@gmail.com>
+# Copyright 2012-2013 lynix <lynix47@gmail.com>
 #
 # This file is part of aerotools-ng.
 #
@@ -25,7 +25,7 @@
 #  [aerocli-ng_*]
 #  user YOURUSER
 #  group AQUAEROGROUP
-#  env.DEVICE /dev/hidrawX
+#  env.DEVICE /dev/usb/hiddevX
 #  env.AEROCLI /path/to/aerocli
 #  env.TEMP1_NAME Your-Caption-Here
 #  ...
