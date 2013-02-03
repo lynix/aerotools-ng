@@ -70,8 +70,8 @@ typedef struct {
 
 
 /* functions to be called from application */
-int		libaquaero5_poll(char *device, aq5_data_t *data_dest);
-int		libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest);
+int		libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg);
+int		libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **err_msg);
 void	libaquaero5_exit();
 
 /* helpful for debugging */
