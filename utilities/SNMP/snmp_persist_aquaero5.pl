@@ -10,7 +10,8 @@
 #
 # This file is a support utility of aerotools-ng.
 #
-# Copyright 2012-2013 lynix <lynix47@gmail.com>
+# Copyright 2012 lynix <lynix47@gmail.com>
+# Copyright 2013 JinTu <JinTu@praecogito.com>, lynix <lynix47@gmail.com>
 #
 # aerotools-ng is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

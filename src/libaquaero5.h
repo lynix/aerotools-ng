@@ -1,4 +1,5 @@
-/* Copyright 2012-2013 lynix <lynix47@gmail.com>
+/* Copyright 2012 lynix <lynix47@gmail.com>
+ * Copyright 2013 JinTu <JinTu@praecogito.com>, lynix <lynix47@gmail.com>
  *
  * This file is part of aerotools-ng.
  *
