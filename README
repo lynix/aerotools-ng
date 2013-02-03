@@ -2,10 +2,8 @@
          aerotools-ng: Tools for Accessing the Aquaero5(R) USB Device
         --------------------------------------------------------------
         
-                   (C) 2012-2013 by lynix <lynix47@gmail.com>
-        
-                   Additional contributors
-                   -JinTu <JinTu@praecogito.com>
+       (C) 2012 lynix <lynix47@gmail.com>
+       (C) 2013 JinTu <JinTu@praecogito.com>, lynix <lynix47@gmail.com>
         
 
 SUMMARY
@@ -71,8 +69,8 @@ To get a more script-friendly output in the form of 'KEY=VALUE' pairs just add
 BUGS / CONTACT
 ----------------
 Feel free to report any bugs you find using the 'issues' function on GitHub. If
-you wish to contact the author, you can drop him an email to lynix47@gmail.com.
-You might wish to use his GPG key, #4804CCA9 on keys.gnupg.net
+you wish to contact the authors, you can drop them an email.
+For lynix, you might wish to use his GPG key, #4804CCA9 on keys.gnupg.net
 
 
 LICENSE
