@@ -1,4 +1,5 @@
-/* Copyright 2012-2013 lynix <lynix47@gmail.com>
+/* Copyright 2012 lynix <lynix47@gmail.com>
+ * Copyright 2013 JinTu <JinTu@praecogito.com>, lynix <lynix47@gmail.com>
  *
  * This file is part of aerotools-ng.
  *
@@ -18,18 +19,57 @@
 
 #include "libaquaero5.h"
 
-/*
- *	Global variables
- */
+/* libs */
+#include <stdio.h>
 
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/utsname.h>
+#include <sys/ioctl.h>
+#include <linux/hiddev.h>
+
+/* usb communication related constants */
+#define AQ5_USB_VID				0x0c70
+#define AQ5_USB_PID				0xf001
+
+/* device data constants */
+#define AQ5_DATA_LEN			659
+#define AQ5_CURRENT_TIME_OFFS	0x001
+#define AQ5_SERIAL_MAJ_OFFS		0x007
+#define AQ5_SERIAL_MIN_OFFS		0x009
+#define AQ5_FIRMWARE_VER_OFFS	0x00b
+#define AQ5_BOOTLOADER_VER_OFFS	0x00d
+#define AQ5_HARDWARE_VER_OFFS	0x00f
+#define AQ5_UPTIME_OFFS			0x011
+#define AQ5_TOTAL_TIME_OFFS		0x015
+#define AQ5_TEMP_OFFS			0x067
+#define AQ5_TEMP_DIST			2
+#define AQ5_TEMP_UNDEF			0x7fff
+#define AQ5_FAN_OFFS			0x169
+#define AQ5_FAN_DIST			8
+#define AQ5_FAN_VRM_OFFS		0x0bf
+#define AQ5_FAN_VRM_DIST		2
+#define AQ5_FAN_VRM_UNDEF		0x7fff
+#define AQ5_FLOW_OFFS			0x0fb
+#define AQ5_FLOW_DIST			2
+#define AQ5_CPU_TEMP_OFFS		0x0d7
+#define AQ5_CPU_TEMP_DIST		2
+#define AQ5_LEVEL_OFFS			0x147
+#define AQ5_LEVEL_DIST			2
+
+/* settings from HID feature report 0xB */
+#define AQ5_SETTINGS_LEN		2427
+#define AQ5_SETTINGS_FAN_OFFS	0x20d
+#define AQ5_SETTINGS_FAN_DIST	20
+
+/* device-specific globals */
+/* TODO: vectorize to handle more than one device */
 unsigned char aq5_buf_data[AQ5_DATA_LEN];
 unsigned char aq5_buf_settings[AQ5_SETTINGS_LEN];
-/* TODO: this really should be an array to handle more than one device */
 int aq5_fd = -1;
 
-/* 
- * 	Local functions 
- */ 
 
 inline int aq5_get_int(unsigned char *buffer, short offset)
 {
@@ -202,13 +242,13 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 	int n;
 	for (int i=0; i<AQ5_NUM_TEMP; i++) {
 		n = aq5_get_int(aq5_buf_data, AQ5_TEMP_OFFS  + i * AQ5_TEMP_DIST);
-		data_dest->temp[i] = n!=AQ5_TEMP_UNDEF ? (double)n/100.0 : AQ_TEMP_UNDEF;
+		data_dest->temp[i] = n!=AQ5_TEMP_UNDEF ? (double)n/100.0 : AQ5_FLOAT_UNDEF;
 	}
 
 	/* fans */
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
 		n = aq5_get_int(aq5_buf_data, AQ5_FAN_VRM_OFFS + i * AQ5_FAN_VRM_DIST);
-		data_dest->fan_vrm_temp[i] = n!=AQ5_FAN_VRM_UNDEF ? (double)n/100.0 : AQ_TEMP_UNDEF;
+		data_dest->fan_vrm_temp[i] = n!=AQ5_FAN_VRM_UNDEF ? (double)n/100.0 : AQ5_FLOAT_UNDEF;
 		data_dest->fan_rpm[i] = aq5_get_int(aq5_buf_data, AQ5_FAN_OFFS + i * AQ5_FAN_DIST);
 		data_dest->fan_duty_cycle[i] = (double)aq5_get_int(aq5_buf_data, AQ5_FAN_OFFS + 2 + i * AQ5_FAN_DIST) / 100.0;
 		data_dest->fan_voltage[i] = (double)aq5_get_int(aq5_buf_data, AQ5_FAN_OFFS + 4 + i * AQ5_FAN_DIST) / 100.0;
@@ -223,7 +263,7 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 	/* CPU temp */
 	for (int i=0; i<AQ5_NUM_CPU; i++) {
 		n = (double)aq5_get_int(aq5_buf_data, AQ5_CPU_TEMP_OFFS + i * AQ5_CPU_TEMP_DIST);
-		data_dest->cpu_temp[i] = n!=AQ5_TEMP_UNDEF ? (double)n/100.0 : AQ_TEMP_UNDEF;
+		data_dest->cpu_temp[i] = n!=AQ5_TEMP_UNDEF ? (double)n/100.0 : AQ5_FLOAT_UNDEF;
 	}
 
 	/* Liquid level sensors */
@@ -234,15 +274,33 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 	return 0;
 }
 
-/* Return the raw buffer data */
-unsigned char *libaquaero5_get_data_buffer()
+int	libaquaero5_dump_data(char *file)
 {
-	return aq5_buf_data;
+	FILE *outf = fopen(file, "w");
+	if (outf == NULL)
+		return -1;
+
+	if (fwrite(aq5_buf_data, 1, AQ5_DATA_LEN, outf) != AQ5_DATA_LEN) {
+		fclose(outf);
+		return -1;
+	}
+	fclose(outf);
+
+	return 0;
 }
 
-/* Return the raw settings buffer data */
-unsigned char *libaquaero5_get_settings_buffer()
+int	libaquaero5_dump_settings(char *file)
 {
-	return aq5_buf_settings;
-}
+	FILE *outf = fopen(file, "w");
+	if (outf == NULL)
+		return -1;
 
+	if (fwrite(aq5_buf_settings, 1, AQ5_SETTINGS_LEN, outf) !=
+			AQ5_SETTINGS_LEN) {
+		fclose(outf);
+		return -1;
+	}
+	fclose(outf);
+
+	return 0;
+}
