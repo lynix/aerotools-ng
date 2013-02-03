@@ -35,26 +35,6 @@ typedef struct {
 typedef enum { M_STD, M_SCRIPT } out_mode_t;
 
 
-/* dump_data() borrowed from original aerotools */
-inline int dump_data(char *file, unsigned char *buffer)
-{
-	FILE *fh;
-	
-	if ((fh = fopen(file, "w")) == NULL) {
-		perror(file);
-		return EXIT_FAILURE;
-	}
-	if (fwrite(buffer, 1, AQ5_DATA_LEN, fh) != AQ5_DATA_LEN) {
-		perror(file);
-		fclose(fh);
-		return EXIT_FAILURE;
-	}
-
-	fclose(fh);
-
-	return EXIT_SUCCESS;
-}
-
 /* get the uptime for the given value in seconds */
 inline void get_uptime(uint32_t timeval, uptime_t *uptime)
 {
@@ -101,11 +81,11 @@ int main(int argc, char *argv[])
 
 	if (argc >= 3 && strcmp(argv[2], "--dump") == 0) {
 		printf("Dumping data to %s\n", argv[3]);
-		r = dump_data(argv[3], libaquaero5_get_data_buffer());
+		r = libaquaero5_dump_data(argv[3]);
 	} else {
 		if (argc >= 3 && strcmp(argv[2], "--dumpsettings") == 0) {
 			printf("Dumping settings to %s\n", argv[3]);
-			r = dump_data(argv[3], libaquaero5_get_settings_buffer());
+			r = libaquaero5_dump_settings(argv[3]);
 		}
 	}
 
@@ -179,13 +159,13 @@ int main(int argc, char *argv[])
 
 	if (1) { /* print_temp */
 		for (int n=0; n<AQ5_NUM_TEMP; n++)
-			if (aquaero_data.temp[n] != AQ_TEMP_UNDEF)
+			if (aquaero_data.temp[n] != AQ5_FLOAT_UNDEF)
 				printf(temp_fstr, n+1, aquaero_data.temp[n]);
 	}
 
 	if (1) { /* print_fan */
 		for (int n=0; n<AQ5_NUM_FAN; n++) {
-			if (aquaero_data.fan_vrm_temp[n] != AQ_TEMP_UNDEF) {
+			if (aquaero_data.fan_vrm_temp[n] != AQ5_FLOAT_UNDEF) {
 				printf(fan_vrm_temp_fstr, n+1, aquaero_data.fan_vrm_temp[n]);
 				printf(fan_current_fstr, n+1, aquaero_data.fan_current[n]);
 				printf(fan_rpm_fstr, n+1, aquaero_data.fan_rpm[n]);
@@ -203,7 +183,7 @@ int main(int argc, char *argv[])
 
 	if (1) { /* print CPU temp */
 		for (int n=0; n<AQ5_NUM_CPU; n++) {
-			if (aquaero_data.cpu_temp[n] != AQ_TEMP_UNDEF)
+			if (aquaero_data.cpu_temp[n] != AQ5_FLOAT_UNDEF)
 				printf(cpu_temp_fstr, n+1, aquaero_data.cpu_temp[n]);
 		}
 	}
