@@ -22,6 +22,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <getopt.h>
 
 #include "libaquaero5.h"
 
@@ -33,6 +34,12 @@ typedef struct {
 } uptime_t;
 
 typedef enum { M_STD, M_SCRIPT } out_mode_t;
+
+char *device = NULL;
+char *err_msg = NULL;
+char *dump_data_file = NULL;
+char *dump_settings_file = NULL;
+out_mode_t out_mode = M_STD;
 
 
 /* get the uptime for the given value in seconds */
@@ -50,43 +57,94 @@ inline void get_uptime(uint32_t timeval, uptime_t *uptime)
 		uptime->hours -= 24 * uptime->days;
 }
 
+void print_help()
+{
+	printf("Usage: aerocli [OPTIONS]\n\n");
+
+	printf("Options:\n");
+	printf("  -d  DEVICE use given DEVICE (no auto-discovery)\n");
+	printf("  -o  MODE   output mode (default, export)\n");
+	printf("  -D  FILE   dump data to FILE\n");
+	printf("  -S  FILE   dump settings to FILE\n");
+	printf("  -h         display this usage information\n");
+
+	printf("\n");
+	printf("This version of aerocli was built on %s %s.\n", __DATE__, __TIME__);
+}
+
+
+void parse_cmdline(int argc, char *argv[])
+{
+	char c;
+	extern int optind, optopt, opterr;
+
+	while ((c = getopt(argc, argv, "d:o:D:S:h")) != -1) {
+		switch (c) {
+			case 'h':
+				print_help();
+				exit(EXIT_SUCCESS);
+				break;
+			case 'd':
+				device = optarg;
+				break;
+			case 'D':
+					dump_data_file = optarg;
+					break;
+			case 'S':
+					dump_settings_file = optarg;
+					break;
+			case 'o':
+				if (strcmp(optarg, "export") == 0) {
+					out_mode = M_SCRIPT;
+				} else if (strcmp(optarg, "default") == 0) {
+					out_mode = M_STD;
+				} else {
+					fprintf(stderr, "invalid output format: '%s'\n", optarg);
+					exit(EXIT_FAILURE);
+				}
+				break;
+			case '?':
+				if (optopt == 'd'|| optopt == 'o')
+					fprintf(stderr, "option -%c requires an argument\n",
+							optopt);
+				exit(EXIT_FAILURE);
+				break;
+			default:
+				fprintf(stderr, "invalid arguments. Try -h for help.");
+				exit(EXIT_FAILURE);
+		}
+	}
+}
+
 
 int main(int argc, char *argv[])
 {
-	int	r = EXIT_SUCCESS;
-
-	if (argc < 2) {
-		fprintf(stderr, "%s: insufficient arguments.\n", argv[0]);
-		exit(EXIT_FAILURE);
-	}
-
-	out_mode_t out_mode = M_STD;
-
-	if (argc == 3 && strcmp(argv[2], "--export") == 0)
-		out_mode = M_SCRIPT;
+	parse_cmdline(argc, argv);
 
 	aq5_data_t aquaero_data;
 	aq5_settings_t aquaero_settings;
 
-	if (libaquaero5_poll(argv[1], &aquaero_data) < 0) {
-		fprintf(stderr, "failed to poll '%s': %s\n", argv[1], strerror(errno));
+	if (libaquaero5_poll(device, &aquaero_data, &err_msg) < 0) {
+		fprintf(stderr, "failed to poll: %s (%s)\n", err_msg, strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 
-	if (libaquaero5_getsettings(argv[1], &aquaero_settings) < 0) {
-		fprintf(stderr, "failed to get settings from '%s': %s\n", argv[1], strerror(errno));
+	if (libaquaero5_getsettings(NULL, &aquaero_settings, &err_msg) < 0) {
+		fprintf(stderr, "failed to get settings: %s (%s)\n", err_msg,
+				strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 	
 
-	if (argc >= 3 && strcmp(argv[2], "--dump") == 0) {
-		printf("Dumping data to %s\n", argv[3]);
-		r = libaquaero5_dump_data(argv[3]);
-	} else {
-		if (argc >= 3 && strcmp(argv[2], "--dumpsettings") == 0) {
-			printf("Dumping settings to %s\n", argv[3]);
-			r = libaquaero5_dump_settings(argv[3]);
-		}
+	if (dump_data_file != NULL) {
+		if (libaquaero5_dump_data(dump_data_file) != 0)
+			fprintf(stderr, "failed to dump data to '%s': %s", dump_data_file,
+					strerror(errno));
+	}
+	if (dump_settings_file != NULL) {
+			if (libaquaero5_dump_settings(dump_data_file) != 0)
+				fprintf(stderr, "failed to dump settings to '%s': %s",
+						dump_settings_file, strerror(errno));
 	}
 
 	/* output mode changes format strings */
@@ -213,6 +271,6 @@ int main(int argc, char *argv[])
 	/* Shut down communications and clean up */
 	libaquaero5_exit();
 
-	return r;
+	exit(EXIT_SUCCESS);
 }
 

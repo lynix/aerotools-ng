@@ -29,6 +29,7 @@
 #include <sys/utsname.h>
 #include <sys/ioctl.h>
 #include <linux/hiddev.h>
+#include <dirent.h>
 
 /* usb communication related constants */
 #define AQ5_USB_VID				0x0c70
@@ -70,11 +71,13 @@ unsigned char aq5_buf_data[AQ5_DATA_LEN];
 unsigned char aq5_buf_settings[AQ5_SETTINGS_LEN];
 int aq5_fd = -1;
 
+/* helper functions */
 
 inline int aq5_get_int(unsigned char *buffer, short offset)
 {
 	return (buffer[offset] << 8) | buffer[offset + 1];
 }
+
 
 inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
 {
@@ -82,8 +85,20 @@ inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
 			(buffer[offset + 2] << 8) | buffer[offset + 3];
 }
 
-/* Open the file handle t othe device */
-int aq5_open(char *device)
+char *aq5_strcat(char *str1, char *str2)
+{
+	char *ret;
+
+	if ((ret = malloc(strlen(str1) + strlen(str2) + 1)) == NULL)
+		return NULL;
+	strcpy(ret, str1);
+	strcpy(ret + strlen(str1), str2);
+
+	return ret;
+}
+
+
+int aq5_open(char *device, char **err_msg)
 {
 	struct hiddev_devinfo dinfo;
 
@@ -92,10 +107,61 @@ int aq5_open(char *device)
 		/* The file handle is already defined and open, just continue */
 		return 0;
 
+	/* no device given, search */
+	if (device == NULL) {
+		DIR *dp;
+		struct dirent *ep;
+		char *full_path = NULL;
+
+		if ((dp = opendir("/dev/usb")) == NULL) {
+			*err_msg = "failed to open directory '/dev/usb'";
+			return -1;
+		}
+
+		while ((ep = readdir(dp)) != NULL) {
+			/* search for files beginning with 'hiddev' */
+			if (strncmp(ep->d_name, "hiddev", 6) != 0) {
+				continue;
+			}
+			full_path = aq5_strcat("/dev/usb/", ep->d_name);
+			if ((aq5_fd = open(full_path, O_RDONLY)) < 0) {
+#ifdef DEBUG
+				printf("failed to open '%s', skipping\n", full_path);
+#endif
+				continue;
+			}
+			ioctl(aq5_fd, HIDIOCGDEVINFO, &dinfo);
+			if ((dinfo.vendor != AQ5_USB_VID) || ((dinfo.product & 0xffff) !=
+					AQ5_USB_PID)) {
+#ifdef DEBUG
+				printf("no Aquaero 5 found on '%s'\n", full_path);
+#endif
+				close(aq5_fd);
+				continue;
+			} else {
+				/* we found the first Aquaero 5 device */
+#ifdef DEBUG
+				printf("found Aquaero 5 device on '%s'!\n", full_path);
+#endif
+				break;
+			}
+		}
+		closedir(dp);
+
+		if (fcntl(aq5_fd, F_GETFL) == -1) {
+			*err_msg = "failed to find an Aquaero 5 device";
+			return -1;
+		}
+
+		return 0;
+	}
+
+
+	/* device name given, try using it */
 	aq5_fd = open(device, O_RDONLY);
 	if (fcntl(aq5_fd, F_GETFL) == -1) {
 		/* We tried to open the device but failed */
-		fprintf(stderr, "failed to open %s\n", device);
+		*err_msg = "failed to open device";
 		return -1;
 	}
 
@@ -112,7 +178,7 @@ int aq5_open(char *device)
 		printf("No Aquaero 5 found on %s. Found vendor:0x%x, product:0x%x(0x%x), version 0x%x instead\n",
 				device, dinfo.vendor, dinfo.product & 0xffff, dinfo.product,
 				dinfo.version);
-		libaquaero5_exit();
+		close(aq5_fd);
 		return -1;
 	}
 
@@ -126,6 +192,7 @@ int aq5_open(char *device)
 
 	return 0;
 }
+
 
 /* Get the specified HID report */
 int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data)
@@ -168,19 +235,21 @@ int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *r
 	return 0;
 }
 
+
 /* Close the file handle and shut down */
 void libaquaero5_exit()
 {
 	close(aq5_fd);
 }
 
+
 /* Get the settings feature report ID 0xB (11) */
-int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest)
+int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **err_msg)
 {
 	int res;
 
 	/* Allow the device to be disconnected and open only if the fd is undefined */
-	if (aq5_open(device) != 0) {
+	if (aq5_open(device, err_msg) != 0) {
 		return -1;
 	}
 
@@ -207,13 +276,14 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest)
 	return 0;
 }
 
+
 /* Get the current sensor data from input report 1 */
-int libaquaero5_poll(char *device, aq5_data_t *data_dest)
+int libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg)
 {
 	int res;
 
 	/* Allow the device to be disconnected and open only if the fd is undefined */
-	if (aq5_open(device) != 0) {
+	if (aq5_open(device, err_msg) != 0) {
 		return -1;
 	}
 
@@ -274,6 +344,7 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest)
 	return 0;
 }
 
+
 int	libaquaero5_dump_data(char *file)
 {
 	FILE *outf = fopen(file, "w");
@@ -288,6 +359,7 @@ int	libaquaero5_dump_data(char *file)
 
 	return 0;
 }
+
 
 int	libaquaero5_dump_settings(char *file)
 {
