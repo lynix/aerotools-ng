@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
 			settings_fan_pulses_per_revolution_fstr = "fan%d pulses per revolution: %d\n";
 			settings_fan_programmable_fuse_fstr = "fan%d programmable fuse: %d mA\n";
 			break;
-		case M_SCRIPT:
+		default:
 			temp_fstr = "TEMP%d=%.2f\n";
 			fan_vrm_temp_fstr = "FAN%d_VRM_TEMP=%.2f\n";
 			fan_current_fstr = "FAN%d_CURRENT=%d\n";
