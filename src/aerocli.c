@@ -142,9 +142,9 @@ int main(int argc, char *argv[])
 					strerror(errno));
 	}
 	if (dump_settings_file != NULL) {
-			if (libaquaero5_dump_settings(dump_data_file) != 0)
-				fprintf(stderr, "failed to dump settings to '%s': %s",
-						dump_settings_file, strerror(errno));
+		if (libaquaero5_dump_settings(dump_settings_file) != 0)
+			fprintf(stderr, "failed to dump settings to '%s': %s", dump_settings_file, 
+					strerror(errno));
 	}
 
 	/* output mode changes format strings */
