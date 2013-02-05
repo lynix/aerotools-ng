@@ -132,7 +132,7 @@ use strict;
 
 
 #------------------------------------------------------------#
-my $aeroclicmd = "/usr/local/sbin/aerocli /dev/usb/hiddev0 --export";
+my $aeroclicmd = "/usr/local/sbin/aerocli -o export";
 
 #my $debug = 1;
 my $debug = 0;

@@ -61,7 +61,7 @@
 #define AQ5_LEVEL_DIST			2
 
 /* settings from HID feature report 0xB */
-#define AQ5_SETTINGS_LEN		2427
+#define AQ5_SETTINGS_LEN		2428
 #define AQ5_SETTINGS_FAN_OFFS	0x20d
 #define AQ5_SETTINGS_FAN_DIST	20
 
