@@ -78,6 +78,79 @@ unsigned char aq5_buf_data[AQ5_DATA_LEN];
 unsigned char aq5_buf_settings[AQ5_SETTINGS_LEN];
 int aq5_fd = -1;
 
+/* Fan data source strings */
+struct FAN_DATA_SOURCE_STRINGS {
+	fan_data_source_t	val;
+        char	*source_str;
+} fan_data_source_strings[] = {
+	{ NONE,			"No data source" },
+	{ TARGET_VAL_CONT_1,	"Target value controller 1" },
+	{ TARGET_VAL_CONT_2,	"Target value controller 2" },
+	{ TARGET_VAL_CONT_3,	"Target value controller 3" },
+	{ TARGET_VAL_CONT_4,	"Target value controller 4" },
+	{ TARGET_VAL_CONT_5,	"Target value controller 5" },
+	{ TARGET_VAL_CONT_6,	"Target value controller 6" },
+	{ TARGET_VAL_CONT_7,	"Target value controller 7" },
+	{ TARGET_VAL_CONT_8,	"Target value controller 8" },
+	{ TWO_POINT_CONT_1,	"Two point controller 1" },
+	{ TWO_POINT_CONT_2,	"Two point controller 2" },
+	{ TWO_POINT_CONT_3,	"Two point controller 3" },
+	{ TWO_POINT_CONT_4,	"Two point controller 4" },
+	{ TWO_POINT_CONT_5,	"Two point controller 5" },
+	{ TWO_POINT_CONT_6,	"Two point controller 6" },
+	{ TWO_POINT_CONT_7,	"Two point controller 7" },
+	{ TWO_POINT_CONT_8,	"Two point controller 8" },
+	{ TWO_POINT_CONT_9,	"Two point controller 9" },
+	{ TWO_POINT_CONT_10,	"Two point controller 10" },
+	{ TWO_POINT_CONT_11,	"Two point controller 11" },
+	{ TWO_POINT_CONT_12,	"Two point controller 12" },
+	{ TWO_POINT_CONT_13,	"Two point controller 13" },
+	{ TWO_POINT_CONT_14,	"Two point controller 14" },
+	{ TWO_POINT_CONT_15,	"Two point controller 15" },
+	{ TWO_POINT_CONT_16,	"Two point controller 16" },
+	{ CURVE_CTRLR_1,	"Curve controller 1" },
+	{ CURVE_CTRLR_2,	"Curve controller 2" },
+	{ CURVE_CTRLR_3,	"Curve controller 3" },
+	{ CURVE_CTRLR_4,	"Curve controller 4" },
+	{ RGB_LED_RED,		"RGB LED red" },
+	{ RGB_LED_BLUE,		"RGB LED blue" },
+	{ RGB_LED_GREEN,	"RGB LED green" },
+	{ PRESET_VAL_1,		"Preset value 1" },
+	{ PRESET_VAL_2,		"Preset value 2" },
+	{ PRESET_VAL_3,		"Preset value 3" },
+	{ PRESET_VAL_4,		"Preset value 4" },
+	{ PRESET_VAL_5,		"Preset value 5" },
+	{ PRESET_VAL_6,		"Preset value 6" },
+	{ PRESET_VAL_7,		"Preset value 7" },
+	{ PRESET_VAL_8,		"Preset value 8" },
+	{ PRESET_VAL_9,		"Preset value 9" },
+	{ PRESET_VAL_10,	"Preset value 10" },
+	{ PRESET_VAL_11,	"Preset value 11" },
+	{ PRESET_VAL_12,	"Preset value 12" },
+	{ PRESET_VAL_13,	"Preset value 13" },
+	{ PRESET_VAL_14,	"Preset value 14" },
+	{ PRESET_VAL_15,	"Preset value 15" },
+	{ PRESET_VAL_16,	"Preset value 16" },
+	{ PRESET_VAL_17,	"Preset value 17" },
+	{ PRESET_VAL_18,	"Preset value 18" },
+	{ PRESET_VAL_19,	"Preset value 19" },
+	{ PRESET_VAL_20,	"Preset value 20" },
+	{ PRESET_VAL_21,	"Preset value 21" },
+	{ PRESET_VAL_22,	"Preset value 22" },
+	{ PRESET_VAL_23,	"Preset value 23" },
+	{ PRESET_VAL_24,	"Preset value 24" },
+	{ PRESET_VAL_25,	"Preset value 25" },
+	{ PRESET_VAL_26,	"Preset value 26" },
+	{ PRESET_VAL_27,	"Preset value 27" },
+	{ PRESET_VAL_28,	"Preset value 28" },
+	{ PRESET_VAL_29,	"Preset value 29" },
+	{ PRESET_VAL_30,	"Preset value 30" },
+	{ PRESET_VAL_31,	"Preset value 31" },
+	{ PRESET_VAL_32,	"Preset value 32" },
+	{ -1,			"Unknown data source" }
+};
+
+
 /* helper functions */
 
 inline int aq5_get_int(unsigned char *buffer, short offset)

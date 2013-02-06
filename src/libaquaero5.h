@@ -131,7 +131,7 @@ typedef enum {
 	PRESET_VAL_29	=	0x007c,
 	PRESET_VAL_30	=	0x007d,
 	PRESET_VAL_31	=	0x007e,
-	PRESET_VAL_32	=	0x007f,
+	PRESET_VAL_32	=	0x007f
 } fan_data_source_t;
 
 typedef struct {
@@ -153,6 +153,7 @@ typedef struct {
 	fan_data_source_t	fan_data_source[AQ5_NUM_FAN];
 	uint16_t	fan_programmable_fuse[AQ5_NUM_FAN];
 } aq5_settings_t;
+
 
 /* functions to be called from application */
 int		libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg);
