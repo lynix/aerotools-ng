@@ -65,6 +65,13 @@
 #define AQ5_SETTINGS_FAN_OFFS	0x20d
 #define AQ5_SETTINGS_FAN_DIST	20
 
+/* Fan settings control mode masks */
+#define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
+#define AQ5_SETTINGS_CTRL_MODE_REG_MODE_RPM	0x0001
+#define AQ5_SETTINGS_CTRL_MODE_PROG_FUSE	0x0200
+#define AQ5_SETTINGS_CTRL_MODE_STARTBOOST	0x0400
+#define AQ5_SETTINGS_CTRL_MODE_HOLD_MIN_POWER	0x0100
+
 /* device-specific globals */
 /* TODO: vectorize to handle more than one device */
 unsigned char aq5_buf_data[AQ5_DATA_LEN];
