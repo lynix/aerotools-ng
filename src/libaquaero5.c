@@ -180,14 +180,14 @@ char *aq5_strcat(char *str1, char *str2)
 
 char *aq5_get_fan_data_source_string(int id) 
 {
-	int n = (sizeof(fan_data_source_strings)/sizeof(fan_data_source_strings[0])) - 1;
+	int i;
 	/* We have to search for it */
-	for (int i=0; i <= n; i++) {
+	for (i=0; fan_data_source_strings[i].val != -1; i++) {
 		if (id == fan_data_source_strings[i].val) {
-			return (fan_data_source_strings[i].source_str);
+			break;
 		}
 	}
-	return 0;
+	return (fan_data_source_strings[i].source_str);
 }
 
 int aq5_open(char *device, char **err_msg)
