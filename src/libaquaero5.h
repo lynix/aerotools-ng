@@ -60,7 +60,7 @@ typedef enum {
 	M_RPM 		= 0x0001 
 } fan_regulation_mode_t;
 
-typedef enum { TRUE, FALSE } boolean_t;
+typedef enum { FALSE, TRUE } boolean_t;
 
 typedef enum {
 	NONE		=	0xffff,
@@ -159,6 +159,7 @@ typedef struct {
 int		libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg);
 int		libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **err_msg);
 void	libaquaero5_exit();
+char	*aq5_get_fan_data_source_string(int id);
 
 /* helpful for debugging */
 int 	libaquaero5_dump_data(char *file);

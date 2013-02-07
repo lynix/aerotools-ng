@@ -72,6 +72,7 @@
 #define AQ5_SETTINGS_CTRL_MODE_STARTBOOST	0x0400
 #define AQ5_SETTINGS_CTRL_MODE_HOLD_MIN_POWER	0x0100
 
+
 /* device-specific globals */
 /* TODO: vectorize to handle more than one device */
 unsigned char aq5_buf_data[AQ5_DATA_LEN];
@@ -177,6 +178,17 @@ char *aq5_strcat(char *str1, char *str2)
 	return ret;
 }
 
+char *aq5_get_fan_data_source_string(int id) 
+{
+	int n = (sizeof(fan_data_source_strings)/sizeof(fan_data_source_strings[0])) - 1;
+	/* We have to search for it */
+	for (int i=0; i <= n; i++) {
+		if (id == fan_data_source_strings[i].val) {
+			return (fan_data_source_strings[i].source_str);
+		}
+	}
+	return 0;
+}
 
 int aq5_open(char *device, char **err_msg)
 {
@@ -341,6 +353,7 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	}
 
 	/* fan settings */
+	int n;
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
 		settings_dest->fan_min_rpm[i] = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_max_rpm[i] = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 2 + i * AQ5_SETTINGS_FAN_DIST);
@@ -349,7 +362,24 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->fan_startboost_duty_cycle[i] = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 8 + i * AQ5_SETTINGS_FAN_DIST) /100.0;
 		settings_dest->fan_startboost_duration[i] = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 10 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_pulses_per_revolution[i] = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 12 + i * AQ5_SETTINGS_FAN_DIST);
-		/* two unknowns */
+		n = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 14 + i * AQ5_SETTINGS_FAN_DIST);
+		settings_dest->fan_control_mode[i].fan_regulation_mode = n & AQ5_SETTINGS_CTRL_MODE_REG_MODE_RPM;
+		if ((n & AQ5_SETTINGS_CTRL_MODE_PROG_FUSE) == AQ5_SETTINGS_CTRL_MODE_PROG_FUSE) {
+			settings_dest->fan_control_mode[i].use_programmable_fuse = TRUE; 
+		} else {
+			settings_dest->fan_control_mode[i].use_programmable_fuse = FALSE;
+		}
+		if ((n & AQ5_SETTINGS_CTRL_MODE_STARTBOOST) == AQ5_SETTINGS_CTRL_MODE_STARTBOOST) {
+			settings_dest->fan_control_mode[i].use_startboost = TRUE;
+		} else {
+			settings_dest->fan_control_mode[i].use_startboost = FALSE;
+		}
+		if ((n & AQ5_SETTINGS_CTRL_MODE_HOLD_MIN_POWER) == AQ5_SETTINGS_CTRL_MODE_HOLD_MIN_POWER) {
+			settings_dest->fan_control_mode[i].hold_minimum_power = TRUE;
+		} else {
+			settings_dest->fan_control_mode[i].hold_minimum_power = FALSE;
+		}
+		settings_dest->fan_data_source[i] = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 16 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_programmable_fuse[i] = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 18 + i * AQ5_SETTINGS_FAN_DIST);
 	}
 
