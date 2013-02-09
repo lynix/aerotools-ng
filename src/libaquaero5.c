@@ -64,6 +64,9 @@
 #define AQ5_SETTINGS_LEN		2428
 #define AQ5_SETTINGS_FAN_OFFS	0x20d
 #define AQ5_SETTINGS_FAN_DIST	20
+#define AQ5_SETTINGS_TEMP_OFFS_OFFS	0x0dc
+#define AQ5_SETTINGS_VRM_TEMP_OFFS_OFFS	0x134
+#define AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS	0x14c
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -350,6 +353,18 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		libaquaero5_exit();
 		printf("failed to get report!");
 		return -1;	
+	}
+
+	for (int i=0; i<AQ5_NUM_TEMP; i++) {
+		settings_dest->temp_offset[i] = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
+	}
+	
+	for (int i=0; i<AQ5_NUM_FAN; i++) {
+		settings_dest->fan_vrm_temp_offset[i] = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_VRM_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
+	}
+
+	for (int i=0; i<AQ5_NUM_CPU; i++) {
+		settings_dest->cpu_temp_offset[i] = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
 	}
 
 	/* fan settings */

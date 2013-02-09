@@ -142,6 +142,9 @@ typedef struct {
 } aq5_fan_control_mode_t;
 
 typedef struct {
+	double		temp_offset[AQ5_NUM_TEMP];
+	double		fan_vrm_temp_offset[AQ5_NUM_TEMP];
+	double		cpu_temp_offset[AQ5_NUM_TEMP];
 	uint16_t	fan_min_rpm[AQ5_NUM_FAN];
 	uint16_t	fan_max_rpm[AQ5_NUM_FAN];
 	double		fan_max_duty_cycle[AQ5_NUM_FAN];
