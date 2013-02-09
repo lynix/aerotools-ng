@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* output mode changes format strings */
-	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr, *settings_fan_data_source_fstr, *settings_fan_control_regulation_mode_fstr, *settings_fan_control_use_startboost_fstr, *settings_fan_control_use_fuse_fstr, *settings_fan_control_hold_min_power_fstr;;
+	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr, *settings_fan_data_source_fstr, *settings_fan_control_regulation_mode_fstr, *settings_fan_control_use_startboost_fstr, *settings_fan_control_use_fuse_fstr, *settings_fan_control_hold_min_power_fstr, *settings_temp_offset_fstr, *settings_fan_vrm_temp_offset_fstr, *settings_cpu_temp_offset_fstr;;
 
 	struct tm aq_time, *local_aq_time, *systime;
 	time_t aq_time_t, systime_t;
@@ -206,6 +206,9 @@ int main(int argc, char *argv[])
 			settings_fan_control_hold_min_power_fstr = "fan%d hold minimum power: %d\n";
 			settings_fan_data_source_fstr = "fan%d data source: %s\n";
 			settings_fan_programmable_fuse_fstr = "fan%d programmable fuse: %d mA\n";
+			settings_temp_offset_fstr = "temp%d offset: %.2f K\n";
+			settings_fan_vrm_temp_offset_fstr = "fan%d VRM temp offset: %.2f K\n";
+			settings_cpu_temp_offset_fstr = "cpu%d temp offset: %.2f K\n";
 			break;
 		case M_SCRIPT:
 		default:
@@ -261,8 +264,13 @@ int main(int argc, char *argv[])
 	/* print settings */
 	if (out_mode != M_SCRIPT) {
 		printf("\n------Settings------\n");
+
+		for (int n=0; n<AQ5_NUM_TEMP; n++)
+			if (aquaero_data.temp[n] != AQ5_FLOAT_UNDEF)
+				printf(settings_temp_offset_fstr, n+1, aquaero_settings.temp_offset[n]);
 	
 		for (int n=0; n<AQ5_NUM_FAN; n++) {
+			printf(settings_fan_vrm_temp_offset_fstr, n+1, aquaero_settings.fan_vrm_temp_offset[n]);
 			printf(settings_fan_min_rpm_fstr, n+1, aquaero_settings.fan_min_rpm[n]);
 			printf(settings_fan_max_rpm_fstr, n+1, aquaero_settings.fan_max_rpm[n]);
 			printf(settings_fan_min_duty_cycle_fstr, n+1, aquaero_settings.fan_min_duty_cycle[n]);
@@ -277,6 +285,12 @@ int main(int argc, char *argv[])
 			printf(settings_fan_data_source_fstr, n+1, aq5_get_fan_data_source_string(aquaero_settings.fan_data_source[n]));
 			printf(settings_fan_programmable_fuse_fstr, n+1, aquaero_settings.fan_programmable_fuse[n]);
 		}
+
+		for (int n=0; n<AQ5_NUM_CPU; n++) {
+			if (aquaero_data.cpu_temp[n] != AQ5_FLOAT_UNDEF)
+				printf(settings_cpu_temp_offset_fstr, n+1, aquaero_settings.cpu_temp_offset[n]);
+		}
+
 	}
 
 	/* Shut down communications and clean up */
