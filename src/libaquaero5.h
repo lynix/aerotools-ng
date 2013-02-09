@@ -159,13 +159,13 @@ typedef struct {
 
 
 /* functions to be called from application */
-int		libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg);
-int		libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **err_msg);
+int	libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg);
+int	libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **err_msg);
 void	libaquaero5_exit();
-char	*aq5_get_fan_data_source_string(int id);
+char	*libaquaero5_get_fan_data_source_string(int id);
 
 /* helpful for debugging */
 int 	libaquaero5_dump_data(char *file);
-int		libaquaero5_dump_settings(char *file);
+int	libaquaero5_dump_settings(char *file);
 
 #endif /* LIBAQUAERO5_H_ */
