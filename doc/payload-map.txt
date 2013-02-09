@@ -183,6 +183,80 @@ payload length: 2427 Bytes
 
 offset		type	value		description
 -------------------------------------------------------
+0x0dc		int16	temp1 offset	Internal temp sensor 1 offset
+0x0de		int16	temp2 offset	Internal temp sensor 2 offset
+0x0e0		int16	temp3 offset	Internal temp sensor 3 offset
+0x0e2		int16	temp4 offset	Internal temp sensor 4 offset
+0x0e4		int16	temp5 offset	Internal temp sensor 5 offset
+0x0e6		int16	temp6 offset	Internal temp sensor 6 offset
+0x0e8		int16	temp7 offset	Internal temp sensor 7 offset
+0x0ea		int16	temp8 offset	Internal temp sensor 8 offset
+
+0x0ec		int16	temp9 offset	External (aquabus) temp sensor 9 offset
+0x0ee		int16	temp10 offset	External (aquabus) temp sensor 10 offset
+0x0f0		int16	temp11 offset	External (aquabus) temp sensor 11 offset
+0x0f2		int16	temp12 offset	External (aquabus) temp sensor 12 offset
+0x0f4		int16	temp13 offset	External (aquabus) temp sensor 13 offset
+0x0f6		int16	temp14 offset	External (aquabus) temp sensor 14 offset
+0x0f8		int16	temp15 offset	External (aquabus) temp sensor 15 offset
+0x0fa		int16	temp16 offset	External (aquabus) temp sensor 16 offset
+
+0x0fc		int16	temp17 offset	Software temp sensor 1 (17) offset
+0x0fe		int16	temp18 offset	Software temp sensor 2 (18) offset
+0x100		int16	temp19 offset	Software temp sensor 3 (19) offset
+0x102		int16	temp20 offset	Software temp sensor 4 (20) offset
+0x104		int16	temp21 offset	Software temp sensor 5 (21) offset
+0x106		int16	temp22 offset	Software temp sensor 6 (22) offset
+0x108		int16	temp23 offset	Software temp sensor 7 (23) offset
+0x10a		int16	temp24 offset	Software temp sensor 8 (24) offset
+
+0x10c		int16	temp25 offset	Virtual temp sensor 1 (25) offset
+0x10e		int16	temp26 offset	Virtual temp sensor 2 (26) offset
+0x110		int16	temp27 offset	Virtual temp sensor 3 (27) offset
+0x112		int16	temp28 offset	Virtual temp sensor 4 (28) offset
+0x114		int16	temp29 offset	External (aquabus?) temp sensor 29 offset
+0x116		int16	temp30 offset	External (aquabus?) temp sensor 30 offset
+0x118		int16	temp31 offset	External (aquabus?) temp sensor 31 offset
+0x11a		int16	temp32 offset	External (aquabus?) temp sensor 32 offset
+
+0x11c		int16	temp33 offset	External (aquabus?) temp sensor 33 offset
+0x11e		int16	temp34 offset	External (aquabus?) temp sensor 34 offset
+0x120		int16	temp35 offset	External (aquabus?) temp sensor 35 offset
+0x122		int16	temp36 offset	External (aquabus?) temp sensor 36 offset
+0x124		int16	temp37 offset	External (aquabus?) temp sensor 37 offset
+0x126		int16	temp38 offset	External (aquabus?) temp sensor 38 offset
+0x128		int16	temp39 offset	External (aquabus?) temp sensor 39 offset
+0x12a		int16	temp40 offset	External (aquabus?) temp sensor 40 offset
+
+0x12c		int16	temp41 offset	External (aquabus?) temp sensor 41 offset
+0x12e		int16	temp42 offset	External (aquabus?) temp sensor 42 offset
+0x130		int16	temp43 offset	External (aquabus?) temp sensor 43 offset
+0x132		int16	temp44 offset	External (aquabus?) temp sensor 44 offset
+
+0x134		int16	fan1 vrm_temp offset	Internal fan VRM temp 1 offset
+0x136		int16	fan2 vrm_temp offset	Internal fan VRM temp 2 offset
+0x138		int16	fan3 vrm_temp offset	Internal fan VRM temp 3 offset
+0x13a		int16	fan4 vrm_temp offset	Internal fan VRM temp 4 offset
+
+0x13c		int16	fan5 vrm_temp offset	External (aquabus) fan VRM temp 5 offset
+0x13e		int16	fan6 vrm_temp offset	External (aquabus) fan VRM temp 6 offset
+0x140		int16	fan7 vrm_temp offset	External (aquabus) fan VRM temp 7 offset
+0x142		int16	fan8 vrm_temp offset	External (aquabus) fan VRM temp 8 offset
+0x144		int16	fan9 vrm_temp offset	External (aquabus) fan VRM temp 9 offset
+0x146		int16	fan10 vrm_temp offset	External (aquabus) fan VRM temp 10 offset
+0x148		int16	fan11 vrm_temp offset	External (aquabus) fan VRM temp 11 offset
+0x14a		int16	fan12 vrm_temp offset	External (aquabus) fan VRM temp 12 offset
+
+0x14c		int16	cpu1_temp offset	Internal CPU temp1 offset 
+0x14e		int16	cpu2_temp offset	External CPU temp2 offset?
+0x150		int16	cpu3_temp offset	External CPU temp3 offset?
+0x152		int16	cpu4_temp offset	External CPU temp4 offset? 
+0x154		int16	cpu5_temp offset	External CPU temp5 offset? 
+0x156		int16	cpu6_temp offset	External CPU temp6 offset? 
+0x158		int16	cpu7_temp offset	External CPU temp7 offset? 
+0x15a		int16	cpu8_temp offset	External CPU temp8 offset? 
+
+
 0x20c		int16			Internal fan 1 Min RPM
 0x20e		int16			Internal fan 1 Max RPM
 0x210		int16			Internal fan 1 Min duty cycle
@@ -190,8 +264,8 @@ offset		type	value		description
 0x214		int16			Internal fan 1 Startboost duty cycle
 0x216		int16			Internal fan 1 Startboost duration
 0x218		int16			Internal fan 1 Pulses per revolution
-0x21a		int16			Internal fan 1 ?
-0x21c		int16			Internal fan 1 ?
+0x21a		int16			Internal fan 1 Control mode
+0x21c		int16			Internal fan 1 Data source
 0x21e		int16			Internal fan 1 Programmable fuse setting in mA
 
 0x220		int16			Internal fan 2 Min RPM
@@ -201,8 +275,8 @@ offset		type	value		description
 0x228		int16			Internal fan 2 Startboost duty cycle
 0x22a		int16			Internal fan 2 Startboost duration
 0x22c		int16			Internal fan 2 Pulses per revolution
-0x22e		int16			Internal fan 2 ?
-0x230		int16			Internal fan 2 ?
+0x22e		int16			Internal fan 2 Control mode
+0x230		int16			Internal fan 2 Data source
 0x232		int16			Internal fan 2 Programmable fuse setting in mA
 
 0x234		int16			Internal fan 3 Min RPM
@@ -212,8 +286,8 @@ offset		type	value		description
 0x23c		int16			Internal fan 3 Startboost duty cycle
 0x23e		int16			Internal fan 3 Startboost duration
 0x240		int16			Internal fan 3 Pulses per revolution
-0x242		int16			Internal fan 3 ?
-0x244		int16			Internal fan 3 ?
+0x242		int16			Internal fan 3 Control mode
+0x244		int16			Internal fan 3 Data source
 0x246		int16			Internal fan 3 Programmable fuse setting in mA
 
 0x248		int16			Internal fan 4 Min RPM
@@ -223,8 +297,8 @@ offset		type	value		description
 0x250		int16			Internal fan 4 Startboost duty cycle
 0x252		int16			Internal fan 4 Startboost duration
 0x254		int16			Internal fan 4 Pulses per revolution
-0x256		int16			Internal fan 4 ?
-0x258		int16			Internal fan 4 ?
+0x256		int16			Internal fan 4 Control mode
+0x258		int16			Internal fan 4 Data source
 0x25a		int16			Internal fan 4 Programmable fuse setting in mA
 
 0x25c		int16			External (aquabus) fan 5 Min RPM
@@ -234,8 +308,8 @@ offset		type	value		description
 0x264		int16			External (aquabus) fan 5 Startboost duty cycle
 0x266		int16			External (aquabus) fan 5 Startboost duration
 0x268		int16			External (aquabus) fan 5 Pulses per revolution
-0x26a		int16			External (aquabus) fan 5 ?
-0x26c		int16			External (aquabus) fan 5 ?
+0x26a		int16			External (aquabus) fan 5 Control mode
+0x26c		int16			External (aquabus) fan 5 Data source
 0x26e		int16			External (aquabus) fan 5 Programmable fuse setting in mA
 
 0x25c		int16			External (aquabus) fan 6 Min RPM
@@ -245,8 +319,8 @@ offset		type	value		description
 0x264		int16			External (aquabus) fan 6 Startboost duty cycle
 0x266		int16			External (aquabus) fan 6 Startboost duration
 0x268		int16			External (aquabus) fan 6 Pulses per revolution
-0x26a		int16			External (aquabus) fan 6 ?
-0x26c		int16			External (aquabus) fan 6 ?
+0x26a		int16			External (aquabus) fan 6 Control mode
+0x26c		int16			External (aquabus) fan 6 Data source
 0x26e		int16			External (aquabus) fan 6 Programmable fuse setting in mA
 
 0x270		int16			External (aquabus) fan 7 Min RPM
@@ -256,8 +330,8 @@ offset		type	value		description
 0x278		int16			External (aquabus) fan 7 Startboost duty cycle
 0x27a		int16			External (aquabus) fan 7 Startboost duration
 0x27c		int16			External (aquabus) fan 7 Pulses per revolution
-0x27e		int16			External (aquabus) fan 7 ?
-0x280		int16			External (aquabus) fan 7 ?
+0x27e		int16			External (aquabus) fan 7 Control mode
+0x280		int16			External (aquabus) fan 7 Data source
 0x282		int16			External (aquabus) fan 7 Programmable fuse setting in mA
 
 0x284		int16			External (aquabus) fan 8 Min RPM
@@ -267,8 +341,8 @@ offset		type	value		description
 0x28c		int16			External (aquabus) fan 8 Startboost duty cycle
 0x28e		int16			External (aquabus) fan 8 Startboost duration
 0x290		int16			External (aquabus) fan 8 Pulses per revolution
-0x292		int16			External (aquabus) fan 8 ?
-0x294		int16			External (aquabus) fan 8 ?
+0x292		int16			External (aquabus) fan 8 Control mode
+0x294		int16			External (aquabus) fan 8 Data source
 0x296		int16			External (aquabus) fan 8 Programmable fuse setting in mA
 
 0x298		int16			External (aquabus) fan 9 Min RPM
@@ -278,8 +352,8 @@ offset		type	value		description
 0x2a0		int16			External (aquabus) fan 9 Startboost duty cycle
 0x2a2		int16			External (aquabus) fan 9 Startboost duration
 0x2a4		int16			External (aquabus) fan 9 Pulses per revolution
-0x2a6		int16			External (aquabus) fan 9 ?
-0x2a8		int16			External (aquabus) fan 9 ?
+0x2a6		int16			External (aquabus) fan 9 Control mode
+0x2a8		int16			External (aquabus) fan 9 Data source
 0x2aa		int16			External (aquabus) fan 9 Programmable fuse setting in mA
 
 0x2ac		int16			External (aquabus) fan 10 Min RPM
@@ -289,8 +363,8 @@ offset		type	value		description
 0x2b4		int16			External (aquabus) fan 10 Startboost duty cycle
 0x2b6		int16			External (aquabus) fan 10 Startboost duration
 0x2b8		int16			External (aquabus) fan 10 Pulses per revolution
-0x2ba		int16			External (aquabus) fan 10 ?
-0x2bc		int16			External (aquabus) fan 10 ?
+0x2ba		int16			External (aquabus) fan 10 Control mode
+0x2bc		int16			External (aquabus) fan 10 Data source
 0x2be		int16			External (aquabus) fan 10 Programmable fuse setting in mA
 
 0x2c0		int16			External (aquabus) fan 11 Min RPM
@@ -300,8 +374,8 @@ offset		type	value		description
 0x2c8		int16			External (aquabus) fan 11 Startboost duty cycle
 0x2ca		int16			External (aquabus) fan 11 Startboost duration
 0x2cc		int16			External (aquabus) fan 11 Pulses per revolution
-0x2ce		int16			External (aquabus) fan 11 ?
-0x2d0		int16			External (aquabus) fan 11 ?
+0x2ce		int16			External (aquabus) fan 11 Control mode
+0x2d0		int16			External (aquabus) fan 11 Data source
 0x2d2		int16			External (aquabus) fan 11 Programmable fuse setting in mA
 
 0x2c0		int16			External (aquabus) fan 12 Min RPM
@@ -311,7 +385,7 @@ offset		type	value		description
 0x2c8		int16			External (aquabus) fan 12 Startboost duty cycle
 0x2ca		int16			External (aquabus) fan 12 Startboost duration
 0x2cc		int16			External (aquabus) fan 12 Pulses per revolution
-0x2ce		int16			External (aquabus) fan 12 ?
-0x2d0		int16			External (aquabus) fan 12 ?
+0x2ce		int16			External (aquabus) fan 12 Control mode
+0x2d0		int16			External (aquabus) fan 12 Data source
 0x2d2		int16			External (aquabus) fan 12 Programmable fuse setting in mA
 
