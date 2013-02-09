@@ -181,18 +181,6 @@ char *aq5_strcat(char *str1, char *str2)
 	return ret;
 }
 
-char *aq5_get_fan_data_source_string(int id) 
-{
-	int i;
-	/* We have to search for it */
-	for (i=0; fan_data_source_strings[i].val != -1; i++) {
-		if (id == fan_data_source_strings[i].val) {
-			break;
-		}
-	}
-	return (fan_data_source_strings[i].source_str);
-}
-
 int aq5_open(char *device, char **err_msg)
 {
 	struct hiddev_devinfo dinfo;
@@ -501,3 +489,17 @@ int	libaquaero5_dump_settings(char *file)
 
 	return 0;
 }
+
+
+char *libaquaero5_get_fan_data_source_string(int id) 
+{
+	int i;
+	/* We have to search for it */
+	for (i=0; fan_data_source_strings[i].val != -1; i++) {
+		if (id == fan_data_source_strings[i].val) {
+			break;
+		}
+	}
+	return (fan_data_source_strings[i].source_str);
+}
+

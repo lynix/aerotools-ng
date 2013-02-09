@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
 			printf(settings_fan_control_use_startboost_fstr, n+1, aquaero_settings.fan_control_mode[n].use_startboost);
 			printf(settings_fan_control_use_fuse_fstr, n+1, aquaero_settings.fan_control_mode[n].use_programmable_fuse);
 			printf(settings_fan_control_hold_min_power_fstr, n+1, aquaero_settings.fan_control_mode[n].hold_minimum_power);
-			printf(settings_fan_data_source_fstr, n+1, aq5_get_fan_data_source_string(aquaero_settings.fan_data_source[n]));
+			printf(settings_fan_data_source_fstr, n+1, libaquaero5_get_fan_data_source_string(aquaero_settings.fan_data_source[n]));
 			printf(settings_fan_programmable_fuse_fstr, n+1, aquaero_settings.fan_programmable_fuse[n]);
 		}
 
