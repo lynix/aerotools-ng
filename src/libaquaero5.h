@@ -161,10 +161,15 @@ typedef enum {
 	GPM_IMP		= 0x05
 } flow_units_t;
 
+typedef enum { 
+	BAR		= 0x00, 
+	PSI		= 0x01 
+} pressure_units_t;
 
 typedef struct {
 	temp_units_t	temp_units;
 	flow_units_t	flow_units;
+	pressure_units_t	pressure_units;
 	language_t	language;
 	double		temp_offset[AQ5_NUM_TEMP];
 	double		fan_vrm_temp_offset[AQ5_NUM_TEMP];
@@ -190,6 +195,7 @@ char	*libaquaero5_get_fan_data_source_string(int id);
 char	*libaquaero5_get_language_string(int id);
 char	*libaquaero5_get_temp_units_string(int id);
 char	*libaquaero5_get_flow_units_string(int id);
+char	*libaquaero5_get_pressure_units_string(int id);
 
 /* helpful for debugging */
 int 	libaquaero5_dump_data(char *file);
