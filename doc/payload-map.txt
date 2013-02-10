@@ -187,6 +187,7 @@ offset		type	value		description
 0x0C5		int8	temp_units	Temperature units
 0x0C6		int8	flow_units	Flow units
 0x0C7		int8	pressure_units	Pressure units
+0x0C8		int8	decimal_separator	Decimal separator
 
 0x0dc		int16	temp1 offset	Internal temp sensor 1 offset
 0x0de		int16	temp2 offset	Internal temp sensor 2 offset

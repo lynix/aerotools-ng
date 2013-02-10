@@ -71,6 +71,7 @@
 #define AQ5_SETTINGS_TEMP_UNITS_OFFS	0x0c5
 #define AQ5_SETTINGS_FLOW_UNITS_OFFS	0x0c6
 #define AQ5_SETTINGS_PRESSURE_UNITS_OFFS	0x0c7
+#define AQ5_SETTINGS_DECIMAL_SEPARATOR_OFFS	0x0c8
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -129,6 +130,16 @@ struct PRESSURE_UNITS_STRINGS {
 	{ BAR,	"bar" },
 	{ PSI,	"PSI" },
 	{ -1,	"Unknown pressure units"}
+};
+
+/* Decimal separator strings */
+struct DECIMAL_SEPARATOR_STRINGS {
+	decimal_separator_t	val;
+	char	*decimal_separator_str;
+} decimal_separator_strings[] = {
+	{ POINT,	"point" },
+	{ COMMA,	"comma" },
+	{ -1,		"Unknown decimal separator"}
 };
 
 /* Fan data source strings */
@@ -397,6 +408,7 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	settings_dest->temp_units = aq5_buf_settings[AQ5_SETTINGS_TEMP_UNITS_OFFS];
 	settings_dest->flow_units = aq5_buf_settings[AQ5_SETTINGS_FLOW_UNITS_OFFS];
 	settings_dest->pressure_units = aq5_buf_settings[AQ5_SETTINGS_PRESSURE_UNITS_OFFS];
+	settings_dest->decimal_separator = aq5_buf_settings[AQ5_SETTINGS_DECIMAL_SEPARATOR_OFFS];
 
 	/* CPU temperature offset setting */
 	for (int i=0; i<AQ5_NUM_TEMP; i++) {
@@ -608,4 +620,16 @@ char *libaquaero5_get_pressure_units_string(int id)
 		}
 	}
 	return (pressure_units_strings[i].pressure_units_str);
+}
+
+char *libaquaero5_get_decimal_separator_string(int id) 
+{
+	int i;
+	/* We have to search for it */
+	for (i=0; decimal_separator_strings[i].val != -1; i++) {
+		if (id == decimal_separator_strings[i].val) {
+			break;
+		}
+	}
+	return (decimal_separator_strings[i].decimal_separator_str);
 }
