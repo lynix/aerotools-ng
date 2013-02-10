@@ -67,8 +67,9 @@
 #define AQ5_SETTINGS_TEMP_OFFS_OFFS	0x0dc
 #define AQ5_SETTINGS_VRM_TEMP_OFFS_OFFS	0x134
 #define AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS	0x14c
-#define AQ5_SETTINGS_LANGUAGE_OFFS	0x019
-#define AQ5_SETTINGS_TEMP_UNITS_OFFS	0x0c4
+#define AQ5_SETTINGS_LANGUAGE_OFFS	0x01a
+#define AQ5_SETTINGS_TEMP_UNITS_OFFS	0x0c5
+#define AQ5_SETTINGS_FLOW_UNITS_OFFS	0x0c6
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -103,6 +104,20 @@ struct TEMP_UNITS_STRINGS {
 	{ FAHRENHEIT,	"Fahrenheit" },
 	{ KELVIN,	"Kelvin" },
 	{ -1,		"Unknown temperature units"}
+};
+
+/* Flow units strings */
+struct FLOW_UNITS_STRINGS {
+	flow_units_t	val;
+	char	*flow_units_str;
+} flow_units_strings[] = {
+	{ LPH,		"Liters per hour" },
+	{ LPM,		"Liters per minute" },
+	{ GPH_US,	"Gallons per hour (US)" },
+	{ GPM_US,	"Gallons per minute (US)" },
+	{ GPH_IMP,	"Gallons per hour (Imp)" },
+	{ GPM_IMP,	"Gallons per minute (Imp)" },
+	{ -1,		"Unknown flow units"}
 };
 
 /* Fan data source strings */
@@ -367,8 +382,9 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	}
 
 	/* User interface settings */
-	settings_dest->language = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_LANGUAGE_OFFS);
-	settings_dest->temp_units = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_TEMP_UNITS_OFFS);
+	settings_dest->language = aq5_buf_settings[AQ5_SETTINGS_LANGUAGE_OFFS];
+	settings_dest->temp_units = aq5_buf_settings[AQ5_SETTINGS_TEMP_UNITS_OFFS];
+	settings_dest->flow_units = aq5_buf_settings[AQ5_SETTINGS_FLOW_UNITS_OFFS];
 
 	/* CPU temperature offset setting */
 	for (int i=0; i<AQ5_NUM_TEMP; i++) {
@@ -556,4 +572,16 @@ char *libaquaero5_get_temp_units_string(int id)
 		}
 	}
 	return (temp_units_strings[i].temp_units_str);
+}
+
+char *libaquaero5_get_flow_units_string(int id) 
+{
+	int i;
+	/* We have to search for it */
+	for (i=0; flow_units_strings[i].val != -1; i++) {
+		if (id == flow_units_strings[i].val) {
+			break;
+		}
+	}
+	return (flow_units_strings[i].flow_units_str);
 }
