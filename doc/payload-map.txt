@@ -183,8 +183,8 @@ payload length: 2427 Bytes
 
 offset		type	value		description
 -------------------------------------------------------
-0x019		int16			Language
-0x0C4		int16			Temperature units
+0x019		int16	language	Language
+0x0C4		int16	temp_units	Temperature units
 
 0x0dc		int16	temp1 offset	Internal temp sensor 1 offset
 0x0de		int16	temp2 offset	Internal temp sensor 2 offset

@@ -141,7 +141,21 @@ typedef struct {
 	boolean_t	use_programmable_fuse;
 } aq5_fan_control_mode_t;
 
+typedef enum { 
+	ENGLISH		= 0x0100, 
+	GERMAN		= 0x0101 
+} language_t;
+
+typedef enum { 
+	CELSIUS		= 0x0000, 
+	FAHRENHEIT	= 0x0001, 
+	KELVIN		= 0x0002 
+} temp_units_t;
+
+
 typedef struct {
+	temp_units_t	temp_units;
+	language_t	language;
 	double		temp_offset[AQ5_NUM_TEMP];
 	double		fan_vrm_temp_offset[AQ5_NUM_TEMP];
 	double		cpu_temp_offset[AQ5_NUM_TEMP];
@@ -163,6 +177,8 @@ int	libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg);
 int	libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **err_msg);
 void	libaquaero5_exit();
 char	*libaquaero5_get_fan_data_source_string(int id);
+char	*libaquaero5_get_language_string(int id);
+char	*libaquaero5_get_temp_units_string(int id);
 
 /* helpful for debugging */
 int 	libaquaero5_dump_data(char *file);

@@ -67,6 +67,8 @@
 #define AQ5_SETTINGS_TEMP_OFFS_OFFS	0x0dc
 #define AQ5_SETTINGS_VRM_TEMP_OFFS_OFFS	0x134
 #define AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS	0x14c
+#define AQ5_SETTINGS_LANGUAGE_OFFS	0x019
+#define AQ5_SETTINGS_TEMP_UNITS_OFFS	0x0c4
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -81,6 +83,27 @@
 unsigned char aq5_buf_data[AQ5_DATA_LEN];
 unsigned char aq5_buf_settings[AQ5_SETTINGS_LEN];
 int aq5_fd = -1;
+
+/* Language setting strings */
+struct LANGUAGE_STRINGS {
+	language_t	val;
+	char	*language_str;
+} language_strings[] = {
+	{ ENGLISH,	"English" },
+	{ GERMAN,	"German" },
+	{ -1,		"Unknown language"}
+};
+
+/* Temperature units strings */
+struct TEMP_UNITS_STRINGS {
+	temp_units_t	val;
+	char	*temp_units_str;
+} temp_units_strings[] = {
+	{ CELSIUS,	"Celsius" },
+	{ FAHRENHEIT,	"Fahrenheit" },
+	{ KELVIN,	"Kelvin" },
+	{ -1,		"Unknown temperature units"}
+};
 
 /* Fan data source strings */
 struct FAN_DATA_SOURCE_STRINGS {
@@ -343,14 +366,21 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		return -1;	
 	}
 
+	/* User interface settings */
+	settings_dest->language = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_LANGUAGE_OFFS);
+	settings_dest->temp_units = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_TEMP_UNITS_OFFS);
+
+	/* CPU temperature offset setting */
 	for (int i=0; i<AQ5_NUM_TEMP; i++) {
 		settings_dest->temp_offset[i] = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
 	}
 	
+	/* Fan VRM temperature offset setting */
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
 		settings_dest->fan_vrm_temp_offset[i] = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_VRM_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
 	}
 
+	/* CPU temperature offset setting */
 	for (int i=0; i<AQ5_NUM_CPU; i++) {
 		settings_dest->cpu_temp_offset[i] = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
 	}
@@ -503,3 +533,27 @@ char *libaquaero5_get_fan_data_source_string(int id)
 	return (fan_data_source_strings[i].source_str);
 }
 
+char *libaquaero5_get_language_string(int id) 
+{
+	int i;
+	/* We have to search for it */
+	for (i=0; language_strings[i].val != -1; i++) {
+		if (id == language_strings[i].val) {
+			break;
+		}
+	}
+	return (language_strings[i].language_str);
+}
+
+
+char *libaquaero5_get_temp_units_string(int id) 
+{
+	int i;
+	/* We have to search for it */
+	for (i=0; temp_units_strings[i].val != -1; i++) {
+		if (id == temp_units_strings[i].val) {
+			break;
+		}
+	}
+	return (temp_units_strings[i].temp_units_str);
+}
