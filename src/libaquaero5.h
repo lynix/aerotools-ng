@@ -142,19 +142,29 @@ typedef struct {
 } aq5_fan_control_mode_t;
 
 typedef enum { 
-	ENGLISH		= 0x0100, 
-	GERMAN		= 0x0101 
+	ENGLISH		= 0x00, 
+	GERMAN		= 0x01 
 } language_t;
 
 typedef enum { 
-	CELSIUS		= 0x0000, 
-	FAHRENHEIT	= 0x0001, 
-	KELVIN		= 0x0002 
+	CELSIUS		= 0x00, 
+	FAHRENHEIT	= 0x01, 
+	KELVIN		= 0x02 
 } temp_units_t;
+
+typedef enum { 
+	LPH		= 0x00, 
+	LPM		= 0x01, 
+	GPH_US		= 0x02, 
+	GPM_US		= 0x03,
+	GPH_IMP		= 0x04,
+	GPM_IMP		= 0x05
+} flow_units_t;
 
 
 typedef struct {
 	temp_units_t	temp_units;
+	flow_units_t	flow_units;
 	language_t	language;
 	double		temp_offset[AQ5_NUM_TEMP];
 	double		fan_vrm_temp_offset[AQ5_NUM_TEMP];
@@ -179,6 +189,7 @@ void	libaquaero5_exit();
 char	*libaquaero5_get_fan_data_source_string(int id);
 char	*libaquaero5_get_language_string(int id);
 char	*libaquaero5_get_temp_units_string(int id);
+char	*libaquaero5_get_flow_units_string(int id);
 
 /* helpful for debugging */
 int 	libaquaero5_dump_data(char *file);
