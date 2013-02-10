@@ -70,6 +70,7 @@
 #define AQ5_SETTINGS_LANGUAGE_OFFS	0x01a
 #define AQ5_SETTINGS_TEMP_UNITS_OFFS	0x0c5
 #define AQ5_SETTINGS_FLOW_UNITS_OFFS	0x0c6
+#define AQ5_SETTINGS_PRESSURE_UNITS_OFFS	0x0c7
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -118,6 +119,16 @@ struct FLOW_UNITS_STRINGS {
 	{ GPH_IMP,	"Gallons per hour (Imp)" },
 	{ GPM_IMP,	"Gallons per minute (Imp)" },
 	{ -1,		"Unknown flow units"}
+};
+
+/* Pressure units strings */
+struct PRESSURE_UNITS_STRINGS {
+	pressure_units_t	val;
+	char	*pressure_units_str;
+} pressure_units_strings[] = {
+	{ BAR,	"bar" },
+	{ PSI,	"PSI" },
+	{ -1,	"Unknown pressure units"}
 };
 
 /* Fan data source strings */
@@ -385,6 +396,7 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	settings_dest->language = aq5_buf_settings[AQ5_SETTINGS_LANGUAGE_OFFS];
 	settings_dest->temp_units = aq5_buf_settings[AQ5_SETTINGS_TEMP_UNITS_OFFS];
 	settings_dest->flow_units = aq5_buf_settings[AQ5_SETTINGS_FLOW_UNITS_OFFS];
+	settings_dest->pressure_units = aq5_buf_settings[AQ5_SETTINGS_PRESSURE_UNITS_OFFS];
 
 	/* CPU temperature offset setting */
 	for (int i=0; i<AQ5_NUM_TEMP; i++) {
@@ -584,4 +596,16 @@ char *libaquaero5_get_flow_units_string(int id)
 		}
 	}
 	return (flow_units_strings[i].flow_units_str);
+}
+
+char *libaquaero5_get_pressure_units_string(int id) 
+{
+	int i;
+	/* We have to search for it */
+	for (i=0; pressure_units_strings[i].val != -1; i++) {
+		if (id == pressure_units_strings[i].val) {
+			break;
+		}
+	}
+	return (pressure_units_strings[i].pressure_units_str);
 }
