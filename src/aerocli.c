@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* output mode changes format strings */
-	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr, *settings_fan_data_source_fstr, *settings_fan_control_regulation_mode_fstr, *settings_fan_control_use_startboost_fstr, *settings_fan_control_use_fuse_fstr, *settings_fan_control_hold_min_power_fstr, *settings_temp_offset_fstr, *settings_fan_vrm_temp_offset_fstr, *settings_cpu_temp_offset_fstr, *settings_language_fstr, *settings_temp_units_fstr, *settings_flow_units_fstr, *settings_pressure_units_fstr;;
+	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr, *settings_fan_data_source_fstr, *settings_fan_control_regulation_mode_fstr, *settings_fan_control_use_startboost_fstr, *settings_fan_control_use_fuse_fstr, *settings_fan_control_hold_min_power_fstr, *settings_temp_offset_fstr, *settings_fan_vrm_temp_offset_fstr, *settings_cpu_temp_offset_fstr, *settings_language_fstr, *settings_temp_units_fstr, *settings_flow_units_fstr, *settings_pressure_units_fstr, *settings_decimal_separator_fstr;;
 
 	struct tm aq_time, *local_aq_time, *systime;
 	time_t aq_time_t, systime_t;
@@ -213,6 +213,7 @@ int main(int argc, char *argv[])
 			settings_temp_units_fstr = "temperature units: %s\n";
 			settings_flow_units_fstr = "flow units: %s\n";
 			settings_pressure_units_fstr = "pressure units: %s\n";
+			settings_decimal_separator_fstr = "decimal separator: %s\n";
 			break;
 		case M_SCRIPT:
 		default:
@@ -273,6 +274,7 @@ int main(int argc, char *argv[])
 		printf(settings_temp_units_fstr, libaquaero5_get_temp_units_string(aquaero_settings.temp_units));
 		printf(settings_flow_units_fstr, libaquaero5_get_flow_units_string(aquaero_settings.flow_units));
 		printf(settings_pressure_units_fstr, libaquaero5_get_pressure_units_string(aquaero_settings.pressure_units));
+		printf(settings_decimal_separator_fstr, libaquaero5_get_decimal_separator_string(aquaero_settings.decimal_separator));
 
 		for (int n=0; n<AQ5_NUM_TEMP; n++)
 			if (aquaero_data.temp[n] != AQ5_FLOAT_UNDEF)
