@@ -273,11 +273,11 @@ int main(int argc, char *argv[])
 	if (out_mode != M_SCRIPT) {
 		printf("\n------Settings------\n");
 		
-		printf(settings_language_fstr, libaquaero5_get_language_string(aquaero_settings.language));
-		printf(settings_temp_units_fstr, libaquaero5_get_temp_units_string(aquaero_settings.temp_units));
-		printf(settings_flow_units_fstr, libaquaero5_get_flow_units_string(aquaero_settings.flow_units));
-		printf(settings_pressure_units_fstr, libaquaero5_get_pressure_units_string(aquaero_settings.pressure_units));
-		printf(settings_decimal_separator_fstr, libaquaero5_get_decimal_separator_string(aquaero_settings.decimal_separator));
+		printf(settings_language_fstr, libaquaero5_get_string(aquaero_settings.language, LANGUAGE));
+		printf(settings_temp_units_fstr, libaquaero5_get_string(aquaero_settings.temp_units, TEMP_UNITS));
+		printf(settings_flow_units_fstr, libaquaero5_get_string(aquaero_settings.flow_units, FLOW_UNITS));
+		printf(settings_pressure_units_fstr, libaquaero5_get_string(aquaero_settings.pressure_units, PRESSURE_UNITS));
+		printf(settings_decimal_separator_fstr, libaquaero5_get_string(aquaero_settings.decimal_separator, DECIMAL_SEPARATOR));
 		for (int n=0; n<AQ5_NUM_INFO_PAGE; n++) {
 			if (aquaero_settings.info_page[n].display_mode != HIDE_PAGE) {
 				printf(settings_info_page_display_mode_fstr,  n+1, libaquaero5_get_string(aquaero_settings.info_page[n].display_mode, DISPLAY_MODE));
@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 			printf(settings_fan_control_use_startboost_fstr, n+1, aquaero_settings.fan_control_mode[n].use_startboost);
 			printf(settings_fan_control_use_fuse_fstr, n+1, aquaero_settings.fan_control_mode[n].use_programmable_fuse);
 			printf(settings_fan_control_hold_min_power_fstr, n+1, aquaero_settings.fan_control_mode[n].hold_minimum_power);
-			printf(settings_fan_data_source_fstr, n+1, libaquaero5_get_fan_data_source_string(aquaero_settings.fan_data_source[n]));
+			printf(settings_fan_data_source_fstr, n+1, libaquaero5_get_string(aquaero_settings.fan_data_source[n], FAN_DATA_SRC));
 			printf(settings_fan_programmable_fuse_fstr, n+1, aquaero_settings.fan_programmable_fuse[n]);
 		}
 

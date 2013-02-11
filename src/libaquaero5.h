@@ -265,12 +265,6 @@ typedef struct {
 int	libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg);
 int	libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **err_msg);
 void	libaquaero5_exit();
-char	*libaquaero5_get_fan_data_source_string(int id);
-char	*libaquaero5_get_language_string(int id);
-char	*libaquaero5_get_temp_units_string(int id);
-char	*libaquaero5_get_flow_units_string(int id);
-char	*libaquaero5_get_pressure_units_string(int id);
-char	*libaquaero5_get_decimal_separator_string(int id);
 char	*libaquaero5_get_string(int id, val_str_opt_t opt);
 
 /* helpful for debugging */
