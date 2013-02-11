@@ -72,6 +72,8 @@
 #define AQ5_SETTINGS_FLOW_UNITS_OFFS	0x0c6
 #define AQ5_SETTINGS_PRESSURE_UNITS_OFFS	0x0c7
 #define AQ5_SETTINGS_DECIMAL_SEPARATOR_OFFS	0x0c8
+#define AQ5_SETTINGS_INFO_PAGE_OFFS	0x031
+#define AQ5_SETTINGS_INFO_PAGE_DIST	4
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -87,133 +89,172 @@ unsigned char aq5_buf_data[AQ5_DATA_LEN];
 unsigned char aq5_buf_settings[AQ5_SETTINGS_LEN];
 int aq5_fd = -1;
 
+typedef struct {
+	int	val;
+	char	*str;
+} val_str_t;
+
 /* Language setting strings */
-struct LANGUAGE_STRINGS {
-	language_t	val;
-	char	*language_str;
-} language_strings[] = {
-	{ ENGLISH,	"English" },
-	{ GERMAN,	"German" },
-	{ -1,		"Unknown language"}
+val_str_t language_strings[] = {
+	{ (language_t)ENGLISH,	"English" },
+	{ (language_t)GERMAN,	"German" },
+	{ -1,			"Unknown language"}
 };
 
 /* Temperature units strings */
-struct TEMP_UNITS_STRINGS {
-	temp_units_t	val;
-	char	*temp_units_str;
-} temp_units_strings[] = {
-	{ CELSIUS,	"Celsius" },
-	{ FAHRENHEIT,	"Fahrenheit" },
-	{ KELVIN,	"Kelvin" },
-	{ -1,		"Unknown temperature units"}
+val_str_t temp_units_strings[] = {
+	{ (temp_units_t)CELSIUS,	"Celsius" },
+	{ (temp_units_t)FAHRENHEIT,	"Fahrenheit" },
+	{ (temp_units_t)KELVIN,		"Kelvin" },
+	{ -1,				"Unknown temperature units"}
 };
 
 /* Flow units strings */
-struct FLOW_UNITS_STRINGS {
-	flow_units_t	val;
-	char	*flow_units_str;
-} flow_units_strings[] = {
-	{ LPH,		"Liters per hour" },
-	{ LPM,		"Liters per minute" },
-	{ GPH_US,	"Gallons per hour (US)" },
-	{ GPM_US,	"Gallons per minute (US)" },
-	{ GPH_IMP,	"Gallons per hour (Imp)" },
-	{ GPM_IMP,	"Gallons per minute (Imp)" },
-	{ -1,		"Unknown flow units"}
+val_str_t flow_units_strings[] = {
+	{ (flow_units_t)LPH,		"Liters per hour" },
+	{ (flow_units_t)LPM,		"Liters per minute" },
+	{ (flow_units_t)GPH_US,		"Gallons per hour (US)" },
+	{ (flow_units_t)GPM_US,		"Gallons per minute (US)" },
+	{ (flow_units_t)GPH_IMP,	"Gallons per hour (Imp)" },
+	{ (flow_units_t)GPM_IMP,	"Gallons per minute (Imp)" },
+	{ -1,				"Unknown flow units"}
 };
 
 /* Pressure units strings */
-struct PRESSURE_UNITS_STRINGS {
-	pressure_units_t	val;
-	char	*pressure_units_str;
-} pressure_units_strings[] = {
-	{ BAR,	"bar" },
-	{ PSI,	"PSI" },
-	{ -1,	"Unknown pressure units"}
+val_str_t pressure_units_strings[] = {
+	{ (pressure_units_t)BAR,	"bar" },
+	{ (pressure_units_t)PSI,	"PSI" },
+	{ -1,				"Unknown pressure units"}
 };
 
 /* Decimal separator strings */
-struct DECIMAL_SEPARATOR_STRINGS {
-	decimal_separator_t	val;
-	char	*decimal_separator_str;
-} decimal_separator_strings[] = {
-	{ POINT,	"point" },
-	{ COMMA,	"comma" },
-	{ -1,		"Unknown decimal separator"}
+val_str_t decimal_separator_strings[] = {
+	{ (decimal_separator_t)POINT,	"point" },
+	{ (decimal_separator_t)COMMA,	"comma" },
+	{ -1,				"Unknown decimal separator"}
 };
 
 /* Fan data source strings */
-struct FAN_DATA_SOURCE_STRINGS {
-	fan_data_source_t	val;
-        char	*source_str;
-} fan_data_source_strings[] = {
-	{ NONE,			"No data source" },
-	{ TARGET_VAL_CONT_1,	"Target value controller 1" },
-	{ TARGET_VAL_CONT_2,	"Target value controller 2" },
-	{ TARGET_VAL_CONT_3,	"Target value controller 3" },
-	{ TARGET_VAL_CONT_4,	"Target value controller 4" },
-	{ TARGET_VAL_CONT_5,	"Target value controller 5" },
-	{ TARGET_VAL_CONT_6,	"Target value controller 6" },
-	{ TARGET_VAL_CONT_7,	"Target value controller 7" },
-	{ TARGET_VAL_CONT_8,	"Target value controller 8" },
-	{ TWO_POINT_CONT_1,	"Two point controller 1" },
-	{ TWO_POINT_CONT_2,	"Two point controller 2" },
-	{ TWO_POINT_CONT_3,	"Two point controller 3" },
-	{ TWO_POINT_CONT_4,	"Two point controller 4" },
-	{ TWO_POINT_CONT_5,	"Two point controller 5" },
-	{ TWO_POINT_CONT_6,	"Two point controller 6" },
-	{ TWO_POINT_CONT_7,	"Two point controller 7" },
-	{ TWO_POINT_CONT_8,	"Two point controller 8" },
-	{ TWO_POINT_CONT_9,	"Two point controller 9" },
-	{ TWO_POINT_CONT_10,	"Two point controller 10" },
-	{ TWO_POINT_CONT_11,	"Two point controller 11" },
-	{ TWO_POINT_CONT_12,	"Two point controller 12" },
-	{ TWO_POINT_CONT_13,	"Two point controller 13" },
-	{ TWO_POINT_CONT_14,	"Two point controller 14" },
-	{ TWO_POINT_CONT_15,	"Two point controller 15" },
-	{ TWO_POINT_CONT_16,	"Two point controller 16" },
-	{ CURVE_CTRLR_1,	"Curve controller 1" },
-	{ CURVE_CTRLR_2,	"Curve controller 2" },
-	{ CURVE_CTRLR_3,	"Curve controller 3" },
-	{ CURVE_CTRLR_4,	"Curve controller 4" },
-	{ RGB_LED_RED,		"RGB LED red" },
-	{ RGB_LED_BLUE,		"RGB LED blue" },
-	{ RGB_LED_GREEN,	"RGB LED green" },
-	{ PRESET_VAL_1,		"Preset value 1" },
-	{ PRESET_VAL_2,		"Preset value 2" },
-	{ PRESET_VAL_3,		"Preset value 3" },
-	{ PRESET_VAL_4,		"Preset value 4" },
-	{ PRESET_VAL_5,		"Preset value 5" },
-	{ PRESET_VAL_6,		"Preset value 6" },
-	{ PRESET_VAL_7,		"Preset value 7" },
-	{ PRESET_VAL_8,		"Preset value 8" },
-	{ PRESET_VAL_9,		"Preset value 9" },
-	{ PRESET_VAL_10,	"Preset value 10" },
-	{ PRESET_VAL_11,	"Preset value 11" },
-	{ PRESET_VAL_12,	"Preset value 12" },
-	{ PRESET_VAL_13,	"Preset value 13" },
-	{ PRESET_VAL_14,	"Preset value 14" },
-	{ PRESET_VAL_15,	"Preset value 15" },
-	{ PRESET_VAL_16,	"Preset value 16" },
-	{ PRESET_VAL_17,	"Preset value 17" },
-	{ PRESET_VAL_18,	"Preset value 18" },
-	{ PRESET_VAL_19,	"Preset value 19" },
-	{ PRESET_VAL_20,	"Preset value 20" },
-	{ PRESET_VAL_21,	"Preset value 21" },
-	{ PRESET_VAL_22,	"Preset value 22" },
-	{ PRESET_VAL_23,	"Preset value 23" },
-	{ PRESET_VAL_24,	"Preset value 24" },
-	{ PRESET_VAL_25,	"Preset value 25" },
-	{ PRESET_VAL_26,	"Preset value 26" },
-	{ PRESET_VAL_27,	"Preset value 27" },
-	{ PRESET_VAL_28,	"Preset value 28" },
-	{ PRESET_VAL_29,	"Preset value 29" },
-	{ PRESET_VAL_30,	"Preset value 30" },
-	{ PRESET_VAL_31,	"Preset value 31" },
-	{ PRESET_VAL_32,	"Preset value 32" },
-	{ -1,			"Unknown data source" }
+val_str_t fan_data_source_strings[] = {
+	{ (fan_data_source_t)NONE,		"No data source" },
+	{ (fan_data_source_t)TARGET_VAL_CONT_1,	"Target value controller 1" },
+	{ (fan_data_source_t)TARGET_VAL_CONT_2,	"Target value controller 2" },
+	{ (fan_data_source_t)TARGET_VAL_CONT_3,	"Target value controller 3" },
+	{ (fan_data_source_t)TARGET_VAL_CONT_4,	"Target value controller 4" },
+	{ (fan_data_source_t)TARGET_VAL_CONT_5,	"Target value controller 5" },
+	{ (fan_data_source_t)TARGET_VAL_CONT_6,	"Target value controller 6" },
+	{ (fan_data_source_t)TARGET_VAL_CONT_7,	"Target value controller 7" },
+	{ (fan_data_source_t)TARGET_VAL_CONT_8,	"Target value controller 8" },
+	{ (fan_data_source_t)TWO_POINT_CONT_1,	"Two point controller 1" },
+	{ (fan_data_source_t)TWO_POINT_CONT_2,	"Two point controller 2" },
+	{ (fan_data_source_t)TWO_POINT_CONT_3,	"Two point controller 3" },
+	{ (fan_data_source_t)TWO_POINT_CONT_4,	"Two point controller 4" },
+	{ (fan_data_source_t)TWO_POINT_CONT_5,	"Two point controller 5" },
+	{ (fan_data_source_t)TWO_POINT_CONT_6,	"Two point controller 6" },
+	{ (fan_data_source_t)TWO_POINT_CONT_7,	"Two point controller 7" },
+	{ (fan_data_source_t)TWO_POINT_CONT_8,	"Two point controller 8" },
+	{ (fan_data_source_t)TWO_POINT_CONT_9,	"Two point controller 9" },
+	{ (fan_data_source_t)TWO_POINT_CONT_10,	"Two point controller 10" },
+	{ (fan_data_source_t)TWO_POINT_CONT_11,	"Two point controller 11" },
+	{ (fan_data_source_t)TWO_POINT_CONT_12,	"Two point controller 12" },
+	{ (fan_data_source_t)TWO_POINT_CONT_13,	"Two point controller 13" },
+	{ (fan_data_source_t)TWO_POINT_CONT_14,	"Two point controller 14" },
+	{ (fan_data_source_t)TWO_POINT_CONT_15,	"Two point controller 15" },
+	{ (fan_data_source_t)TWO_POINT_CONT_16,	"Two point controller 16" },
+	{ (fan_data_source_t)CURVE_CTRLR_1,	"Curve controller 1" },
+	{ (fan_data_source_t)CURVE_CTRLR_2,	"Curve controller 2" },
+	{ (fan_data_source_t)CURVE_CTRLR_3,	"Curve controller 3" },
+	{ (fan_data_source_t)CURVE_CTRLR_4,	"Curve controller 4" },
+	{ (fan_data_source_t)RGB_LED_RED,	"RGB LED red" },
+	{ (fan_data_source_t)RGB_LED_BLUE,	"RGB LED blue" },
+	{ (fan_data_source_t)RGB_LED_GREEN,	"RGB LED green" },
+	{ (fan_data_source_t)PRESET_VAL_1,	"Preset value 1" },
+	{ (fan_data_source_t)PRESET_VAL_2,	"Preset value 2" },
+	{ (fan_data_source_t)PRESET_VAL_3,	"Preset value 3" },
+	{ (fan_data_source_t)PRESET_VAL_4,	"Preset value 4" },
+	{ (fan_data_source_t)PRESET_VAL_5,	"Preset value 5" },
+	{ (fan_data_source_t)PRESET_VAL_6,	"Preset value 6" },
+	{ (fan_data_source_t)PRESET_VAL_7,	"Preset value 7" },
+	{ (fan_data_source_t)PRESET_VAL_8,	"Preset value 8" },
+	{ (fan_data_source_t)PRESET_VAL_9,	"Preset value 9" },
+	{ (fan_data_source_t)PRESET_VAL_10,	"Preset value 10" },
+	{ (fan_data_source_t)PRESET_VAL_11,	"Preset value 11" },
+	{ (fan_data_source_t)PRESET_VAL_12,	"Preset value 12" },
+	{ (fan_data_source_t)PRESET_VAL_13,	"Preset value 13" },
+	{ (fan_data_source_t)PRESET_VAL_14,	"Preset value 14" },
+	{ (fan_data_source_t)PRESET_VAL_15,	"Preset value 15" },
+	{ (fan_data_source_t)PRESET_VAL_16,	"Preset value 16" },
+	{ (fan_data_source_t)PRESET_VAL_17,	"Preset value 17" },
+	{ (fan_data_source_t)PRESET_VAL_18,	"Preset value 18" },
+	{ (fan_data_source_t)PRESET_VAL_19,	"Preset value 19" },
+	{ (fan_data_source_t)PRESET_VAL_20,	"Preset value 20" },
+	{ (fan_data_source_t)PRESET_VAL_21,	"Preset value 21" },
+	{ (fan_data_source_t)PRESET_VAL_22,	"Preset value 22" },
+	{ (fan_data_source_t)PRESET_VAL_23,	"Preset value 23" },
+	{ (fan_data_source_t)PRESET_VAL_24,	"Preset value 24" },
+	{ (fan_data_source_t)PRESET_VAL_25,	"Preset value 25" },
+	{ (fan_data_source_t)PRESET_VAL_26,	"Preset value 26" },
+	{ (fan_data_source_t)PRESET_VAL_27,	"Preset value 27" },
+	{ (fan_data_source_t)PRESET_VAL_28,	"Preset value 28" },
+	{ (fan_data_source_t)PRESET_VAL_29,	"Preset value 29" },
+	{ (fan_data_source_t)PRESET_VAL_30,	"Preset value 30" },
+	{ (fan_data_source_t)PRESET_VAL_31,	"Preset value 31" },
+	{ (fan_data_source_t)PRESET_VAL_32,	"Preset value 32" },
+	{ -1,					"Unknown data source" }
 };
 
+/* Info page strings */
+val_str_t info_page_strings[] = {
+	{ (info_page_type_t)LOG_DATA_1,		"Log data 1" },
+	{ (info_page_type_t)LOG_DATA_2,		"Log data 2" },
+	{ (info_page_type_t)LOG_DATA_3,		"Log data 3" },
+	{ (info_page_type_t)LOG_DATA_4,		"Log data 4" },
+	{ (info_page_type_t)LOG_DATA_5,		"Log data 5" },
+	{ (info_page_type_t)LOG_DATA_6,		"Log data 6" },
+	{ (info_page_type_t)LOG_DATA_7,		"Log data 7" },
+	{ (info_page_type_t)LOG_DATA_8,		"Log data 8" },
+	{ (info_page_type_t)LOG_DATA_9,		"Log data 9" },
+	{ (info_page_type_t)LOG_DATA_10,	"Log data 10" },
+	{ (info_page_type_t)LOG_DATA_11,	"Log data 11" },
+	{ (info_page_type_t)LOG_DATA_12,	"Log data 12" },
+	{ (info_page_type_t)LOG_DATA_13,	"Log data 13" },
+	{ (info_page_type_t)LOG_DATA_14,	"Log data 14" },
+	{ (info_page_type_t)LOG_DATA_15,	"Log data 15" },
+	{ (info_page_type_t)LOG_DATA_16,	"Log data 16" },
+	/* Incomplete */
+	{ (info_page_type_t)SENSOR_1_4,		"Sensor 1-4" },
+	{ (info_page_type_t)SENSOR_5_8,		"Sensor 5-8" },
+	{ (info_page_type_t)POWERADJUST_1_4,	"Poweradjust 1-4" },
+	/* Incomplete */
+	{ (info_page_type_t)FAN_1_4_POWER,	"Fan 1-4 power" },
+	{ (info_page_type_t)FAN_5_8_POWER,	"Fan 5-8 power" },
+	{ (info_page_type_t)FAN_9_12_POWER,	"Fan 9-12 power" },
+	{ (info_page_type_t)FAN_1_4_RPM,	"Fan 1-4 RPM" },
+	{ (info_page_type_t)FAN_5_8_RPM,	"Fan 5-8 RPM" },
+	{ (info_page_type_t)FAN_9_12_RPM,	"Fan 9-12 RPM" },
+	{ (info_page_type_t)FAN_1,		"Fan 1" },
+	/* Incomplete */
+	{ (info_page_type_t)FILL_LEVEL_1,	"Fill level 1" },
+	{ (info_page_type_t)FILL_LEVEL_2,	"Fill level 2" },
+	{ (info_page_type_t)FILL_LEVEL_3,	"Fill level 3" },
+	{ (info_page_type_t)FILL_LEVEL_4,	"Fill level 4" },
+	{ (info_page_type_t)PWR_CONSUMPT_1,	"Power consumption 1" },
+	/* Incomplete */
+	{ (info_page_type_t)AQUAERO_INFO,	"Aquaero info" },
+	{ (info_page_type_t)TIME,		"Time" },
+	{ (info_page_type_t)USB_LCD_PAGE,	"USB LCD page" },
+	{ (info_page_type_t)RELAY_AND_POWER,	"Relay and power outputs" },
+	{ (info_page_type_t)USR_DEFINED_LOGO,	"User defined logo" },
+	{ -1,					"Unknown info page"}
+};
+
+/* Info page display mode strings */
+val_str_t display_mode_strings[] = {
+	{ (display_mode_t)HIDE_PAGE,		"Hide page" },
+	{ (display_mode_t)SHOW_PAGE,		"Show page" },
+	{ (display_mode_t)SHOW_PAGE_PERM,	"Show page permanently" },
+	{ -1,					"Unknown display mode" }
+};
 
 /* helper functions */
 
@@ -405,6 +446,13 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 
 	/* User interface settings */
 	settings_dest->language = aq5_buf_settings[AQ5_SETTINGS_LANGUAGE_OFFS];
+
+	for (int i=0; i<AQ5_NUM_INFO_PAGE; i++) {
+		settings_dest->info_page[i].display_mode = aq5_buf_settings[AQ5_SETTINGS_INFO_PAGE_OFFS + i * AQ5_SETTINGS_INFO_PAGE_DIST];
+		settings_dest->info_page[i].display_time = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_INFO_PAGE_OFFS + 1 + i * AQ5_SETTINGS_INFO_PAGE_DIST);
+		settings_dest->info_page[i].info_page_type = aq5_buf_settings[AQ5_SETTINGS_INFO_PAGE_OFFS + 3 + i * AQ5_SETTINGS_INFO_PAGE_DIST];
+	}
+
 	settings_dest->temp_units = aq5_buf_settings[AQ5_SETTINGS_TEMP_UNITS_OFFS];
 	settings_dest->flow_units = aq5_buf_settings[AQ5_SETTINGS_FLOW_UNITS_OFFS];
 	settings_dest->pressure_units = aq5_buf_settings[AQ5_SETTINGS_PRESSURE_UNITS_OFFS];
@@ -560,76 +608,42 @@ int	libaquaero5_dump_settings(char *file)
 	return 0;
 }
 
-
-char *libaquaero5_get_fan_data_source_string(int id) 
+/* Return the human readable string for the given enum */
+char *libaquaero5_get_string(int id, val_str_opt_t opt) 
 {
 	int i;
+	val_str_t *val_str;
+	switch (opt) {
+		case FAN_DATA_SRC:
+			val_str = fan_data_source_strings;
+			break;
+		case LANGUAGE:
+			val_str = language_strings;
+			break;
+		case TEMP_UNITS:
+			val_str = temp_units_strings;
+			break;
+		case FLOW_UNITS:
+			val_str = flow_units_strings;
+			break;
+		case PRESSURE_UNITS:
+			val_str = pressure_units_strings;
+			break;
+		case DECIMAL_SEPARATOR:
+			val_str = decimal_separator_strings;
+			break; 
+		case INFO_SCREEN:
+			val_str = info_page_strings;
+			break;
+		case DISPLAY_MODE:
+		default:
+			val_str = display_mode_strings;
+	}
 	/* We have to search for it */
-	for (i=0; fan_data_source_strings[i].val != -1; i++) {
-		if (id == fan_data_source_strings[i].val) {
+	for (i=0; val_str[i].val != -1; i++) {
+		if (id == val_str[i].val) {
 			break;
 		}
 	}
-	return (fan_data_source_strings[i].source_str);
-}
-
-char *libaquaero5_get_language_string(int id) 
-{
-	int i;
-	/* We have to search for it */
-	for (i=0; language_strings[i].val != -1; i++) {
-		if (id == language_strings[i].val) {
-			break;
-		}
-	}
-	return (language_strings[i].language_str);
-}
-
-
-char *libaquaero5_get_temp_units_string(int id) 
-{
-	int i;
-	/* We have to search for it */
-	for (i=0; temp_units_strings[i].val != -1; i++) {
-		if (id == temp_units_strings[i].val) {
-			break;
-		}
-	}
-	return (temp_units_strings[i].temp_units_str);
-}
-
-char *libaquaero5_get_flow_units_string(int id) 
-{
-	int i;
-	/* We have to search for it */
-	for (i=0; flow_units_strings[i].val != -1; i++) {
-		if (id == flow_units_strings[i].val) {
-			break;
-		}
-	}
-	return (flow_units_strings[i].flow_units_str);
-}
-
-char *libaquaero5_get_pressure_units_string(int id) 
-{
-	int i;
-	/* We have to search for it */
-	for (i=0; pressure_units_strings[i].val != -1; i++) {
-		if (id == pressure_units_strings[i].val) {
-			break;
-		}
-	}
-	return (pressure_units_strings[i].pressure_units_str);
-}
-
-char *libaquaero5_get_decimal_separator_string(int id) 
-{
-	int i;
-	/* We have to search for it */
-	for (i=0; decimal_separator_strings[i].val != -1; i++) {
-		if (id == decimal_separator_strings[i].val) {
-			break;
-		}
-	}
-	return (decimal_separator_strings[i].decimal_separator_str);
+	return (val_str[i].str);
 }
