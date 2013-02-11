@@ -24,10 +24,11 @@
 
 /* sensor quantity */
 #define AQ5_NUM_TEMP			44
-#define AQ5_NUM_FAN				12
+#define AQ5_NUM_FAN			12
 #define AQ5_NUM_FLOW			14
-#define AQ5_NUM_CPU				8
+#define AQ5_NUM_CPU			8
 #define AQ5_NUM_LEVEL			4
+#define AQ5_NUM_INFO_PAGE		32
 
 
 /* constant for unknown value */
@@ -171,12 +172,79 @@ typedef enum {
 	COMMA		= 0x01 
 } decimal_separator_t;
 
+typedef enum {
+	LOG_DATA_1	= 0x00,
+	LOG_DATA_2	= 0x01,
+	LOG_DATA_3	= 0x02,
+	LOG_DATA_4	= 0x03,
+	LOG_DATA_5	= 0x04,
+	LOG_DATA_6	= 0x05,
+	LOG_DATA_7	= 0x06,
+	LOG_DATA_8	= 0x07,
+	LOG_DATA_9	= 0x08,
+	LOG_DATA_10	= 0x09,
+	LOG_DATA_11	= 0x0a,
+	LOG_DATA_12	= 0x0b,
+	LOG_DATA_13	= 0x0c,
+	LOG_DATA_14	= 0x0d,
+	LOG_DATA_15	= 0x0e,
+	LOG_DATA_16	= 0x0f,
+	/* Incomplete */
+	SENSOR_1_4	= 0x24,
+	SENSOR_5_8	= 0x25,
+	POWERADJUST_1_4	= 0x26,
+	/* Incomplete */
+	FAN_1_4_POWER	= 0x34,
+	FAN_5_8_POWER	= 0x35,
+	FAN_9_12_POWER	= 0x36,
+	FAN_1_4_RPM	= 0x37,
+	FAN_5_8_RPM	= 0x38,
+	FAN_9_12_RPM	= 0x39,
+	FAN_1		= 0x3a,
+	/* Incomplete */
+	FILL_LEVEL_1	= 0x58,
+	FILL_LEVEL_2	= 0x59,
+	FILL_LEVEL_3	= 0x5a,
+	FILL_LEVEL_4	= 0x5b,
+	PWR_CONSUMPT_1	= 0x5c,
+	/* Incomplete */
+	AQUAERO_INFO	= 0x60,
+	TIME		= 0x61,
+	USB_LCD_PAGE	= 0x62,
+	RELAY_AND_POWER	= 0x63,
+	USR_DEFINED_LOGO	= 0x64
+} info_page_type_t;
+
+typedef enum { 
+	FAN_DATA_SRC, 
+	LANGUAGE, 
+	TEMP_UNITS, 
+	FLOW_UNITS, 
+	PRESSURE_UNITS, 
+	DECIMAL_SEPARATOR,
+	INFO_SCREEN, 
+	DISPLAY_MODE
+} val_str_opt_t;
+
+typedef enum {
+	HIDE_PAGE	= 0x00,
+	SHOW_PAGE	= 0x01,
+	SHOW_PAGE_PERM	= 0x02
+} display_mode_t;
+
+typedef struct {
+	display_mode_t		display_mode;
+	uint16_t		display_time;
+	info_page_type_t	info_page_type;
+} info_page_t;
+
 typedef struct {
 	temp_units_t	temp_units;
 	flow_units_t	flow_units;
 	pressure_units_t	pressure_units;
 	decimal_separator_t	decimal_separator;
 	language_t	language;
+	info_page_t	info_page[AQ5_NUM_INFO_PAGE];	
 	double		temp_offset[AQ5_NUM_TEMP];
 	double		fan_vrm_temp_offset[AQ5_NUM_TEMP];
 	double		cpu_temp_offset[AQ5_NUM_TEMP];
@@ -203,6 +271,7 @@ char	*libaquaero5_get_temp_units_string(int id);
 char	*libaquaero5_get_flow_units_string(int id);
 char	*libaquaero5_get_pressure_units_string(int id);
 char	*libaquaero5_get_decimal_separator_string(int id);
+char	*libaquaero5_get_string(int id, val_str_opt_t opt);
 
 /* helpful for debugging */
 int 	libaquaero5_dump_data(char *file);

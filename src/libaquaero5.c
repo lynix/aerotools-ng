@@ -72,6 +72,8 @@
 #define AQ5_SETTINGS_FLOW_UNITS_OFFS	0x0c6
 #define AQ5_SETTINGS_PRESSURE_UNITS_OFFS	0x0c7
 #define AQ5_SETTINGS_DECIMAL_SEPARATOR_OFFS	0x0c8
+#define AQ5_SETTINGS_INFO_PAGE_OFFS	0x031
+#define AQ5_SETTINGS_INFO_PAGE_DIST	4
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -90,7 +92,7 @@ int aq5_fd = -1;
 /* Language setting strings */
 struct LANGUAGE_STRINGS {
 	language_t	val;
-	char	*language_str;
+	char	*str;
 } language_strings[] = {
 	{ ENGLISH,	"English" },
 	{ GERMAN,	"German" },
@@ -100,7 +102,7 @@ struct LANGUAGE_STRINGS {
 /* Temperature units strings */
 struct TEMP_UNITS_STRINGS {
 	temp_units_t	val;
-	char	*temp_units_str;
+	char	*str;
 } temp_units_strings[] = {
 	{ CELSIUS,	"Celsius" },
 	{ FAHRENHEIT,	"Fahrenheit" },
@@ -111,7 +113,7 @@ struct TEMP_UNITS_STRINGS {
 /* Flow units strings */
 struct FLOW_UNITS_STRINGS {
 	flow_units_t	val;
-	char	*flow_units_str;
+	char	*str;
 } flow_units_strings[] = {
 	{ LPH,		"Liters per hour" },
 	{ LPM,		"Liters per minute" },
@@ -125,7 +127,7 @@ struct FLOW_UNITS_STRINGS {
 /* Pressure units strings */
 struct PRESSURE_UNITS_STRINGS {
 	pressure_units_t	val;
-	char	*pressure_units_str;
+	char	*str;
 } pressure_units_strings[] = {
 	{ BAR,	"bar" },
 	{ PSI,	"PSI" },
@@ -135,7 +137,7 @@ struct PRESSURE_UNITS_STRINGS {
 /* Decimal separator strings */
 struct DECIMAL_SEPARATOR_STRINGS {
 	decimal_separator_t	val;
-	char	*decimal_separator_str;
+	char	*str;
 } decimal_separator_strings[] = {
 	{ POINT,	"point" },
 	{ COMMA,	"comma" },
@@ -145,7 +147,7 @@ struct DECIMAL_SEPARATOR_STRINGS {
 /* Fan data source strings */
 struct FAN_DATA_SOURCE_STRINGS {
 	fan_data_source_t	val;
-        char	*source_str;
+        char	*str;
 } fan_data_source_strings[] = {
 	{ NONE,			"No data source" },
 	{ TARGET_VAL_CONT_1,	"Target value controller 1" },
@@ -214,6 +216,61 @@ struct FAN_DATA_SOURCE_STRINGS {
 	{ -1,			"Unknown data source" }
 };
 
+typedef struct {
+	int	val;
+	char	*str;
+} val_str_t;
+
+val_str_t info_page_strings[] = {
+	{ (info_page_type_t)LOG_DATA_1,		"Log data 1" },
+	{ (info_page_type_t)LOG_DATA_2,		"Log data 2" },
+	{ (info_page_type_t)LOG_DATA_3,		"Log data 3" },
+	{ (info_page_type_t)LOG_DATA_4,		"Log data 4" },
+	{ (info_page_type_t)LOG_DATA_5,		"Log data 5" },
+	{ (info_page_type_t)LOG_DATA_6,		"Log data 6" },
+	{ (info_page_type_t)LOG_DATA_7,		"Log data 7" },
+	{ (info_page_type_t)LOG_DATA_8,		"Log data 8" },
+	{ (info_page_type_t)LOG_DATA_9,		"Log data 9" },
+	{ (info_page_type_t)LOG_DATA_10,	"Log data 10" },
+	{ (info_page_type_t)LOG_DATA_11,	"Log data 11" },
+	{ (info_page_type_t)LOG_DATA_12,	"Log data 12" },
+	{ (info_page_type_t)LOG_DATA_13,	"Log data 13" },
+	{ (info_page_type_t)LOG_DATA_14,	"Log data 14" },
+	{ (info_page_type_t)LOG_DATA_15,	"Log data 15" },
+	{ (info_page_type_t)LOG_DATA_16,	"Log data 16" },
+	/* Incomplete */
+	{ (info_page_type_t)SENSOR_1_4,		"Sensor 1-4" },
+	{ (info_page_type_t)SENSOR_5_8,		"Sensor 5-8" },
+	{ (info_page_type_t)POWERADJUST_1_4,	"Poweradjust 1-4" },
+	/* Incomplete */
+	{ (info_page_type_t)FAN_1_4_POWER,	"Fan 1-4 power" },
+	{ (info_page_type_t)FAN_5_8_POWER,	"Fan 5-8 power" },
+	{ (info_page_type_t)FAN_9_12_POWER,	"Fan 9-12 power" },
+	{ (info_page_type_t)FAN_1_4_RPM,	"Fan 1-4 RPM" },
+	{ (info_page_type_t)FAN_5_8_RPM,	"Fan 5-8 RPM" },
+	{ (info_page_type_t)FAN_9_12_RPM,	"Fan 9-12 RPM" },
+	{ (info_page_type_t)FAN_1,		"Fan 1" },
+	/* Incomplete */
+	{ (info_page_type_t)FILL_LEVEL_1,	"Fill level 1" },
+	{ (info_page_type_t)FILL_LEVEL_2,	"Fill level 2" },
+	{ (info_page_type_t)FILL_LEVEL_3,	"Fill level 3" },
+	{ (info_page_type_t)FILL_LEVEL_4,	"Fill level 4" },
+	{ (info_page_type_t)PWR_CONSUMPT_1,	"Power consumption 1" },
+	/* Incomplete */
+	{ (info_page_type_t)AQUAERO_INFO,	"Aquaero info" },
+	{ (info_page_type_t)TIME,		"Time" },
+	{ (info_page_type_t)USB_LCD_PAGE,	"USB LCD page" },
+	{ (info_page_type_t)RELAY_AND_POWER,	"Relay and power outputs" },
+	{ (info_page_type_t)USR_DEFINED_LOGO,	"User defined logo" },
+	{ -1,					"Unknown info page"}
+};
+
+val_str_t display_mode_strings[] = {
+	{ (display_mode_t)HIDE_PAGE,		"Hide page" },
+	{ (display_mode_t)SHOW_PAGE,		"Show page" },
+	{ (display_mode_t)SHOW_PAGE_PERM,	"Show page permanently" },
+	{ -1,					"Unknown display mode" }
+};
 
 /* helper functions */
 
@@ -405,6 +462,13 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 
 	/* User interface settings */
 	settings_dest->language = aq5_buf_settings[AQ5_SETTINGS_LANGUAGE_OFFS];
+
+	for (int i=0; i<AQ5_NUM_INFO_PAGE; i++) {
+		settings_dest->info_page[i].display_mode = aq5_buf_settings[AQ5_SETTINGS_INFO_PAGE_OFFS + i * AQ5_SETTINGS_INFO_PAGE_DIST];
+		settings_dest->info_page[i].display_time = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_INFO_PAGE_OFFS + 1 + i * AQ5_SETTINGS_INFO_PAGE_DIST);
+		settings_dest->info_page[i].info_page_type = aq5_buf_settings[AQ5_SETTINGS_INFO_PAGE_OFFS + 3 + i * AQ5_SETTINGS_INFO_PAGE_DIST];
+	}
+
 	settings_dest->temp_units = aq5_buf_settings[AQ5_SETTINGS_TEMP_UNITS_OFFS];
 	settings_dest->flow_units = aq5_buf_settings[AQ5_SETTINGS_FLOW_UNITS_OFFS];
 	settings_dest->pressure_units = aq5_buf_settings[AQ5_SETTINGS_PRESSURE_UNITS_OFFS];
@@ -570,7 +634,7 @@ char *libaquaero5_get_fan_data_source_string(int id)
 			break;
 		}
 	}
-	return (fan_data_source_strings[i].source_str);
+	return (fan_data_source_strings[i].str);
 }
 
 char *libaquaero5_get_language_string(int id) 
@@ -582,7 +646,7 @@ char *libaquaero5_get_language_string(int id)
 			break;
 		}
 	}
-	return (language_strings[i].language_str);
+	return (language_strings[i].str);
 }
 
 
@@ -595,7 +659,7 @@ char *libaquaero5_get_temp_units_string(int id)
 			break;
 		}
 	}
-	return (temp_units_strings[i].temp_units_str);
+	return (temp_units_strings[i].str);
 }
 
 char *libaquaero5_get_flow_units_string(int id) 
@@ -607,7 +671,7 @@ char *libaquaero5_get_flow_units_string(int id)
 			break;
 		}
 	}
-	return (flow_units_strings[i].flow_units_str);
+	return (flow_units_strings[i].str);
 }
 
 char *libaquaero5_get_pressure_units_string(int id) 
@@ -619,7 +683,7 @@ char *libaquaero5_get_pressure_units_string(int id)
 			break;
 		}
 	}
-	return (pressure_units_strings[i].pressure_units_str);
+	return (pressure_units_strings[i].str);
 }
 
 char *libaquaero5_get_decimal_separator_string(int id) 
@@ -631,5 +695,46 @@ char *libaquaero5_get_decimal_separator_string(int id)
 			break;
 		}
 	}
-	return (decimal_separator_strings[i].decimal_separator_str);
+	return (decimal_separator_strings[i].str);
+}
+
+/* Return the human readable string for the given enum */
+char *libaquaero5_get_string(int id, val_str_opt_t opt) 
+{
+	int i;
+	val_str_t *val_str;
+	switch (opt) {
+/*		case FAN_DATA_SRC:
+			val_str = fan_data_source_strings;
+			break;
+		case LANGUAGE:
+			val_str = language_strings;
+			break;
+		case TEMP_UNITS:
+			val_str = temp_units_strings;
+			break;
+		case FLOW_UNITS:
+			val_str = flow_units_strings;
+			break;
+		case PRESSURE_UNITS:
+			val_str = pressure_units_strings;
+			break;
+		case DECIMAL_SEPARATOR:
+			val_str = decimal_separator_strings;
+			break; 
+*/
+		case INFO_SCREEN:
+			val_str = info_page_strings;
+			break;
+		case DISPLAY_MODE:
+		default:
+			val_str = display_mode_strings;
+	}
+	/* We have to search for it */
+	for (i=0; val_str[i].val != -1; i++) {
+		if (id == val_str[i].val) {
+			break;
+		}
+	}
+	return (val_str[i].str);
 }
