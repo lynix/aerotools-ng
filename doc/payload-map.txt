@@ -183,7 +183,23 @@ payload length: 2427 Bytes
 
 offset		type	value		description
 -------------------------------------------------------
-0x01a		int8	language	Language
+0x009		int16	key_down sens		Down key sensitivity
+0x00b		int16	key_enter sens		Enter key sensitivity 
+0x00d		int16	key_up sens		Up key sensitivity 
+
+0x00e		int16	disable_keys		Disable keys
+
+0x011		int16	key_prog4 sens		Programmable key 4 sensitivity 
+0x013		int16	key_prog3 sens		Programmable key 3 sensitivity 
+0x015		int16	key_prog2 sens		Programmable key 2 sensitivity 
+0x017		int16	key_prog1 sens		Programmable key 1 sensitivity 
+
+0x01a		int8	language		Language
+
+0x027		int16	brightness_in_use	Brightness in use
+0x029		int16	brightness_while_idle	Brightness while idle
+
+0x02b		int8	illumination_mode	Illumination mode
 
 0x031		int8	page1 screen_mode	Info page 1 screen mode
 0x032		int16	page1 duration		Info page 1 screen duration
@@ -314,10 +330,12 @@ offset		type	value		description
 0x0b0		int8	page32 info		Info page 32 info to be shown
 
 
-0x0c5		int8	temp_units	Temperature units
-0x0c6		int8	flow_units	Flow units
-0x0c7		int8	pressure_units	Pressure units
+0x0c5		int8	temp_units		Temperature units
+0x0c6		int8	flow_units		Flow units
+0x0c7		int8	pressure_units		Pressure units
 0x0c8		int8	decimal_separator	Decimal separator
+
+0x0c9		int8	key_tone		Key tone
 
 0x0dc		int16	temp1 offset	Internal temp sensor 1 offset
 0x0de		int16	temp2 offset	Internal temp sensor 2 offset
