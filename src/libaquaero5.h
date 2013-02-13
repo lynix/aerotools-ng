@@ -137,9 +137,9 @@ typedef enum {
 
 typedef struct {
 	fan_regulation_mode_t	fan_regulation_mode;
-	boolean_t	use_startboost;
-	boolean_t	hold_minimum_power;
-	boolean_t	use_programmable_fuse;
+	boolean_t		use_startboost;
+	boolean_t		hold_minimum_power;
+	boolean_t		use_programmable_fuse;
 } aq5_fan_control_mode_t;
 
 typedef enum { 
@@ -284,7 +284,10 @@ typedef enum {
 	PRESSURE_UNITS, 
 	DECIMAL_SEPARATOR,
 	INFO_SCREEN, 
-	DISPLAY_MODE
+	DISPLAY_MODE,
+	DISABLE_KEYS,
+	ILLUM_MODE,
+	KEY_TONE
 } val_str_opt_t;
 
 typedef enum {
@@ -308,7 +311,7 @@ typedef enum {
 	QUIET		= 0x01,
 	NORMAL		= 0x02,
 	LOUD		= 0x03
-} keytone_t;
+} key_tone_t;
 
 typedef struct {
 	display_mode_t		display_mode;
@@ -331,7 +334,7 @@ typedef struct {
 	double			brightness_while_in_use;
 	double			brightness_while_idle;
 	illumination_mode_t	illumination_mode;
-	keytone_t		key_tone;
+	key_tone_t		key_tone;
 	key_sensitivity_t	key_sensitivity;
 	temp_units_t		temp_units;
 	flow_units_t		flow_units;

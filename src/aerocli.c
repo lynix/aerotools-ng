@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* output mode changes format strings */
-	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr, *settings_fan_data_source_fstr, *settings_fan_control_regulation_mode_fstr, *settings_fan_control_use_startboost_fstr, *settings_fan_control_use_fuse_fstr, *settings_fan_control_hold_min_power_fstr, *settings_temp_offset_fstr, *settings_fan_vrm_temp_offset_fstr, *settings_cpu_temp_offset_fstr, *settings_language_fstr, *settings_temp_units_fstr, *settings_flow_units_fstr, *settings_pressure_units_fstr, *settings_decimal_separator_fstr, *settings_info_page_display_mode_fstr, *settings_info_page_display_time_fstr, *settings_info_page_page_type_fstr;;
+	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr, *settings_fan_data_source_fstr, *settings_fan_control_regulation_mode_fstr, *settings_fan_control_use_startboost_fstr, *settings_fan_control_use_fuse_fstr, *settings_fan_control_hold_min_power_fstr, *settings_temp_offset_fstr, *settings_fan_vrm_temp_offset_fstr, *settings_cpu_temp_offset_fstr, *settings_language_fstr, *settings_temp_units_fstr, *settings_flow_units_fstr, *settings_pressure_units_fstr, *settings_decimal_separator_fstr, *settings_info_page_display_mode_fstr, *settings_info_page_display_time_fstr, *settings_info_page_page_type_fstr, *settings_disable_keys_fstr, *settings_illum_mode_fstr, *settings_key_tone_fstr, *settings_bright_while_in_use_fstr, *settings_bright_while_idle_fstr, *settings_key_sens_fstr;;
 
 	struct tm aq_time, *local_aq_time, *systime;
 	time_t aq_time_t, systime_t;
@@ -217,6 +217,12 @@ int main(int argc, char *argv[])
 			settings_info_page_display_mode_fstr = "info page%d display mode: %s\n";
 			settings_info_page_display_time_fstr = "info page%d display time: %d seconds\n";
 			settings_info_page_page_type_fstr = "info page%d page type: %s\n";
+			settings_disable_keys_fstr = "disable keys: %s\n";
+			settings_illum_mode_fstr = "illumination mode: %s\n";
+			settings_key_tone_fstr = "key tone: %s\n";
+			settings_bright_while_in_use_fstr = "brightness while in use: %.2f %%\n";
+			settings_bright_while_idle_fstr = "brightness while idle: %.2f %%\n";
+			settings_key_sens_fstr = "%s sensitivity: %d\n";
 			break;
 		case M_SCRIPT:
 		default:
@@ -274,6 +280,20 @@ int main(int argc, char *argv[])
 		printf("\n------Settings------\n");
 		
 		printf(settings_language_fstr, libaquaero5_get_string(aquaero_settings.language, LANGUAGE));
+
+		printf(settings_disable_keys_fstr, libaquaero5_get_string(aquaero_settings.disable_keys, DISABLE_KEYS));
+		printf(settings_illum_mode_fstr, libaquaero5_get_string(aquaero_settings.illumination_mode, ILLUM_MODE));
+		printf(settings_key_tone_fstr, libaquaero5_get_string(aquaero_settings.key_tone, KEY_TONE));
+		printf(settings_bright_while_in_use_fstr, aquaero_settings.brightness_while_in_use);
+		printf(settings_bright_while_idle_fstr, aquaero_settings.brightness_while_idle);
+		printf(settings_key_sens_fstr, "Down key", aquaero_settings.key_sensitivity.down_key);
+		printf(settings_key_sens_fstr, "Enter key", aquaero_settings.key_sensitivity.enter_key);
+		printf(settings_key_sens_fstr, "Up key", aquaero_settings.key_sensitivity.up_key);
+		printf(settings_key_sens_fstr, "Programmable key 1", aquaero_settings.key_sensitivity.programmable_key_1);
+		printf(settings_key_sens_fstr, "Programmable key 2", aquaero_settings.key_sensitivity.programmable_key_2);
+		printf(settings_key_sens_fstr, "Programmable key 3", aquaero_settings.key_sensitivity.programmable_key_3);
+		printf(settings_key_sens_fstr, "Programmable key 4", aquaero_settings.key_sensitivity.programmable_key_4);
+
 		printf(settings_temp_units_fstr, libaquaero5_get_string(aquaero_settings.temp_units, TEMP_UNITS));
 		printf(settings_flow_units_fstr, libaquaero5_get_string(aquaero_settings.flow_units, FLOW_UNITS));
 		printf(settings_pressure_units_fstr, libaquaero5_get_string(aquaero_settings.pressure_units, PRESSURE_UNITS));

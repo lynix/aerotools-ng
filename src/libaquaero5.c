@@ -61,19 +61,31 @@
 #define AQ5_LEVEL_DIST			2
 
 /* settings from HID feature report 0xB */
-#define AQ5_SETTINGS_LEN		2428
-#define AQ5_SETTINGS_FAN_OFFS	0x20d
-#define AQ5_SETTINGS_FAN_DIST	20
-#define AQ5_SETTINGS_TEMP_OFFS_OFFS	0x0dc
-#define AQ5_SETTINGS_VRM_TEMP_OFFS_OFFS	0x134
-#define AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS	0x14c
-#define AQ5_SETTINGS_LANGUAGE_OFFS	0x01a
-#define AQ5_SETTINGS_TEMP_UNITS_OFFS	0x0c5
-#define AQ5_SETTINGS_FLOW_UNITS_OFFS	0x0c6
+#define AQ5_SETTINGS_LEN			2428
+#define AQ5_SETTINGS_FAN_OFFS			0x20d
+#define AQ5_SETTINGS_FAN_DIST			20
+#define AQ5_SETTINGS_TEMP_OFFS_OFFS		0x0dc
+#define AQ5_SETTINGS_VRM_TEMP_OFFS_OFFS		0x134
+#define AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS		0x14c
+#define AQ5_SETTINGS_LANGUAGE_OFFS		0x01a
+#define AQ5_SETTINGS_TEMP_UNITS_OFFS		0x0c5
+#define AQ5_SETTINGS_FLOW_UNITS_OFFS		0x0c6
 #define AQ5_SETTINGS_PRESSURE_UNITS_OFFS	0x0c7
 #define AQ5_SETTINGS_DECIMAL_SEPARATOR_OFFS	0x0c8
-#define AQ5_SETTINGS_INFO_PAGE_OFFS	0x031
-#define AQ5_SETTINGS_INFO_PAGE_DIST	4
+#define AQ5_SETTINGS_INFO_PAGE_OFFS		0x031
+#define AQ5_SETTINGS_INFO_PAGE_DIST		4
+#define AQ5_SETTINGS_KEY_DOWN_SENS_OFFS		0x009
+#define AQ5_SETTINGS_KEY_ENTER_SENS_OFFS	0x00b
+#define AQ5_SETTINGS_KEY_UP_SENS_OFFS		0x00d
+#define AQ5_SETTINGS_KEY_PROG4_SENS_OFFS	0x011
+#define AQ5_SETTINGS_KEY_PROG3_SENS_OFFS	0x013
+#define AQ5_SETTINGS_KEY_PROG2_SENS_OFFS	0x015
+#define AQ5_SETTINGS_KEY_PROG1_SENS_OFFS	0x017
+#define AQ5_SETTINGS_DISABLE_KEYS_OFFS		0x00e
+#define AQ5_SETTINGS_BRT_WHILE_IN_USE_OFFS	0x027
+#define AQ5_SETTINGS_BRT_WHILE_IDLE_OFFS	0x029
+#define AQ5_SETTINGS_ILLUM_MODE_OFFS		0x02b
+#define AQ5_SETTINGS_KEY_TONE_OFFS		0x0c9
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -317,6 +329,30 @@ val_str_t display_mode_strings[] = {
 	{ -1,					"Unknown display mode" }
 };
 
+/* disable keys strings */
+val_str_t disable_keys_strings[] = {
+	{ (disable_keys_t)ENABLED,	"Enabled" },
+	{ (disable_keys_t)DISABLED,	"Disabled" },
+	{ -1,				"Unknown disable keys state"}
+};
+
+/* Illumination mode strings */
+val_str_t illumination_mode_strings[] = {
+	{ (illumination_mode_t)AUTO_OFF,	"Automatic off" },
+	{ (illumination_mode_t)ALWAYS_ON,	"Always on" },
+	{ -1,					"Unknown illumination mode"}
+};
+
+/* Key tone strings */
+val_str_t key_tone_strings[] = {
+	{ (key_tone_t)OFF,	"Off" },
+	{ (key_tone_t)QUIET,	"Quiet" },
+	{ (key_tone_t)NORMAL,	"Normal" },
+	{ (key_tone_t)LOUD,	"Loud" },
+	{ -1,			"Unknown key tone mode" }
+};
+
+
 /* helper functions */
 
 inline int aq5_get_int(unsigned char *buffer, short offset)
@@ -506,6 +542,19 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	}
 
 	/* User interface settings */
+	settings_dest->disable_keys = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_DISABLE_KEYS_OFFS);
+	settings_dest->brightness_while_in_use = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IN_USE_OFFS) /100.0;	
+	settings_dest->brightness_while_idle = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IDLE_OFFS) /100.0;
+	settings_dest->illumination_mode = aq5_buf_settings[AQ5_SETTINGS_ILLUM_MODE_OFFS];
+	settings_dest->key_tone = aq5_buf_settings[AQ5_SETTINGS_KEY_TONE_OFFS];
+	settings_dest->key_sensitivity.down_key = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_KEY_DOWN_SENS_OFFS);	
+	settings_dest->key_sensitivity.enter_key = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_KEY_ENTER_SENS_OFFS);	
+	settings_dest->key_sensitivity.up_key = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_KEY_UP_SENS_OFFS);	
+	settings_dest->key_sensitivity.programmable_key_4 = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_KEY_PROG4_SENS_OFFS);	
+	settings_dest->key_sensitivity.programmable_key_3 = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_KEY_PROG3_SENS_OFFS);	
+	settings_dest->key_sensitivity.programmable_key_2 = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_KEY_PROG2_SENS_OFFS);	
+	settings_dest->key_sensitivity.programmable_key_1 = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_KEY_PROG1_SENS_OFFS);	
+
 	settings_dest->language = aq5_buf_settings[AQ5_SETTINGS_LANGUAGE_OFFS];
 
 	for (int i=0; i<AQ5_NUM_INFO_PAGE; i++) {
@@ -697,8 +746,17 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 			val_str = info_page_strings;
 			break;
 		case DISPLAY_MODE:
-		default:
 			val_str = display_mode_strings;
+			break;
+		case DISABLE_KEYS:
+			val_str = disable_keys_strings;
+			break;
+		case ILLUM_MODE:
+			val_str = illumination_mode_strings;
+			break;
+		case KEY_TONE:
+		default:
+			val_str = key_tone_strings;
 	}
 	/* We have to search for it */
 	for (i=0; val_str[i].val != -1; i++) {
