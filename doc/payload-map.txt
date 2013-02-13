@@ -187,7 +187,7 @@ offset		type	value		description
 0x00b		int16	key_enter sens		Enter key sensitivity 
 0x00d		int16	key_up sens		Up key sensitivity 
 
-0x00e		int16	disable_keys		Disable keys
+0x00f		int16	disable_keys		Disable keys
 
 0x011		int16	key_prog4 sens		Programmable key 4 sensitivity 
 0x013		int16	key_prog3 sens		Programmable key 3 sensitivity 
