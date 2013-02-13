@@ -293,6 +293,23 @@ typedef enum {
 	SHOW_PAGE_PERM	= 0x02
 } display_mode_t;
 
+typedef enum {
+	ENABLED		= 0x00,
+	DISABLED	= 0xFF
+} disable_keys_t;
+
+typedef enum {
+	AUTO_OFF	= 0x00,
+	ALWAYS_ON	= 0x01
+} illumination_mode_t;
+
+typedef enum {
+	OFF		= 0x00,
+	QUIET		= 0x01,
+	NORMAL		= 0x02,
+	LOUD		= 0x03
+} keytone_t;
+
 typedef struct {
 	display_mode_t		display_mode;
 	uint16_t		display_time;
@@ -300,25 +317,41 @@ typedef struct {
 } info_page_t;
 
 typedef struct {
-	temp_units_t	temp_units;
-	flow_units_t	flow_units;
+	uint16_t	enter_key;
+	uint16_t	up_key;
+	uint16_t	down_key;
+	uint16_t	programmable_key_1;
+	uint16_t	programmable_key_2;
+	uint16_t	programmable_key_3;
+	uint16_t	programmable_key_4;
+} key_sensitivity_t;	
+
+typedef struct {
+	disable_keys_t		disable_keys;
+	double			brightness_while_in_use;
+	double			brightness_while_idle;
+	illumination_mode_t	illumination_mode;
+	keytone_t		key_tone;
+	key_sensitivity_t	key_sensitivity;
+	temp_units_t		temp_units;
+	flow_units_t		flow_units;
 	pressure_units_t	pressure_units;
 	decimal_separator_t	decimal_separator;
-	language_t	language;
-	info_page_t	info_page[AQ5_NUM_INFO_PAGE];	
-	double		temp_offset[AQ5_NUM_TEMP];
-	double		fan_vrm_temp_offset[AQ5_NUM_TEMP];
-	double		cpu_temp_offset[AQ5_NUM_TEMP];
-	uint16_t	fan_min_rpm[AQ5_NUM_FAN];
-	uint16_t	fan_max_rpm[AQ5_NUM_FAN];
-	double		fan_max_duty_cycle[AQ5_NUM_FAN];
-	double		fan_min_duty_cycle[AQ5_NUM_FAN];
-	double		fan_startboost_duty_cycle[AQ5_NUM_FAN];
-	uint16_t	fan_startboost_duration[AQ5_NUM_FAN];
-	uint16_t	fan_pulses_per_revolution[AQ5_NUM_FAN];
+	language_t		language;
+	info_page_t		info_page[AQ5_NUM_INFO_PAGE];	
+	double			temp_offset[AQ5_NUM_TEMP];
+	double			fan_vrm_temp_offset[AQ5_NUM_TEMP];
+	double			cpu_temp_offset[AQ5_NUM_TEMP];
+	uint16_t		fan_min_rpm[AQ5_NUM_FAN];
+	uint16_t		fan_max_rpm[AQ5_NUM_FAN];
+	double			fan_max_duty_cycle[AQ5_NUM_FAN];
+	double			fan_min_duty_cycle[AQ5_NUM_FAN];
+	double			fan_startboost_duty_cycle[AQ5_NUM_FAN];
+	uint16_t		fan_startboost_duration[AQ5_NUM_FAN];
+	uint16_t		fan_pulses_per_revolution[AQ5_NUM_FAN];
 	aq5_fan_control_mode_t	fan_control_mode[AQ5_NUM_FAN];
 	fan_data_source_t	fan_data_source[AQ5_NUM_FAN];
-	uint16_t	fan_programmable_fuse[AQ5_NUM_FAN];
+	uint16_t		fan_programmable_fuse[AQ5_NUM_FAN];
 } aq5_settings_t;
 
 
