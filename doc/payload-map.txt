@@ -196,8 +196,15 @@ offset		type	value		description
 
 0x01a		int8	language		Language
 
-0x027		int16	brightness_in_use	Brightness in use
-0x029		int16	brightness_while_idle	Brightness while idle
+0x01b		int16	contrast		Display contrast
+0x01f		int16	brightness_in_use	Display brightness while in use
+0x021		int16	brightness_while_idle	Display brightness while idle
+0x023		int16	illumination_time	Display illumination time
+0x025		int8	illumination_mode	Display illumination mode
+0x026		int8	display_mode		Display display mode
+
+0x027		int16	brightness_in_use	Brightness while in use (keys)
+0x029		int16	brightness_while_idle	Brightness while idle (keys)
 
 0x02b		int8	illumination_mode	Illumination mode
 
