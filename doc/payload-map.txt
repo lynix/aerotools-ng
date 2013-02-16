@@ -205,8 +205,9 @@ offset		type	value		description
 
 0x027		int16	brightness_in_use	Brightness while in use (keys)
 0x029		int16	brightness_while_idle	Brightness while idle (keys)
+0x02b		int8	illumination_mode	Illumination mode (keys)
 
-0x02b		int8	illumination_mode	Illumination mode
+0x02c		int16	menu_duration		Menu display duration
 
 0x031		int8	page1 screen_mode	Info page 1 screen mode
 0x032		int16	page1 duration		Info page 1 screen duration
@@ -343,6 +344,8 @@ offset		type	value		description
 0x0c8		int8	decimal_separator	Decimal separator
 
 0x0c9		int8	key_tone		Key tone
+
+0x0d4		int16	display_duration_aps	Display duration after page selection
 
 0x0dc		int16	temp1 offset	Internal temp sensor 1 offset
 0x0de		int16	temp2 offset	Internal temp sensor 2 offset
