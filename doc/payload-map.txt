@@ -209,6 +209,9 @@ offset		type	value		description
 
 0x02c		int16	menu_duration		Menu display duration
 
+0x02f		int8	time_zone		Timezone offset from GMT
+0x030		int8	time_format		Bit field for AutoDST, Date format and Time format
+
 0x031		int8	page1 screen_mode	Info page 1 screen mode
 0x032		int16	page1 duration		Info page 1 screen duration
 0x034		int8	page1 info		Info page 1 info to be shown
