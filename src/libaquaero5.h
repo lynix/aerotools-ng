@@ -276,7 +276,11 @@ typedef enum {
 	USER_DEF_LOGO	= 0x64
 } info_page_type_t;
 
-typedef enum { 
+typedef enum {
+	DATE_FORMAT,
+	TIME_FORMAT,
+	AUTO_DST,
+	DISPLAY_MODE,
 	FAN_DATA_SRC, 
 	LANGUAGE, 
 	TEMP_UNITS, 
@@ -284,7 +288,7 @@ typedef enum {
 	PRESSURE_UNITS, 
 	DECIMAL_SEPARATOR,
 	INFO_SCREEN, 
-	DISPLAY_MODE,
+	PAGE_DISPLAY_MODE,
 	DISABLE_KEYS,
 	ILLUM_MODE,
 	KEY_TONE
@@ -294,7 +298,7 @@ typedef enum {
 	HIDE_PAGE	= 0x00,
 	SHOW_PAGE	= 0x01,
 	SHOW_PAGE_PERM	= 0x02
-} display_mode_t;
+} page_display_mode_t;
 
 typedef enum {
 	ENABLED		= 0x00,
@@ -314,7 +318,7 @@ typedef enum {
 } key_tone_t;
 
 typedef struct {
-	display_mode_t		display_mode;
+	page_display_mode_t	page_display_mode;
 	uint16_t		display_time;
 	info_page_type_t	info_page_type;
 } info_page_t;
@@ -329,7 +333,39 @@ typedef struct {
 	uint16_t	programmable_key_4;
 } key_sensitivity_t;	
 
+typedef enum {
+	YEAR_MONTH_DAY	= 0x00,
+	DAY_MONTH_YEAR	= 0x04
+} date_format_t;
+
+typedef enum {
+	TWELVE_HOUR		= 0x00,
+	TWENTY_FOUR_HOUR	= 0x02
+} time_format_t;
+
+typedef enum {
+	DST_DISABLED	= 0x00,
+	DST_ENABLED	= 0x01
+} auto_dst_t;
+
+typedef enum {
+	DISP_NORMAL	= 0x00,
+	DISP_INVERTED	= 0x01
+} display_mode_t;	
+
 typedef struct {
+	time_format_t		time_format;
+	date_format_t		date_format;
+	auto_dst_t		auto_dst;
+	int8_t			time_zone;
+	double			display_contrast;
+	double			display_brightness_while_in_use;
+	double			display_brightness_while_idle;
+	uint16_t		display_illumination_time;
+	illumination_mode_t	display_illumination_mode;
+	display_mode_t		display_mode;
+	uint16_t		menu_display_duration;
+	uint16_t		display_duration_after_page_selection;
 	disable_keys_t		disable_keys;
 	double			brightness_while_in_use;
 	double			brightness_while_idle;
