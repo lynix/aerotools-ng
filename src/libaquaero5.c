@@ -86,6 +86,16 @@
 #define AQ5_SETTINGS_BRT_WHILE_IDLE_OFFS	0x029
 #define AQ5_SETTINGS_ILLUM_MODE_OFFS		0x02b
 #define AQ5_SETTINGS_KEY_TONE_OFFS		0x0c9
+#define AQ5_SETTINGS_DISP_CONTRAST_OFFS		0x01b
+#define AQ5_SETTINGS_DISP_BRT_WHILE_IN_USE_OFFS	0x01f
+#define AQ5_SETTINGS_DISP_BRT_WHILE_IDLE_OFFS	0x021
+#define AQ5_SETTINGS_DISP_ILLUM_TIME_OFFS	0x023
+#define AQ5_SETTINGS_DISP_ILLUM_MODE_OFFS	0x025
+#define AQ5_SETTINGS_DISP_MODE_OFFS		0x026
+#define AQ5_SETTINGS_MENU_DISP_DURATION_OFFS	0x02c
+#define AQ5_SETTINGS_DISP_DURATION_APS_OFFS	0x0d4
+#define AQ5_SETTINGS_TIME_ZONE_OFFS		0x02f
+#define AQ5_SETTINGS_DATE_SETTINGS_OFFS		0x030	
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -322,10 +332,10 @@ val_str_t info_page_strings[] = {
 };
 
 /* Info page display mode strings */
-val_str_t display_mode_strings[] = {
-	{ (display_mode_t)HIDE_PAGE,		"Hide page" },
-	{ (display_mode_t)SHOW_PAGE,		"Show page" },
-	{ (display_mode_t)SHOW_PAGE_PERM,	"Show page permanently" },
+val_str_t page_display_mode_strings[] = {
+	{ (page_display_mode_t)HIDE_PAGE,	"Hide page" },
+	{ (page_display_mode_t)SHOW_PAGE,	"Show page" },
+	{ (page_display_mode_t)SHOW_PAGE_PERM,	"Show page permanently" },
 	{ -1,					"Unknown display mode" }
 };
 
@@ -352,6 +362,34 @@ val_str_t key_tone_strings[] = {
 	{ -1,			"Unknown key tone mode" }
 };
 
+/* Date formt strings */
+val_str_t date_format_strings[] = {
+	{ (date_format_t)YEAR_MONTH_DAY,	"Year.Month.Day" },
+	{ (date_format_t)DAY_MONTH_YEAR,	"Day.Month.Year" },
+	{ -1,					"Unknown date format"}
+};
+
+/* Time format strings */
+val_str_t time_format_strings[] = {
+	{ (time_format_t)TWELVE_HOUR,		"12 hour" },
+	{ (time_format_t)TWENTY_FOUR_HOUR,	"24 hour" },
+	{ -1,					"Unknown time format" }
+};
+
+/* Auto DST format strings */
+val_str_t auto_dst_strings[] = {
+	{ (auto_dst_t)DISABLED,	"Enabled" },
+	{ (auto_dst_t)ENABLED,	"Disabled" },
+	{ -1,			"Unknown DST mode" },
+	
+};
+
+/* Display mode strings */
+val_str_t display_mode_strings[] = {
+	{ (display_mode_t)DISP_NORMAL,		"Normal" },
+	{ (display_mode_t)DISP_INVERTED,	"Inverted" },
+	{ -1,					"Unknown display mode"}
+};
 
 /* helper functions */
 
@@ -556,9 +594,38 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	settings_dest->key_sensitivity.programmable_key_1 = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_KEY_PROG1_SENS_OFFS);	
 
 	settings_dest->language = aq5_buf_settings[AQ5_SETTINGS_LANGUAGE_OFFS];
+	int m;
+	m = aq5_buf_settings[AQ5_SETTINGS_DATE_SETTINGS_OFFS];
+	if ((m & (date_format_t)DAY_MONTH_YEAR) == (date_format_t)DAY_MONTH_YEAR) {
+		settings_dest->date_format = DAY_MONTH_YEAR;
+	} else {
+		settings_dest->date_format = YEAR_MONTH_DAY;
+	}
+	
+	if ((m & (time_format_t)TWENTY_FOUR_HOUR) == (time_format_t)TWENTY_FOUR_HOUR) {
+		settings_dest->time_format = TWENTY_FOUR_HOUR;
+	} else {
+		settings_dest->time_format = TWELVE_HOUR;
+	}
+
+	if ((m & (auto_dst_t)DST_ENABLED) == (auto_dst_t)DST_ENABLED) {
+		settings_dest->auto_dst = DST_ENABLED;
+	} else {
+		settings_dest->auto_dst = DST_DISABLED;
+	}
+
+	settings_dest->time_zone = aq5_buf_settings[AQ5_SETTINGS_TIME_ZONE_OFFS];
+	settings_dest->display_contrast = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_DISP_CONTRAST_OFFS) /100.0;
+	settings_dest->display_brightness_while_in_use = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IN_USE_OFFS) /100.0;
+	settings_dest->display_brightness_while_idle = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IDLE_OFFS) /100.0;
+	settings_dest->display_illumination_time = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_DISP_ILLUM_TIME_OFFS);
+	settings_dest->display_illumination_mode = aq5_buf_settings[AQ5_SETTINGS_DISP_ILLUM_MODE_OFFS];
+	settings_dest->display_mode = aq5_buf_settings[AQ5_SETTINGS_DISP_MODE_OFFS];
+	settings_dest->menu_display_duration = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_MENU_DISP_DURATION_OFFS);
+	settings_dest->display_duration_after_page_selection = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_DISP_DURATION_APS_OFFS);
 
 	for (int i=0; i<AQ5_NUM_INFO_PAGE; i++) {
-		settings_dest->info_page[i].display_mode = aq5_buf_settings[AQ5_SETTINGS_INFO_PAGE_OFFS + i * AQ5_SETTINGS_INFO_PAGE_DIST];
+		settings_dest->info_page[i].page_display_mode = aq5_buf_settings[AQ5_SETTINGS_INFO_PAGE_OFFS + i * AQ5_SETTINGS_INFO_PAGE_DIST];
 		settings_dest->info_page[i].display_time = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_INFO_PAGE_OFFS + 1 + i * AQ5_SETTINGS_INFO_PAGE_DIST);
 		settings_dest->info_page[i].info_page_type = aq5_buf_settings[AQ5_SETTINGS_INFO_PAGE_OFFS + 3 + i * AQ5_SETTINGS_INFO_PAGE_DIST];
 	}
@@ -724,6 +791,18 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case DATE_FORMAT:
+			val_str = date_format_strings;
+			break;
+		case TIME_FORMAT:
+			val_str = time_format_strings;
+			break;
+		case AUTO_DST:
+			val_str = auto_dst_strings;
+			break;
+		case DISPLAY_MODE:
+			val_str = display_mode_strings;
+			break;
 		case FAN_DATA_SRC:
 			val_str = fan_data_source_strings;
 			break;
@@ -745,8 +824,8 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 		case INFO_SCREEN:
 			val_str = info_page_strings;
 			break;
-		case DISPLAY_MODE:
-			val_str = display_mode_strings;
+		case PAGE_DISPLAY_MODE:
+			val_str = page_display_mode_strings;
 			break;
 		case DISABLE_KEYS:
 			val_str = disable_keys_strings;
