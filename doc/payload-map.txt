@@ -197,6 +197,7 @@ offset		type	value		description
 0x01a		int8	language		Language
 
 0x01b		int16	contrast		Display contrast
+0x01d		int16	standby_contrast	Standby display contrast
 0x01f		int16	brightness_in_use	Display brightness while in use
 0x021		int16	brightness_while_idle	Display brightness while idle
 0x023		int16	illumination_time	Display illumination time
@@ -347,6 +348,12 @@ offset		type	value		description
 0x0c8		int8	decimal_separator	Decimal separator
 
 0x0c9		int8	key_tone		Key tone
+
+0x0ca		int16	standby_lcd_brightness	Standby LCD backlight brightness
+0x0cc		int16	standby_timeout_kad_brightness	Standby timeout key and display brightness
+0x0ce		int16	standby_key_brightness	Standby key backlight brightness
+0x0d0		int16	standby_action_at_power_up	Standby action at power up
+0x0d2		int16	standby_action_at_power_down	Standby action at power down
 
 0x0d4		int16	display_duration_aps	Display duration after page selection
 

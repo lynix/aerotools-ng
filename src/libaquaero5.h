@@ -277,6 +277,7 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	STANDBY_ACTION,
 	DATE_FORMAT,
 	TIME_FORMAT,
 	AUTO_DST,
@@ -353,7 +354,34 @@ typedef enum {
 	DISP_INVERTED	= 0x01
 } display_mode_t;	
 
+typedef enum {
+	NO_ACTION		= 0xffff,
+	SPEED_SIG_GEN_ON	= 0x0000,
+	SPEED_SIG_GEN_OFF	= 0x0001,
+	ALARM_BUZZER_ON		= 0x0002,
+	ALARM_BUZZER_OFF	= 0x0003,
+	ALARM_BUZZER_CYCLE_ON_OFF	= 0x0004,
+	ALARM_BUZZER_SINGLE_TONE	= 0x0005,
+	RELAY_ON		= 0x0006,
+	RELAY_OFF		= 0x0007,
+	SWITCH_RELAY_2_SEC	= 0x0008,
+	SWITCH_RELAY_10_SEC	= 0x0009,
+	LOAD_PROFILE_1		= 0x000a,
+	LOAD_PROFILE_2		= 0x000b,
+	LOAD_PROFILE_3		= 0x000c,
+	LOAD_PROFILE_4		= 0x000d,
+	USB_KEYBD_POWER_KEY	= 0x000e,
+	USB_KEYBD_SLEEP_KEY	= 0x000f,
+	USB_KEYBD_WAKEUP_KEY	= 0x0010
+} standby_action_t;
+
 typedef struct {
+	double			standby_display_contrast;
+	double			standby_lcd_backlight_brightness;
+	double			standby_key_backlight_brightness;
+	uint16_t		standby_timeout_key_and_display_brightness;
+	standby_action_t	standby_action_at_power_down;
+	standby_action_t	standby_action_at_power_up;
 	time_format_t		time_format;
 	date_format_t		date_format;
 	auto_dst_t		auto_dst;

@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* output mode changes format strings */
-	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr, *settings_fan_data_source_fstr, *settings_fan_control_regulation_mode_fstr, *settings_fan_control_use_startboost_fstr, *settings_fan_control_use_fuse_fstr, *settings_fan_control_hold_min_power_fstr, *settings_temp_offset_fstr, *settings_fan_vrm_temp_offset_fstr, *settings_cpu_temp_offset_fstr, *settings_language_fstr, *settings_temp_units_fstr, *settings_flow_units_fstr, *settings_pressure_units_fstr, *settings_decimal_separator_fstr, *settings_info_page_display_mode_fstr, *settings_info_page_display_time_fstr, *settings_info_page_page_type_fstr, *settings_disable_keys_fstr, *settings_illum_mode_fstr, *settings_key_tone_fstr, *settings_bright_while_in_use_fstr, *settings_bright_while_idle_fstr, *settings_key_sens_fstr, *settings_time_format_fstr, *settings_date_format_fstr, *settings_auto_dst_fstr, *settings_time_zone_fstr, *settings_display_contrast_fstr, *settings_display_brightness_while_in_use_fstr, *settings_display_brightness_while_idle_fstr, *settings_display_illumination_time_fstr, *settings_display_illumination_mode_fstr, *settings_display_mode_fstr, *settings_menu_display_duration_fstr, *settings_display_duration_after_page_selection_fstr;;
+	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr, *settings_fan_data_source_fstr, *settings_fan_control_regulation_mode_fstr, *settings_fan_control_use_startboost_fstr, *settings_fan_control_use_fuse_fstr, *settings_fan_control_hold_min_power_fstr, *settings_temp_offset_fstr, *settings_fan_vrm_temp_offset_fstr, *settings_cpu_temp_offset_fstr, *settings_language_fstr, *settings_temp_units_fstr, *settings_flow_units_fstr, *settings_pressure_units_fstr, *settings_decimal_separator_fstr, *settings_info_page_display_mode_fstr, *settings_info_page_display_time_fstr, *settings_info_page_page_type_fstr, *settings_disable_keys_fstr, *settings_illum_mode_fstr, *settings_key_tone_fstr, *settings_bright_while_in_use_fstr, *settings_bright_while_idle_fstr, *settings_key_sens_fstr, *settings_time_format_fstr, *settings_date_format_fstr, *settings_auto_dst_fstr, *settings_time_zone_fstr, *settings_display_contrast_fstr, *settings_display_brightness_while_in_use_fstr, *settings_display_brightness_while_idle_fstr, *settings_display_illumination_time_fstr, *settings_display_illumination_mode_fstr, *settings_display_mode_fstr, *settings_menu_display_duration_fstr, *settings_display_duration_after_page_selection_fstr, *settings_standby_display_contrast_fstr, *settings_standby_lcd_backlight_brightness_fstr, *settings_standby_key_backlight_brightness_fstr, *settings_standby_timeout_key_and_display_brightness_fstr, *settings_standby_action_at_power_down_fstr, *settings_standby_action_at_power_up_fstr;;
 
 	struct tm aq_time, *local_aq_time, *systime;
 	time_t aq_time_t, systime_t;
@@ -235,6 +235,12 @@ int main(int argc, char *argv[])
 			settings_display_mode_fstr = "display mode: %s\n";
 			settings_menu_display_duration_fstr = "menu display duration: %d seconds\n";
 			settings_display_duration_after_page_selection_fstr = "display duration after page selection: %d seconds\n";
+			settings_standby_display_contrast_fstr = "standby display contrast: %.2f %%\n";
+			settings_standby_lcd_backlight_brightness_fstr = "standby LCD backlight brightness: %.2f %%\n";
+			settings_standby_key_backlight_brightness_fstr = "standby key backlight brightness: %.2f %%\n";
+			settings_standby_timeout_key_and_display_brightness_fstr = "standby key and display brightness: %d seconds\n";
+			settings_standby_action_at_power_down_fstr = "standby action at power down: %s\n";
+			settings_standby_action_at_power_up_fstr = "standby action at power up: %s\n";
 			break;
 		case M_SCRIPT:
 		default:
@@ -306,11 +312,6 @@ int main(int argc, char *argv[])
 		printf(settings_key_sens_fstr, "Programmable key 3", aquaero_settings.key_sensitivity.programmable_key_3);
 		printf(settings_key_sens_fstr, "Programmable key 4", aquaero_settings.key_sensitivity.programmable_key_4);
 
-		printf(settings_time_format_fstr, libaquaero5_get_string(aquaero_settings.time_format, TIME_FORMAT));
-		printf(settings_date_format_fstr, libaquaero5_get_string(aquaero_settings.date_format, DATE_FORMAT));
-		printf(settings_auto_dst_fstr, libaquaero5_get_string(aquaero_settings.auto_dst, AUTO_DST));
-		printf(settings_time_zone_fstr, aquaero_settings.time_zone);
-
 		printf(settings_display_contrast_fstr, aquaero_settings.display_contrast);
 		printf(settings_display_brightness_while_in_use_fstr, aquaero_settings.display_brightness_while_in_use);
 		printf(settings_display_brightness_while_idle_fstr, aquaero_settings.display_brightness_while_idle);
@@ -331,6 +332,19 @@ int main(int argc, char *argv[])
 				printf(settings_info_page_page_type_fstr,  n+1, libaquaero5_get_string(aquaero_settings.info_page[n].info_page_type, INFO_SCREEN));
 			}
 		}
+		
+		/* System settings */
+		printf(settings_time_format_fstr, libaquaero5_get_string(aquaero_settings.time_format, TIME_FORMAT));
+		printf(settings_date_format_fstr, libaquaero5_get_string(aquaero_settings.date_format, DATE_FORMAT));
+		printf(settings_auto_dst_fstr, libaquaero5_get_string(aquaero_settings.auto_dst, AUTO_DST));
+		printf(settings_time_zone_fstr, aquaero_settings.time_zone);
+
+		printf(settings_standby_display_contrast_fstr, aquaero_settings.standby_display_contrast);
+		printf(settings_standby_lcd_backlight_brightness_fstr, aquaero_settings.standby_lcd_backlight_brightness);
+		printf(settings_standby_key_backlight_brightness_fstr, aquaero_settings.standby_key_backlight_brightness);
+		printf(settings_standby_timeout_key_and_display_brightness_fstr, aquaero_settings.standby_timeout_key_and_display_brightness);
+		printf(settings_standby_action_at_power_down_fstr, libaquaero5_get_string(aquaero_settings.standby_action_at_power_down, STANDBY_ACTION));
+		printf(settings_standby_action_at_power_up_fstr, libaquaero5_get_string(aquaero_settings.standby_action_at_power_up, STANDBY_ACTION));
 
 		for (int n=0; n<AQ5_NUM_TEMP; n++)
 			if (aquaero_data.temp[n] != AQ5_FLOAT_UNDEF)
