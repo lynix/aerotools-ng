@@ -96,6 +96,14 @@
 #define AQ5_SETTINGS_DISP_DURATION_APS_OFFS	0x0d4
 #define AQ5_SETTINGS_TIME_ZONE_OFFS		0x02f
 #define AQ5_SETTINGS_DATE_SETTINGS_OFFS		0x030	
+#define AQ5_SETTINGS_STNDBY_DISP_CONTRAST_OFFS	0x01d
+#define AQ5_SETTINGS_STNDBY_LCD_BL_BRT_OFFS	0x0ca
+#define AQ5_SETTINGS_STNDBY_KEY_BL_BRT_OFFS	0x0ce
+#define AQ5_SETTINGS_STNDBY_TMO_KAD_BRT_OFFS	0x0cc
+/*
+#define AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS	0x000
+#define AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS	0x000
+ */
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -391,6 +399,29 @@ val_str_t display_mode_strings[] = {
 	{ -1,					"Unknown display mode"}
 };
 
+/* Standby action strings */
+val_str_t standby_action_strings[] = {
+	{ (standby_action_t)NO_ACTION,			"No action" },
+	{ (standby_action_t)SPEED_SIG_GEN_ON,		"Speed signal generator on" },
+	{ (standby_action_t)SPEED_SIG_GEN_OFF,		"Speed signal generator off" },
+	{ (standby_action_t)ALARM_BUZZER_ON,		"Alarm buzzer on" },
+	{ (standby_action_t)ALARM_BUZZER_OFF,		"Alarm buzzer off" },
+	{ (standby_action_t)ALARM_BUZZER_CYCLE_ON_OFF,	"Alarm buzzer cycle on-off" },
+	{ (standby_action_t)ALARM_BUZZER_SINGLE_TONE,	"Alarm buzzer single tone" },
+	{ (standby_action_t)RELAY_ON,			"Relay on" },
+	{ (standby_action_t)RELAY_OFF,			"Relay off" },
+	{ (standby_action_t)SWITCH_RELAY_2_SEC,		"Switch relay for 2 s" },
+	{ (standby_action_t)SWITCH_RELAY_10_SEC,	"Switch relay for 10 s" },
+	{ (standby_action_t)LOAD_PROFILE_1,		"Load profile 1" },
+	{ (standby_action_t)LOAD_PROFILE_2,		"Load profile 2" },
+	{ (standby_action_t)LOAD_PROFILE_3,		"Load profile 3" },
+	{ (standby_action_t)LOAD_PROFILE_4,		"Load profile 4" },
+	{ (standby_action_t)USB_KEYBD_POWER_KEY,	"USB keyboard: power key" },
+	{ (standby_action_t)USB_KEYBD_SLEEP_KEY,	"USB keyboard: sleep key" },
+	{ (standby_action_t)USB_KEYBD_WAKEUP_KEY,	"USB keyboard: wakeup key" },
+	{ -1,						"Unknown standby action" },
+};
+
 /* helper functions */
 
 inline int aq5_get_int(unsigned char *buffer, short offset)
@@ -594,25 +625,6 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	settings_dest->key_sensitivity.programmable_key_1 = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_KEY_PROG1_SENS_OFFS);	
 
 	settings_dest->language = aq5_buf_settings[AQ5_SETTINGS_LANGUAGE_OFFS];
-	int m;
-	m = aq5_buf_settings[AQ5_SETTINGS_DATE_SETTINGS_OFFS];
-	if ((m & (date_format_t)DAY_MONTH_YEAR) == (date_format_t)DAY_MONTH_YEAR) {
-		settings_dest->date_format = DAY_MONTH_YEAR;
-	} else {
-		settings_dest->date_format = YEAR_MONTH_DAY;
-	}
-	
-	if ((m & (time_format_t)TWENTY_FOUR_HOUR) == (time_format_t)TWENTY_FOUR_HOUR) {
-		settings_dest->time_format = TWENTY_FOUR_HOUR;
-	} else {
-		settings_dest->time_format = TWELVE_HOUR;
-	}
-
-	if ((m & (auto_dst_t)DST_ENABLED) == (auto_dst_t)DST_ENABLED) {
-		settings_dest->auto_dst = DST_ENABLED;
-	} else {
-		settings_dest->auto_dst = DST_DISABLED;
-	}
 
 	settings_dest->time_zone = aq5_buf_settings[AQ5_SETTINGS_TIME_ZONE_OFFS];
 	settings_dest->display_contrast = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_DISP_CONTRAST_OFFS) /100.0;
@@ -634,6 +646,39 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	settings_dest->flow_units = aq5_buf_settings[AQ5_SETTINGS_FLOW_UNITS_OFFS];
 	settings_dest->pressure_units = aq5_buf_settings[AQ5_SETTINGS_PRESSURE_UNITS_OFFS];
 	settings_dest->decimal_separator = aq5_buf_settings[AQ5_SETTINGS_DECIMAL_SEPARATOR_OFFS];
+
+	/* System settings */
+	int m;
+	settings_dest->time_zone = aq5_buf_settings[AQ5_SETTINGS_TIME_ZONE_OFFS];
+
+	m = aq5_buf_settings[AQ5_SETTINGS_DATE_SETTINGS_OFFS];
+	if ((m & (date_format_t)DAY_MONTH_YEAR) == (date_format_t)DAY_MONTH_YEAR) {
+		settings_dest->date_format = DAY_MONTH_YEAR;
+	} else {
+		settings_dest->date_format = YEAR_MONTH_DAY;
+	}
+	
+	if ((m & (time_format_t)TWENTY_FOUR_HOUR) == (time_format_t)TWENTY_FOUR_HOUR) {
+		settings_dest->time_format = TWENTY_FOUR_HOUR;
+	} else {
+		settings_dest->time_format = TWELVE_HOUR;
+	}
+
+	if ((m & (auto_dst_t)DST_ENABLED) == (auto_dst_t)DST_ENABLED) {
+		settings_dest->auto_dst = DST_ENABLED;
+	} else {
+		settings_dest->auto_dst = DST_DISABLED;
+	}
+
+	/* System - standby config */
+	settings_dest->standby_display_contrast = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_STNDBY_DISP_CONTRAST_OFFS) /100.0;
+	settings_dest->standby_lcd_backlight_brightness = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_STNDBY_LCD_BL_BRT_OFFS) /100.0;
+	settings_dest->standby_key_backlight_brightness = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_STNDBY_KEY_BL_BRT_OFFS) /100.0;
+	settings_dest->standby_timeout_key_and_display_brightness = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_STNDBY_TMO_KAD_BRT_OFFS);
+	/*
+	settings_dest->standby_action_at_power_down = aq5_buf_settings[AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS];
+	settings_dest->standby_action_at_power_up = aq5_buf_settings[AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS];
+ 	*/
 
 	/* CPU temperature offset setting */
 	for (int i=0; i<AQ5_NUM_TEMP; i++) {
@@ -791,6 +836,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case STANDBY_ACTION:
+			val_str = standby_action_strings;
+			break;
 		case DATE_FORMAT:
 			val_str = date_format_strings;
 			break;
