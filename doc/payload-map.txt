@@ -352,6 +352,8 @@ offset		type	value		description
 0x0ca		int16	standby_lcd_brightness	Standby LCD backlight brightness
 0x0cc		int16	standby_timeout_kad_brightness	Standby timeout key and display brightness
 0x0ce		int16	standby_key_brightness	Standby key backlight brightness
+0x0d0		int16	standby_action_at_power_up	Standby action at power up
+0x0d2		int16	standby_action_at_power_down	Standby action at power down
 
 0x0d4		int16	display_duration_aps	Display duration after page selection
 

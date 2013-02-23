@@ -343,10 +343,8 @@ int main(int argc, char *argv[])
 		printf(settings_standby_lcd_backlight_brightness_fstr, aquaero_settings.standby_lcd_backlight_brightness);
 		printf(settings_standby_key_backlight_brightness_fstr, aquaero_settings.standby_key_backlight_brightness);
 		printf(settings_standby_timeout_key_and_display_brightness_fstr, aquaero_settings.standby_timeout_key_and_display_brightness);
-		/*
 		printf(settings_standby_action_at_power_down_fstr, libaquaero5_get_string(aquaero_settings.standby_action_at_power_down, STANDBY_ACTION));
 		printf(settings_standby_action_at_power_up_fstr, libaquaero5_get_string(aquaero_settings.standby_action_at_power_up, STANDBY_ACTION));
-		*/
 
 		for (int n=0; n<AQ5_NUM_TEMP; n++)
 			if (aquaero_data.temp[n] != AQ5_FLOAT_UNDEF)

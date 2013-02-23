@@ -100,10 +100,8 @@
 #define AQ5_SETTINGS_STNDBY_LCD_BL_BRT_OFFS	0x0ca
 #define AQ5_SETTINGS_STNDBY_KEY_BL_BRT_OFFS	0x0ce
 #define AQ5_SETTINGS_STNDBY_TMO_KAD_BRT_OFFS	0x0cc
-/*
-#define AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS	0x000
-#define AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS	0x000
- */
+#define AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS	0x0d2
+#define AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS	0x0d0
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -675,10 +673,8 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	settings_dest->standby_lcd_backlight_brightness = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_STNDBY_LCD_BL_BRT_OFFS) /100.0;
 	settings_dest->standby_key_backlight_brightness = (double)aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_STNDBY_KEY_BL_BRT_OFFS) /100.0;
 	settings_dest->standby_timeout_key_and_display_brightness = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_STNDBY_TMO_KAD_BRT_OFFS);
-	/*
-	settings_dest->standby_action_at_power_down = aq5_buf_settings[AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS];
-	settings_dest->standby_action_at_power_up = aq5_buf_settings[AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS];
- 	*/
+	settings_dest->standby_action_at_power_down = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS);
+	settings_dest->standby_action_at_power_up = aq5_get_int(aq5_buf_settings, AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS);
 
 	/* CPU temperature offset setting */
 	for (int i=0; i<AQ5_NUM_TEMP; i++) {
