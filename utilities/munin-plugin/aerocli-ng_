@@ -41,10 +41,6 @@
 #%# capabilities=autoconf
 
 if [ "$1" == "autoconf" ]; then
-	if [ -z "$DEVICE" ]; then
-		echo "no"
-		exit 1
-	fi
 	if ! [ -x "$AEROCLI" ]; then
 		echo "no"
 		exit 1
@@ -67,7 +63,7 @@ FAN2_NAME=${FAN2_NAME:-"fan2"}
 FAN3_NAME=${FAN3_NAME:-"fan3"}
 FAN4_NAME=${FAN4_NAME:-"fan4"}
 
-AERO_DATA="$($AEROCLI $DEVICE --export)"
+AERO_DATA="$($AEROCLI $DEVICE -o export)"
 if [ -z "$AERO_DATA" ]; then
 	echo "empty response from $AEROCLI"
 	exit 1
