@@ -183,6 +183,254 @@ payload length: 2427 Bytes
 
 offset		type	value		description
 -------------------------------------------------------
+0x009		int16	key_down sens		Down key sensitivity
+0x00b		int16	key_enter sens		Enter key sensitivity 
+0x00d		int16	key_up sens		Up key sensitivity 
+
+0x00f		int16	disable_keys		Disable keys
+
+0x011		int16	key_prog4 sens		Programmable key 4 sensitivity 
+0x013		int16	key_prog3 sens		Programmable key 3 sensitivity 
+0x015		int16	key_prog2 sens		Programmable key 2 sensitivity 
+0x017		int16	key_prog1 sens		Programmable key 1 sensitivity 
+
+0x01a		int8	language		Language
+
+0x01b		int16	contrast		Display contrast
+0x01d		int16	standby_contrast	Standby display contrast
+0x01f		int16	brightness_in_use	Display brightness while in use
+0x021		int16	brightness_while_idle	Display brightness while idle
+0x023		int16	illumination_time	Display illumination time
+0x025		int8	illumination_mode	Display illumination mode
+0x026		int8	display_mode		Display display mode
+
+0x027		int16	brightness_in_use	Brightness while in use (keys)
+0x029		int16	brightness_while_idle	Brightness while idle (keys)
+0x02b		int8	illumination_mode	Illumination mode (keys)
+
+0x02c		int16	menu_duration		Menu display duration
+
+0x02f		int8	time_zone		Timezone offset from GMT
+0x030		int8	time_format		Bit field for AutoDST, Date format and Time format
+
+0x031		int8	page1 screen_mode	Info page 1 screen mode
+0x032		int16	page1 duration		Info page 1 screen duration
+0x034		int8	page1 info		Info page 1 info to be shown
+
+0x035		int8	page2 screen_mode	Info page 2 screen mode
+0x036		int16	page2 duration		Info page 2 screen duration
+0x038		int8	page2 info		Info page 2 info to be shown
+
+0x039		int8	page3 screen_mode	Info page 3 screen mode
+0x03a		int16	page3 duration		Info page 3 screen duration
+0x03c		int8	page3 info		Info page 3 info to be shown
+
+0x03d		int8	page4 screen_mode	Info page 4 screen mode
+0x03e		int16	page4 duration		Info page 4 screen duration
+0x040		int8	page4 info		Info page 4 info to be shown
+
+0x041		int8	page5 screen_mode	Info page 5 screen mode
+0x042		int16	page5 duration		Info page 5 screen duration
+0x044		int8	page5 info		Info page 5 info to be shown
+
+0x045		int8	page6 screen_mode	Info page 6 screen mode
+0x046		int16	page6 duration		Info page 6 screen duration
+0x048		int8	page6 info		Info page 6 info to be shown
+
+0x049		int8	page7 screen_mode	Info page 7 screen mode
+0x04a		int16	page7 duration		Info page 7 screen duration
+0x04c		int8	page7 info		Info page 7 info to be shown
+
+0x04d		int8	page8 screen_mode	Info page 8 screen mode
+0x04e		int16	page8 duration		Info page 8 screen duration
+0x050		int8	page8 info		Info page 8 info to be shown
+
+0x051		int8	page9 screen_mode	Info page 9 screen mode
+0x052		int16	page9 duration		Info page 9 screen duration
+0x054		int8	page9 info		Info page 9 info to be shown
+
+0x055		int8	page10 screen_mode	Info page 10 screen mode
+0x056		int16	page10 duration		Info page 10 screen duration
+0x058		int8	page10 info		Info page 10 info to be shown
+
+0x059		int8	page11 screen_mode	Info page 11 screen mode
+0x05a		int16	page11 duration		Info page 11 screen duration
+0x05c		int8	page11 info		Info page 11 info to be shown
+
+0x05d		int8	page12 screen_mode	Info page 12 screen mode
+0x05e		int16	page12 duration		Info page 12 screen duration
+0x060		int8	page12 info		Info page 12 info to be shown
+
+0x061		int8	page13 screen_mode	Info page 13 screen mode
+0x062		int16	page13 duration		Info page 13 screen duration
+0x064		int8	page13 info		Info page 13 info to be shown
+
+0x065		int8	page14 screen_mode	Info page 14 screen mode
+0x066		int16	page14 duration		Info page 14 screen duration
+0x068		int8	page14 info		Info page 14 info to be shown
+
+0x069		int8	page15 screen_mode	Info page 15 screen mode
+0x06a		int16	page15 duration		Info page 15 screen duration
+0x06c		int8	page15 info		Info page 15 info to be shown
+
+0x06d		int8	page16 screen_mode	Info page 16 screen mode
+0x06e		int16	page16 duration		Info page 16 screen duration
+0x070		int8	page16 info		Info page 16 info to be shown
+
+0x071		int8	page17 screen_mode	Info page 17 screen mode
+0x072		int16	page17 duration		Info page 17 screen duration
+0x074		int8	page17 info		Info page 17 info to be shown
+
+0x075		int8	page18 screen_mode	Info page 18 screen mode
+0x076		int16	page18 duration		Info page 18 screen duration
+0x078		int8	page18 info		Info page 18 info to be shown
+
+0x079		int8	page19 screen_mode	Info page 19 screen mode
+0x07a		int16	page19 duration		Info page 19 screen duration
+0x07c		int8	page19 info		Info page 19 info to be shown
+
+0x07d		int8	page20 screen_mode	Info page 20 screen mode
+0x07e		int16	page20 duration		Info page 20 screen duration
+0x080		int8	page20 info		Info page 20 info to be shown
+
+0x081		int8	page21 screen_mode	Info page 21 screen mode
+0x082		int16	page21 duration		Info page 21 screen duration
+0x084		int8	page21 info		Info page 21 info to be shown
+
+0x085		int8	page22 screen_mode	Info page 22 screen mode
+0x086		int16	page22 duration		Info page 22 screen duration
+0x088		int8	page22 info		Info page 22 info to be shown
+
+0x089		int8	page23 screen_mode	Info page 23 screen mode
+0x08a		int16	page23 duration		Info page 23 screen duration
+0x08c		int8	page23 info		Info page 23 info to be shown
+
+0x08d		int8	page24 screen_mode	Info page 24 screen mode
+0x08e		int16	page24 duration		Info page 24 screen duration
+0x090		int8	page24 info		Info page 24 info to be shown
+
+0x091		int8	page25 screen_mode	Info page 25 screen mode
+0x092		int16	page25 duration		Info page 25 screen duration
+0x094		int8	page25 info		Info page 25 info to be shown
+
+0x095		int8	page26 screen_mode	Info page 26 screen mode
+0x096		int16	page26 duration		Info page 26 screen duration
+0x098		int8	page26 info		Info page 26 info to be shown
+
+0x099		int8	page27 screen_mode	Info page 27 screen mode
+0x09a		int16	page27 duration		Info page 27 screen duration
+0x09c		int8	page27 info		Info page 27 info to be shown
+
+0x09d		int8	page28 screen_mode	Info page 28 screen mode
+0x09e		int16	page28 duration		Info page 28 screen duration
+0x0a0		int8	page28 info		Info page 28 info to be shown
+
+0x0a1		int8	page29 screen_mode	Info page 29 screen mode
+0x0a2		int16	page29 duration		Info page 29 screen duration
+0x0a4		int8	page29 info		Info page 29 info to be shown
+
+0x0a5		int8	page30 screen_mode	Info page 30 screen mode
+0x0a6		int16	page30 duration		Info page 30 screen duration
+0x0a8		int8	page30 info		Info page 30 info to be shown
+
+0x0a9		int8	page31 screen_mode	Info page 31 screen mode
+0x0aa		int16	page31 duration		Info page 31 screen duration
+0x0ac		int8	page31 info		Info page 31 info to be shown
+
+0x0ad		int8	page32 screen_mode	Info page 32 screen mode
+0x0ae		int16	page32 duration		Info page 32 screen duration
+0x0b0		int8	page32 info		Info page 32 info to be shown
+
+
+0x0c5		int8	temp_units		Temperature units
+0x0c6		int8	flow_units		Flow units
+0x0c7		int8	pressure_units		Pressure units
+0x0c8		int8	decimal_separator	Decimal separator
+
+0x0c9		int8	key_tone		Key tone
+
+0x0ca		int16	standby_lcd_brightness	Standby LCD backlight brightness
+0x0cc		int16	standby_timeout_kad_brightness	Standby timeout key and display brightness
+0x0ce		int16	standby_key_brightness	Standby key backlight brightness
+0x0d0		int16	standby_action_at_power_up	Standby action at power up
+0x0d2		int16	standby_action_at_power_down	Standby action at power down
+
+0x0d4		int16	display_duration_aps	Display duration after page selection
+
+0x0dc		int16	temp1 offset	Internal temp sensor 1 offset
+0x0de		int16	temp2 offset	Internal temp sensor 2 offset
+0x0e0		int16	temp3 offset	Internal temp sensor 3 offset
+0x0e2		int16	temp4 offset	Internal temp sensor 4 offset
+0x0e4		int16	temp5 offset	Internal temp sensor 5 offset
+0x0e6		int16	temp6 offset	Internal temp sensor 6 offset
+0x0e8		int16	temp7 offset	Internal temp sensor 7 offset
+0x0ea		int16	temp8 offset	Internal temp sensor 8 offset
+
+0x0ec		int16	temp9 offset	External (aquabus) temp sensor 9 offset
+0x0ee		int16	temp10 offset	External (aquabus) temp sensor 10 offset
+0x0f0		int16	temp11 offset	External (aquabus) temp sensor 11 offset
+0x0f2		int16	temp12 offset	External (aquabus) temp sensor 12 offset
+0x0f4		int16	temp13 offset	External (aquabus) temp sensor 13 offset
+0x0f6		int16	temp14 offset	External (aquabus) temp sensor 14 offset
+0x0f8		int16	temp15 offset	External (aquabus) temp sensor 15 offset
+0x0fa		int16	temp16 offset	External (aquabus) temp sensor 16 offset
+
+0x0fc		int16	temp17 offset	Software temp sensor 1 (17) offset
+0x0fe		int16	temp18 offset	Software temp sensor 2 (18) offset
+0x100		int16	temp19 offset	Software temp sensor 3 (19) offset
+0x102		int16	temp20 offset	Software temp sensor 4 (20) offset
+0x104		int16	temp21 offset	Software temp sensor 5 (21) offset
+0x106		int16	temp22 offset	Software temp sensor 6 (22) offset
+0x108		int16	temp23 offset	Software temp sensor 7 (23) offset
+0x10a		int16	temp24 offset	Software temp sensor 8 (24) offset
+
+0x10c		int16	temp25 offset	Virtual temp sensor 1 (25) offset
+0x10e		int16	temp26 offset	Virtual temp sensor 2 (26) offset
+0x110		int16	temp27 offset	Virtual temp sensor 3 (27) offset
+0x112		int16	temp28 offset	Virtual temp sensor 4 (28) offset
+0x114		int16	temp29 offset	External (aquabus?) temp sensor 29 offset
+0x116		int16	temp30 offset	External (aquabus?) temp sensor 30 offset
+0x118		int16	temp31 offset	External (aquabus?) temp sensor 31 offset
+0x11a		int16	temp32 offset	External (aquabus?) temp sensor 32 offset
+
+0x11c		int16	temp33 offset	External (aquabus?) temp sensor 33 offset
+0x11e		int16	temp34 offset	External (aquabus?) temp sensor 34 offset
+0x120		int16	temp35 offset	External (aquabus?) temp sensor 35 offset
+0x122		int16	temp36 offset	External (aquabus?) temp sensor 36 offset
+0x124		int16	temp37 offset	External (aquabus?) temp sensor 37 offset
+0x126		int16	temp38 offset	External (aquabus?) temp sensor 38 offset
+0x128		int16	temp39 offset	External (aquabus?) temp sensor 39 offset
+0x12a		int16	temp40 offset	External (aquabus?) temp sensor 40 offset
+
+0x12c		int16	temp41 offset	External (aquabus?) temp sensor 41 offset
+0x12e		int16	temp42 offset	External (aquabus?) temp sensor 42 offset
+0x130		int16	temp43 offset	External (aquabus?) temp sensor 43 offset
+0x132		int16	temp44 offset	External (aquabus?) temp sensor 44 offset
+
+0x134		int16	fan1 vrm_temp offset	Internal fan VRM temp 1 offset
+0x136		int16	fan2 vrm_temp offset	Internal fan VRM temp 2 offset
+0x138		int16	fan3 vrm_temp offset	Internal fan VRM temp 3 offset
+0x13a		int16	fan4 vrm_temp offset	Internal fan VRM temp 4 offset
+
+0x13c		int16	fan5 vrm_temp offset	External (aquabus) fan VRM temp 5 offset
+0x13e		int16	fan6 vrm_temp offset	External (aquabus) fan VRM temp 6 offset
+0x140		int16	fan7 vrm_temp offset	External (aquabus) fan VRM temp 7 offset
+0x142		int16	fan8 vrm_temp offset	External (aquabus) fan VRM temp 8 offset
+0x144		int16	fan9 vrm_temp offset	External (aquabus) fan VRM temp 9 offset
+0x146		int16	fan10 vrm_temp offset	External (aquabus) fan VRM temp 10 offset
+0x148		int16	fan11 vrm_temp offset	External (aquabus) fan VRM temp 11 offset
+0x14a		int16	fan12 vrm_temp offset	External (aquabus) fan VRM temp 12 offset
+
+0x14c		int16	cpu1_temp offset	Internal CPU temp1 offset 
+0x14e		int16	cpu2_temp offset	External CPU temp2 offset?
+0x150		int16	cpu3_temp offset	External CPU temp3 offset?
+0x152		int16	cpu4_temp offset	External CPU temp4 offset? 
+0x154		int16	cpu5_temp offset	External CPU temp5 offset? 
+0x156		int16	cpu6_temp offset	External CPU temp6 offset? 
+0x158		int16	cpu7_temp offset	External CPU temp7 offset? 
+0x15a		int16	cpu8_temp offset	External CPU temp8 offset? 
+
+
 0x20c		int16			Internal fan 1 Min RPM
 0x20e		int16			Internal fan 1 Max RPM
 0x210		int16			Internal fan 1 Min duty cycle
@@ -190,8 +438,8 @@ offset		type	value		description
 0x214		int16			Internal fan 1 Startboost duty cycle
 0x216		int16			Internal fan 1 Startboost duration
 0x218		int16			Internal fan 1 Pulses per revolution
-0x21a		int16			Internal fan 1 ?
-0x21c		int16			Internal fan 1 ?
+0x21a		int16			Internal fan 1 Control mode
+0x21c		int16			Internal fan 1 Data source
 0x21e		int16			Internal fan 1 Programmable fuse setting in mA
 
 0x220		int16			Internal fan 2 Min RPM
@@ -201,8 +449,8 @@ offset		type	value		description
 0x228		int16			Internal fan 2 Startboost duty cycle
 0x22a		int16			Internal fan 2 Startboost duration
 0x22c		int16			Internal fan 2 Pulses per revolution
-0x22e		int16			Internal fan 2 ?
-0x230		int16			Internal fan 2 ?
+0x22e		int16			Internal fan 2 Control mode
+0x230		int16			Internal fan 2 Data source
 0x232		int16			Internal fan 2 Programmable fuse setting in mA
 
 0x234		int16			Internal fan 3 Min RPM
@@ -212,8 +460,8 @@ offset		type	value		description
 0x23c		int16			Internal fan 3 Startboost duty cycle
 0x23e		int16			Internal fan 3 Startboost duration
 0x240		int16			Internal fan 3 Pulses per revolution
-0x242		int16			Internal fan 3 ?
-0x244		int16			Internal fan 3 ?
+0x242		int16			Internal fan 3 Control mode
+0x244		int16			Internal fan 3 Data source
 0x246		int16			Internal fan 3 Programmable fuse setting in mA
 
 0x248		int16			Internal fan 4 Min RPM
@@ -223,8 +471,8 @@ offset		type	value		description
 0x250		int16			Internal fan 4 Startboost duty cycle
 0x252		int16			Internal fan 4 Startboost duration
 0x254		int16			Internal fan 4 Pulses per revolution
-0x256		int16			Internal fan 4 ?
-0x258		int16			Internal fan 4 ?
+0x256		int16			Internal fan 4 Control mode
+0x258		int16			Internal fan 4 Data source
 0x25a		int16			Internal fan 4 Programmable fuse setting in mA
 
 0x25c		int16			External (aquabus) fan 5 Min RPM
@@ -234,8 +482,8 @@ offset		type	value		description
 0x264		int16			External (aquabus) fan 5 Startboost duty cycle
 0x266		int16			External (aquabus) fan 5 Startboost duration
 0x268		int16			External (aquabus) fan 5 Pulses per revolution
-0x26a		int16			External (aquabus) fan 5 ?
-0x26c		int16			External (aquabus) fan 5 ?
+0x26a		int16			External (aquabus) fan 5 Control mode
+0x26c		int16			External (aquabus) fan 5 Data source
 0x26e		int16			External (aquabus) fan 5 Programmable fuse setting in mA
 
 0x25c		int16			External (aquabus) fan 6 Min RPM
@@ -245,8 +493,8 @@ offset		type	value		description
 0x264		int16			External (aquabus) fan 6 Startboost duty cycle
 0x266		int16			External (aquabus) fan 6 Startboost duration
 0x268		int16			External (aquabus) fan 6 Pulses per revolution
-0x26a		int16			External (aquabus) fan 6 ?
-0x26c		int16			External (aquabus) fan 6 ?
+0x26a		int16			External (aquabus) fan 6 Control mode
+0x26c		int16			External (aquabus) fan 6 Data source
 0x26e		int16			External (aquabus) fan 6 Programmable fuse setting in mA
 
 0x270		int16			External (aquabus) fan 7 Min RPM
@@ -256,8 +504,8 @@ offset		type	value		description
 0x278		int16			External (aquabus) fan 7 Startboost duty cycle
 0x27a		int16			External (aquabus) fan 7 Startboost duration
 0x27c		int16			External (aquabus) fan 7 Pulses per revolution
-0x27e		int16			External (aquabus) fan 7 ?
-0x280		int16			External (aquabus) fan 7 ?
+0x27e		int16			External (aquabus) fan 7 Control mode
+0x280		int16			External (aquabus) fan 7 Data source
 0x282		int16			External (aquabus) fan 7 Programmable fuse setting in mA
 
 0x284		int16			External (aquabus) fan 8 Min RPM
@@ -267,8 +515,8 @@ offset		type	value		description
 0x28c		int16			External (aquabus) fan 8 Startboost duty cycle
 0x28e		int16			External (aquabus) fan 8 Startboost duration
 0x290		int16			External (aquabus) fan 8 Pulses per revolution
-0x292		int16			External (aquabus) fan 8 ?
-0x294		int16			External (aquabus) fan 8 ?
+0x292		int16			External (aquabus) fan 8 Control mode
+0x294		int16			External (aquabus) fan 8 Data source
 0x296		int16			External (aquabus) fan 8 Programmable fuse setting in mA
 
 0x298		int16			External (aquabus) fan 9 Min RPM
@@ -278,8 +526,8 @@ offset		type	value		description
 0x2a0		int16			External (aquabus) fan 9 Startboost duty cycle
 0x2a2		int16			External (aquabus) fan 9 Startboost duration
 0x2a4		int16			External (aquabus) fan 9 Pulses per revolution
-0x2a6		int16			External (aquabus) fan 9 ?
-0x2a8		int16			External (aquabus) fan 9 ?
+0x2a6		int16			External (aquabus) fan 9 Control mode
+0x2a8		int16			External (aquabus) fan 9 Data source
 0x2aa		int16			External (aquabus) fan 9 Programmable fuse setting in mA
 
 0x2ac		int16			External (aquabus) fan 10 Min RPM
@@ -289,8 +537,8 @@ offset		type	value		description
 0x2b4		int16			External (aquabus) fan 10 Startboost duty cycle
 0x2b6		int16			External (aquabus) fan 10 Startboost duration
 0x2b8		int16			External (aquabus) fan 10 Pulses per revolution
-0x2ba		int16			External (aquabus) fan 10 ?
-0x2bc		int16			External (aquabus) fan 10 ?
+0x2ba		int16			External (aquabus) fan 10 Control mode
+0x2bc		int16			External (aquabus) fan 10 Data source
 0x2be		int16			External (aquabus) fan 10 Programmable fuse setting in mA
 
 0x2c0		int16			External (aquabus) fan 11 Min RPM
@@ -300,8 +548,8 @@ offset		type	value		description
 0x2c8		int16			External (aquabus) fan 11 Startboost duty cycle
 0x2ca		int16			External (aquabus) fan 11 Startboost duration
 0x2cc		int16			External (aquabus) fan 11 Pulses per revolution
-0x2ce		int16			External (aquabus) fan 11 ?
-0x2d0		int16			External (aquabus) fan 11 ?
+0x2ce		int16			External (aquabus) fan 11 Control mode
+0x2d0		int16			External (aquabus) fan 11 Data source
 0x2d2		int16			External (aquabus) fan 11 Programmable fuse setting in mA
 
 0x2c0		int16			External (aquabus) fan 12 Min RPM
@@ -311,7 +559,7 @@ offset		type	value		description
 0x2c8		int16			External (aquabus) fan 12 Startboost duty cycle
 0x2ca		int16			External (aquabus) fan 12 Startboost duration
 0x2cc		int16			External (aquabus) fan 12 Pulses per revolution
-0x2ce		int16			External (aquabus) fan 12 ?
-0x2d0		int16			External (aquabus) fan 12 ?
+0x2ce		int16			External (aquabus) fan 12 Control mode
+0x2d0		int16			External (aquabus) fan 12 Data source
 0x2d2		int16			External (aquabus) fan 12 Programmable fuse setting in mA
 
