@@ -26,47 +26,29 @@
 
 #include "libaquaero5.h"
 
-typedef struct {
-	uint32_t        days;
-	uint32_t        hours;
-	uint32_t        minutes;
-	uint32_t        seconds;
-} uptime_t;
-
-typedef enum { M_STD, M_SCRIPT } out_mode_t;
+typedef enum { F_STD, F_SCRIPT } out_fmt_t;
 
 char *device = NULL;
 char *err_msg = NULL;
 char *dump_data_file = NULL;
 char *dump_settings_file = NULL;
-out_mode_t out_mode = M_STD;
+out_fmt_t out_format = F_STD;
+char out_all = 0;
+char *temp_unit;
+char *flow_unit;
 
-
-/* get the uptime for the given value in seconds */
-inline void get_uptime(uint32_t timeval, uptime_t *uptime)
-{
-	uptime->seconds = timeval;
-	uptime->minutes = uptime->seconds / 60;
-	uptime->hours = uptime->minutes / 60;
-	uptime->days = uptime->hours / 24;
-	if (uptime->seconds > 59) 
-		uptime->seconds -= 60 * uptime->minutes;
-	if (uptime->minutes > 59)
-		uptime->minutes -= 60 * uptime->hours;
-	if (uptime->hours > 23)
-		uptime->hours -= 24 * uptime->days;
-}
 
 void print_help()
 {
 	printf("Usage: aerocli [OPTIONS]\n\n");
 
 	printf("Options:\n");
-	printf("  -d  DEVICE use given DEVICE (no auto-discovery)\n");
-	printf("  -o  MODE   output mode (default, export)\n");
-	printf("  -D  FILE   dump data to FILE\n");
-	printf("  -S  FILE   dump settings to FILE\n");
-	printf("  -h         display this usage information\n");
+	printf("  -d  DEVICE  use given DEVICE (no auto-discovery)\n");
+	printf("  -o  FORMAT  output format (default, export)\n");
+	printf("  -a          print all available data (default: summary)\n");
+	printf("  -D  FILE    dump data to FILE\n");
+	printf("  -S  FILE    dump settings to FILE\n");
+	printf("  -h          display this usage information\n");
 
 	printf("\n");
 	printf("This version of aerocli was built on %s %s.\n", __DATE__, __TIME__);
@@ -78,7 +60,7 @@ void parse_cmdline(int argc, char *argv[])
 	char c;
 	extern int optind, optopt, opterr;
 
-	while ((c = getopt(argc, argv, "d:o:D:S:h")) != -1) {
+	while ((c = getopt(argc, argv, "d:o:aD:S:h")) != -1) {
 		switch (c) {
 			case 'h':
 				print_help();
@@ -95,13 +77,16 @@ void parse_cmdline(int argc, char *argv[])
 					break;
 			case 'o':
 				if (strcmp(optarg, "export") == 0) {
-					out_mode = M_SCRIPT;
+					out_format = F_SCRIPT;
 				} else if (strcmp(optarg, "default") == 0) {
-					out_mode = M_STD;
+					out_format = F_STD;
 				} else {
 					fprintf(stderr, "invalid output format: '%s'\n", optarg);
 					exit(EXIT_FAILURE);
 				}
+				break;
+			case 'a':
+				out_all = 1;
 				break;
 			case '?':
 				if (optopt == 'd'|| optopt == 'o')
@@ -113,6 +98,248 @@ void parse_cmdline(int argc, char *argv[])
 				fprintf(stderr, "invalid arguments. Try -h for help.");
 				exit(EXIT_FAILURE);
 		}
+	}
+}
+
+
+inline void print_with_offset(double value, double offset, char *unit)
+{
+	printf("%5.2f %s (%+.2f)", value, unit, offset);
+}
+
+
+void print_system(aq5_data_t *aq_data, aq5_settings_t *aq_sett) {
+	/* A klunky way to get the offset for the local time from UTC since mktime doesn't honor gmtoff */
+	struct tm *local_aq_time, *systime;
+	time_t aq_time_t, systime_t;
+	aq_time_t = mktime(&aq_data->time_utc);
+	time(&systime_t);
+	systime = localtime(&systime_t);
+	aq_time_t += systime->tm_gmtoff;
+	local_aq_time = localtime(&aq_time_t);
+
+	/* pre-convert times to strings */
+	char time_local_str[21], uptime_str[51];
+	strftime(time_local_str, 20, "%Y-%m-%d %H:%M:%S", local_aq_time);
+	strftime(uptime_str, 50, "%dd %H:%M:%S", &aq_data->uptime);
+
+	printf("----------- System -----------\n");
+	if (!out_all) {
+		printf("Time:%25s\n", time_local_str);
+		printf("Uptime:%23s\n", uptime_str);
+		printf("CPU Temp:%18.2f %s\n", aq_data->cpu_temp[0], temp_unit);
+	} else {
+		char time_utc_str[21], uptime_total_str[51];
+		strftime(time_utc_str, 20, "%Y-%m-%d %H:%M:%S", &aq_data->time_utc);
+		strftime(uptime_total_str, 50, "%yy %dd %H:%M:%S", &aq_data->total_time);
+		printf("Time (UTC)    = %s\n", time_utc_str);
+		printf("Time (local)  = %s\n", time_local_str);
+		printf("Uptime        = %s\n", uptime_str);
+		printf("Uptime total  = %s\n", uptime_total_str);
+		printf("Serial number = %d-%d\n", aq_data->serial_major,
+				aq_data->serial_minor);
+		printf("Firmware      = %d\n", aq_data->firmware_version);
+		printf("Bootloader    = %d\n", aq_data->bootloader_version);
+		printf("Hardware      = %d\n", aq_data->hardware_version);
+		printf("CPU Temp      = ");
+		for (int n=0; n<AQ5_NUM_CPU; n++) {
+			if (aq_data->cpu_temp[n] != AQ5_FLOAT_UNDEF)
+				print_with_offset(aq_data->cpu_temp[n],
+						aq_sett->cpu_temp_offset[n], temp_unit);
+				putchar(' ');
+		}
+		putchar('\n');
+	}
+}
+
+
+void print_sensors(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
+{
+	printf("---- Temperature Sensors -----\n");
+	if (!out_all) {
+		for (int n=0; n<AQ5_NUM_TEMP; n++)
+			if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
+				printf("Sensor %2d:%17.2f %s\n", n+1, aq_data->temp[n], temp_unit);
+		return;
+	}
+
+	for (int n=0; n<AQ5_NUM_TEMP; n++) {
+		printf("Sensor %2d     = ", n+1);
+		if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
+			print_with_offset(aq_data->temp[n], aq_sett->temp_offset[n], temp_unit);
+		else
+			printf("   not connected");
+		putchar('\n');
+	}
+}
+
+
+void print_fans(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
+{
+	printf("------------ Fans ------------\n");
+	if (!out_all) {
+		for (int n=0; n<AQ5_NUM_FAN; n++) {
+			if (aq_data->fan_current[n]>0) {
+				printf("Fan %2d:   %4drpm @ %3u%% %2.0f %s\n", n+1,
+						aq_data->fan_rpm[n], aq_data->fan_duty[n],
+						aq_data->fan_vrm_temp[n], temp_unit);
+			}
+		}
+	} else {
+		for (int n=0; n<AQ5_NUM_FAN; n++) {
+			if (aq_data->fan_vrm_temp[n] != AQ5_FLOAT_UNDEF) {
+				printf("Fan %2d:   %4drpm @ %3u%% %5.2f V\n", n+1,
+					aq_data->fan_rpm[n], aq_data->fan_duty[n],
+					aq_data->fan_voltage[n]);
+				printf("               %4d mA  %5.2f %s\n", aq_data->fan_current[n],
+						aq_data->fan_vrm_temp[n], temp_unit);
+			} else {
+				printf("Fan %2d:            not connected\n", n+1);
+			}
+		}
+	}
+}
+
+
+void print_flow(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
+{
+	printf("-------- Flow Sensors --------\n");
+	for (int n=0; n<AQ5_NUM_FLOW; n++)
+		if (aq_data->flow[n] != 0 || out_all)
+			printf("Flow %2d:%18.0f %s\n", n+1, aq_data->flow[n], flow_unit);
+}
+
+
+void print_levels(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
+{
+	printf("------- Liquid Levels --------\n");
+	for (int n=0; n<AQ5_NUM_LEVEL; n++)
+			if (aq_data->level[n] != 0 || out_all)
+				printf("Level %2d:%20.0f%%\n", n+1, aq_data->level[n]);
+}
+
+
+void print_settings(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
+{
+	printf("---------- Settings ----------\n");
+	/* TODO: implement me */
+	printf("TODO\n");
+}
+
+
+void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
+{
+	/* A klunky way to get the offset for the local time from UTC since mktime doesn't honor gmtoff */
+	struct tm *local_aq_time, *systime;
+	time_t aq_time_t, systime_t;
+	aq_time_t = mktime(&aq_data->time_utc);
+	time(&systime_t);
+	systime = localtime(&systime_t);
+	aq_time_t += systime->tm_gmtoff;
+	local_aq_time = localtime(&aq_time_t);
+
+	/* pre-convert times to strings */
+	char time_local_str[21], uptime_str[51];
+	strftime(time_local_str, 20, "%Y-%m-%d %H:%M:%S", local_aq_time);
+	strftime(uptime_str, 50, "%dd %H:%M:%S", &aq_data->uptime);
+
+	printf("SYS_TIME_LOCAL='%s'\n", time_local_str);
+	printf("SYS_UPTIME='%s'\n", uptime_str);
+	for (int n=0; n<AQ5_NUM_CPU; n++) {
+		if (aq_data->cpu_temp[n] != AQ5_FLOAT_UNDEF)
+			printf("SYS_TEMP_CPU%d=%.2f\n", n+1, aq_data->cpu_temp[n]);
+			printf("SYS_TEMP_CPU%d_OFFS=%.2f\n", n+1,
+					aq_sett->cpu_temp_offset[n]);
+	}
+	for (int n=0; n<AQ5_NUM_TEMP; n++)
+		if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
+			printf("TEMP%d=%.2f\n", n+1, aq_data->temp[n]);
+	for (int n=0; n<AQ5_NUM_FAN; n++)
+		if (aq_data->fan_vrm_temp[n] != AQ5_FLOAT_UNDEF) {
+			printf("FAN%d_RPM=%d\n", n+1, aq_data->fan_rpm[n]);
+			printf("FAN%d_DUTY_CYCLE=%d\n", n+1, aq_data->fan_duty[n]);
+
+		}
+	for (int n=0; n<AQ5_NUM_FLOW; n++) {
+		if (aq_data->flow[n] != AQ5_FLOAT_UNDEF)
+			printf("FLOW%d=%.1f\n", n+1, aq_data->flow[n]);
+	}
+
+
+	if (out_all) {
+		char time_utc_str[21], uptime_total_str[51];
+		strftime(time_utc_str, 20, "%Y-%m-%d %H:%M:%S", &aq_data->time_utc);
+		strftime(uptime_total_str, 50, "%yy %dd %H:%M:%S", &aq_data->total_time);
+		printf("SYS_TIME_UTC='%s'\n", time_utc_str);
+		printf("SYS_UPTIME_TOTAL='%s'\n", uptime_total_str);
+		printf("SYS_SERIAL=%d-%d\n", aq_data->serial_major,
+				aq_data->serial_minor);
+		printf("SYS_FW=%d\n", aq_data->firmware_version);
+		printf("SYS_LOADER=%d\n", aq_data->bootloader_version);
+		printf("SYS_HW=%d\n", aq_data->hardware_version);
+		printf("SYS_UNIT_TEMP='%s'\n", temp_unit);
+		printf("SYS_UNIT_FLOW='%s'\n", flow_unit);
+		printf("SYS_UNIT_PRESS='%s'\n", libaquaero5_get_string(aq_sett->pressure_units, PRESSURE_UNITS));
+		printf("SYS_LANG='%s'\n", libaquaero5_get_string(aq_sett->language, LANGUAGE));
+		printf("SYS_DEC_SEP='%s'\n", libaquaero5_get_string(aq_sett->decimal_separator, DECIMAL_SEPARATOR));
+		printf("SYS_TIME_FMT='%s'\n", libaquaero5_get_string(aq_sett->time_format, TIME_FORMAT));
+		printf("SYS_DATE_FMT='%s'\n", libaquaero5_get_string(aq_sett->date_format, DATE_FORMAT));
+		printf("SYS_TIME_ADST='%s'\n", libaquaero5_get_string(aq_sett->auto_dst, AUTO_DST));
+		printf("SYS_TIME_ZONE=%d\n", aq_sett->time_zone);
+		printf("SYS_STBY_ACT_OFF='%s'\n", libaquaero5_get_string(aq_sett->standby_action_at_power_down, STANDBY_ACTION));
+		printf("SYS_STBY_ACT_ON='%s'\n", libaquaero5_get_string(aq_sett->standby_action_at_power_up, STANDBY_ACTION));
+		printf("KEYS_DISABLE='%s'\n", libaquaero5_get_string(aq_sett->disable_keys, DISABLE_KEYS));
+		printf("KEYS_BEEP='%s'\n", libaquaero5_get_string(aq_sett->key_tone, KEY_TONE));
+		printf("KEYS_BRIGHT_STBY=%d\n", aq_sett->standby_key_backlight_brightness);
+		printf("KEY_SENS_DOWN=%d\n", aq_sett->key_sensitivity.down_key);
+		printf("KEY_SENS_ENTR=%d\n", aq_sett->key_sensitivity.enter_key);
+		printf("KEY_SENS_UP=%d\n", aq_sett->key_sensitivity.up_key);
+		printf("KEY_SENS_P1=%d\n", aq_sett->key_sensitivity.programmable_key_1);
+		printf("KEY_SENS_P2=%d\n", aq_sett->key_sensitivity.programmable_key_2);
+		printf("KEY_SENS_P3=%d\n", aq_sett->key_sensitivity.programmable_key_3);
+		printf("KEY_SENS_P4=%d\n", aq_sett->key_sensitivity.programmable_key_4);
+		printf("DISP_ILLUM_MODE='%s'\n", libaquaero5_get_string(aq_sett->illumination_mode, ILLUM_MODE));
+		printf("DISP_CONTRAST=%d\n", aq_sett->display_contrast);
+		printf("DISP_CONTRAST_STBY=%d\n", aq_sett->standby_display_contrast);
+		printf("DISP_BRIGHT_USE=%d\n", aq_sett->display_brightness_while_in_use);
+		printf("DISP_BRIGHT_IDLE=%d\n", aq_sett->display_brightness_while_idle);
+		printf("DISP_BRIGHT_TIME=%d\n", aq_sett->display_illumination_time);
+		printf("DISP_BRIGHT_STBY=%d\n", aq_sett->standby_lcd_backlight_brightness);
+		printf("DISP_BRIGHT_STBY_TIME=%d\n", aq_sett->standby_timeout_key_and_display_brightness);
+		printf("DISP_MODE='%s'\n", libaquaero5_get_string(aq_sett->display_mode, DISPLAY_MODE));
+		printf("DISP_TIME_MENU=%d\n", aq_sett->menu_display_duration);
+		printf("DISP_TIME_APAGE=%d\n", aq_sett->display_duration_after_page_selection);
+		for (int n=0; n<AQ5_NUM_INFO_PAGE; n++) {
+			printf("PAGE%d_MODE='%s'\n", n+1, libaquaero5_get_string(aq_sett->info_page[n].page_display_mode, PAGE_DISPLAY_MODE));
+			printf("PAGE%d_TIME=%d\n", n+1, aq_sett->info_page[n].display_time);
+			printf("PAGE%d_TYPE='%s'\n", n+1, libaquaero5_get_string(aq_sett->info_page[n].info_page_type, INFO_SCREEN));
+		}
+		for (int n=0; n<AQ5_NUM_TEMP; n++)
+			if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
+				printf("TEMP%d_OFFS=%.2f\n", n+1, aq_sett->temp_offset[n]);
+		for (int n=0; n<AQ5_NUM_FAN; n++) {
+			printf("FAN%d_CURRENT=%d\n", n+1, aq_data->fan_current[n]);
+			printf("FAN%d_VOLTAGE=%.2f\n", n+1, aq_data->fan_voltage[n]);
+			printf("FAN%d_VRM_TEMP=%.2f\n", n+1, aq_data->fan_vrm_temp[n]);
+			printf("FAN%d_VRM_TEMP_OFFS=%.2f\n", n+1, aq_sett->fan_vrm_temp_offset[n]);
+			printf("FAN%d_MIN_RPM=%d\n", n+1, aq_sett->fan_min_rpm[n]);
+			printf("FAN%d_MIN_DUTY=%d\n", n+1, aq_sett->fan_min_duty[n]);
+			printf("FAN%d_MAX_RPM=%d\n", n+1, aq_sett->fan_max_rpm[n]);
+			printf("FAN%d_MAX_DUTY=%d\n", n+1, aq_sett->fan_max_duty[n]);
+			printf("FAN%d_BOOST_DUTY=%d\n", n+1, aq_sett->fan_startboost_duty[n]);
+			printf("FAN%d_BOOST_DURATION=%d\n", n+1, aq_sett->fan_startboost_duration[n]);
+			printf("FAN%d_PULSES=%d\n", n+1, aq_sett->fan_pulses_per_revolution[n]);
+			printf("FAN%d_MODE=%d\n", n+1, aq_sett->fan_control_mode[n].fan_regulation_mode);
+			printf("FAN%d_BOOST_ENABLED=%d\n", n+1, aq_sett->fan_control_mode[n].use_startboost);
+			printf("FAN%d_FUSE_ENABLED=%d\n", n+1, aq_sett->fan_control_mode[n].use_programmable_fuse);
+			printf("FAN%d HOLD_MIN_DUTY=%d\n", n+1, aq_sett->fan_control_mode[n].hold_minimum_power);
+			printf("FAN%d_DATA_SRC='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_data_source[n], FAN_DATA_SRC));
+			printf("FAN%d_FUSE_CURRENT=%d\n", n+1, aq_sett->fan_programmable_fuse[n]);
+		}
+		for (int n=0; n<AQ5_NUM_LEVEL; n++)
+			printf("LEVEL%d=%.2f\n", n+1, aq_data->level[n]);
+
+
 	}
 }
 
@@ -147,231 +374,35 @@ int main(int argc, char *argv[])
 					strerror(errno));
 	}
 
-	/* output mode changes format strings */
-	const char *temp_fstr, *fan_vrm_temp_fstr, *fan_current_fstr, *fan_rpm_fstr, *fan_duty_cycle_fstr, *fan_voltage_fstr, *flow_fstr, *cpu_temp_fstr, *level_fstr, *settings_fan_min_rpm_fstr, *settings_fan_max_rpm_fstr, *settings_fan_min_duty_cycle_fstr, *settings_fan_max_duty_cycle_fstr, *settings_fan_startboost_duty_cycle_fstr, *settings_fan_startboost_duration_fstr, *settings_fan_pulses_per_revolution_fstr, *settings_fan_programmable_fuse_fstr, *settings_fan_data_source_fstr, *settings_fan_control_regulation_mode_fstr, *settings_fan_control_use_startboost_fstr, *settings_fan_control_use_fuse_fstr, *settings_fan_control_hold_min_power_fstr, *settings_temp_offset_fstr, *settings_fan_vrm_temp_offset_fstr, *settings_cpu_temp_offset_fstr, *settings_language_fstr, *settings_temp_units_fstr, *settings_flow_units_fstr, *settings_pressure_units_fstr, *settings_decimal_separator_fstr, *settings_info_page_display_mode_fstr, *settings_info_page_display_time_fstr, *settings_info_page_page_type_fstr, *settings_disable_keys_fstr, *settings_illum_mode_fstr, *settings_key_tone_fstr, *settings_bright_while_in_use_fstr, *settings_bright_while_idle_fstr, *settings_key_sens_fstr, *settings_time_format_fstr, *settings_date_format_fstr, *settings_auto_dst_fstr, *settings_time_zone_fstr, *settings_display_contrast_fstr, *settings_display_brightness_while_in_use_fstr, *settings_display_brightness_while_idle_fstr, *settings_display_illumination_time_fstr, *settings_display_illumination_mode_fstr, *settings_display_mode_fstr, *settings_menu_display_duration_fstr, *settings_display_duration_after_page_selection_fstr, *settings_standby_display_contrast_fstr, *settings_standby_lcd_backlight_brightness_fstr, *settings_standby_key_backlight_brightness_fstr, *settings_standby_timeout_key_and_display_brightness_fstr, *settings_standby_action_at_power_down_fstr, *settings_standby_action_at_power_up_fstr;;
-
-	struct tm aq_time, *local_aq_time, *systime;
-	time_t aq_time_t, systime_t;
-	/* offset time from 00:00:00 1/1/2009 */
-	aq_time.tm_min = 0;
-	aq_time.tm_hour = 0;
-	aq_time.tm_mday = 1;
-	aq_time.tm_mon = 0;
-	aq_time.tm_year = 109; 
-	aq_time.tm_gmtoff = 0; 
-	aq_time.tm_sec = aquaero_data.current_time;
-	aq_time_t = mktime(&aq_time);
-
-	/* A klunky way to get the offset for the local time from UTC since mktime doesn't honor gmtoff */
-	time(&systime_t);
-	systime = localtime(&systime_t);
-	aq_time_t += systime->tm_gmtoff; 
-	local_aq_time = localtime(&aq_time_t);
-
-	/* Get the uptimes */
-	uptime_t uptime, total_time;
-
-	get_uptime(aquaero_data.uptime, &uptime);
-	get_uptime(aquaero_data.total_time, &total_time);
-
-	switch (out_mode) {
-		case M_STD:
-			printf("Time (UTC) = %s", asctime(&aq_time));
-			printf("Time (local) = %s", asctime(local_aq_time));
-			printf("Serial number = %d-%d\n", aquaero_data.serial_major, aquaero_data.serial_minor);
-			printf("Firmware version = %d\n", aquaero_data.firmware_version);
-			printf("Bootloader version = %d\n", aquaero_data.bootloader_version);
-			printf("Hardware version = %d\n", aquaero_data.hardware_version);
-			printf("Uptime = %d days, %d hours, %d minutes, %d seconds\n", uptime.days, uptime.hours, uptime.minutes, uptime.seconds);
-			printf("Total time = %d days, %d hours, %d minutes, %d seconds\n", total_time.days, total_time.hours, total_time.minutes, total_time.seconds);
-			temp_fstr = "temp%d: %.2f °C\n";
-			fan_vrm_temp_fstr = "fan%d VRM temp: %.2f °C\n";
-			fan_current_fstr = "fan%d current: %d mA\n";
-			fan_rpm_fstr = "fan%d RPM: %d rpm\n";
-			fan_duty_cycle_fstr = "fan%d duty cycle: %.2f %%\n";
-			fan_voltage_fstr = "fan%d voltage: %.2f V\n";
-			flow_fstr = "flow%d: %.1f l/h\n";
-			cpu_temp_fstr = "CPU%d temp: %.2f °C\n";
-			level_fstr = "level%d: %.2f %%\n";
-			settings_fan_min_rpm_fstr = "fan%d minimum RPM: %d rpm\n";
-			settings_fan_max_rpm_fstr = "fan%d maximum RPM: %d rpm\n";
-			settings_fan_min_duty_cycle_fstr = "fan%d minimum duty cycle: %.2f %%\n";
-			settings_fan_max_duty_cycle_fstr = "fan%d maximum duty cycle: %.2f %%\n";
-			settings_fan_startboost_duty_cycle_fstr = "fan%d startboost duty cycle: %.2f %%\n";
-			settings_fan_startboost_duration_fstr = "fan%d startboost duration: %d seconds\n";
-			settings_fan_pulses_per_revolution_fstr = "fan%d pulses per revolution: %d\n";
-			settings_fan_control_regulation_mode_fstr = "fan%d regulation mode: %d\n";
-			settings_fan_control_use_startboost_fstr = "fan%d use startboost: %d\n";
-			settings_fan_control_use_fuse_fstr = "fan%d use programmable fuse: %d\n";
-			settings_fan_control_hold_min_power_fstr = "fan%d hold minimum power: %d\n";
-			settings_fan_data_source_fstr = "fan%d data source: %s\n";
-			settings_fan_programmable_fuse_fstr = "fan%d programmable fuse: %d mA\n";
-			settings_temp_offset_fstr = "temp%d offset: %.2f K\n";
-			settings_fan_vrm_temp_offset_fstr = "fan%d VRM temp offset: %.2f K\n";
-			settings_cpu_temp_offset_fstr = "cpu%d temp offset: %.2f K\n";
-			settings_language_fstr = "language: %s\n";
-			settings_temp_units_fstr = "temperature units: %s\n";
-			settings_flow_units_fstr = "flow units: %s\n";
-			settings_pressure_units_fstr = "pressure units: %s\n";
-			settings_decimal_separator_fstr = "decimal separator: %s\n";
-			settings_info_page_display_mode_fstr = "info page%d display mode: %s\n";
-			settings_info_page_display_time_fstr = "info page%d display time: %d seconds\n";
-			settings_info_page_page_type_fstr = "info page%d page type: %s\n";
-			settings_disable_keys_fstr = "disable keys: %s\n";
-			settings_illum_mode_fstr = "illumination mode: %s\n";
-			settings_key_tone_fstr = "key tone: %s\n";
-			settings_bright_while_in_use_fstr = "brightness while in use: %.2f %%\n";
-			settings_bright_while_idle_fstr = "brightness while idle: %.2f %%\n";
-			settings_key_sens_fstr = "%s sensitivity: %d\n";
-			settings_time_format_fstr = "time format: %s\n";
-			settings_date_format_fstr = "date format: %s\n";
-			settings_auto_dst_fstr = "auto DST: %s\n";
-			settings_time_zone_fstr = "time zone: %d\n";
-			settings_display_contrast_fstr = "display contrast: %.2f %%\n";
-			settings_display_brightness_while_in_use_fstr = "display brightness while in use: %.2f %%\n";
-			settings_display_brightness_while_idle_fstr = "display brightness while idle: %.2f %%\n";
-			settings_display_illumination_time_fstr = "display illumination time: %d seconds\n";
-			settings_display_illumination_mode_fstr = "display illumination mode: %s\n";
-			settings_display_mode_fstr = "display mode: %s\n";
-			settings_menu_display_duration_fstr = "menu display duration: %d seconds\n";
-			settings_display_duration_after_page_selection_fstr = "display duration after page selection: %d seconds\n";
-			settings_standby_display_contrast_fstr = "standby display contrast: %.2f %%\n";
-			settings_standby_lcd_backlight_brightness_fstr = "standby LCD backlight brightness: %.2f %%\n";
-			settings_standby_key_backlight_brightness_fstr = "standby key backlight brightness: %.2f %%\n";
-			settings_standby_timeout_key_and_display_brightness_fstr = "standby key and display brightness: %d seconds\n";
-			settings_standby_action_at_power_down_fstr = "standby action at power down: %s\n";
-			settings_standby_action_at_power_up_fstr = "standby action at power up: %s\n";
-			break;
-		case M_SCRIPT:
-		default:
-			temp_fstr = "TEMP%d=%.2f\n";
-			fan_vrm_temp_fstr = "FAN%d_VRM_TEMP=%.2f\n";
-			fan_current_fstr = "FAN%d_CURRENT=%d\n";
-			fan_rpm_fstr = "FAN%d_RPM=%d\n";
-			fan_duty_cycle_fstr = "FAN%d_DUTY_CYCLE=%.2f\n";
-			fan_voltage_fstr = "FAN%d_VOLTAGE=%.2f\n";
-			flow_fstr = "FLOW%d=%.1f\n";
-			cpu_temp_fstr = "CPU%d_TEMP=%.2f\n";
-			level_fstr = "LEVEL%d=%.2f\n";
-			break;
+	/* Set Unit Symbols */
+	switch (aquaero_settings.temp_units) {
+		case CELSIUS:		temp_unit = "°C"; break;
+		case FAHRENHEIT:	temp_unit = "°F"; break;
+		case KELVIN:		temp_unit = "°K"; break;
+		default:			temp_unit = "°?"; break;
+	}
+	switch (aquaero_settings.flow_units) {
+		case LPH:		flow_unit = "l/h"; break;
+		case LPM:		flow_unit = "l/min"; break;
+		case GPH_US:	flow_unit = "gph"; break;
+		case GPM_US:	flow_unit = "gpm"; break;
+		case GPH_IMP:	flow_unit = "gph"; break;
+		case GPM_IMP:	flow_unit = "gpm"; break;
+		default:		flow_unit = "??"; break;
 	}
 
-	if (1) { /* print_temp */
-		for (int n=0; n<AQ5_NUM_TEMP; n++)
-			if (aquaero_data.temp[n] != AQ5_FLOAT_UNDEF)
-				printf(temp_fstr, n+1, aquaero_data.temp[n]);
-	}
-
-	if (1) { /* print_fan */
-		for (int n=0; n<AQ5_NUM_FAN; n++) {
-			if (aquaero_data.fan_vrm_temp[n] != AQ5_FLOAT_UNDEF) {
-				printf(fan_vrm_temp_fstr, n+1, aquaero_data.fan_vrm_temp[n]);
-				printf(fan_current_fstr, n+1, aquaero_data.fan_current[n]);
-				printf(fan_rpm_fstr, n+1, aquaero_data.fan_rpm[n]);
-				printf(fan_duty_cycle_fstr, n+1, aquaero_data.fan_duty_cycle[n]);
-				printf(fan_voltage_fstr, n+1, aquaero_data.fan_voltage[n]);
-			}
-		}
-	}
-
-	if (1) { /* print flow */
-		for (int n=0; n<AQ5_NUM_FLOW; n++) {
-			printf(flow_fstr, n+1, aquaero_data.flow[n]);
-		}
-	}
-
-	if (1) { /* print CPU temp */
-		for (int n=0; n<AQ5_NUM_CPU; n++) {
-			if (aquaero_data.cpu_temp[n] != AQ5_FLOAT_UNDEF)
-				printf(cpu_temp_fstr, n+1, aquaero_data.cpu_temp[n]);
-		}
-	}
-
-	if (1) { /* print liquid level */
-		for (int n=0; n<AQ5_NUM_LEVEL; n++) {
-			printf(level_fstr, n+1, aquaero_data.level[n]);
-		}
-	}
-
-	/* print settings */
-	if (out_mode != M_SCRIPT) {
-		printf("\n------Settings------\n");
-		
-		printf(settings_language_fstr, libaquaero5_get_string(aquaero_settings.language, LANGUAGE));
-
-		printf(settings_disable_keys_fstr, libaquaero5_get_string(aquaero_settings.disable_keys, DISABLE_KEYS));
-		printf(settings_illum_mode_fstr, libaquaero5_get_string(aquaero_settings.illumination_mode, ILLUM_MODE));
-		printf(settings_key_tone_fstr, libaquaero5_get_string(aquaero_settings.key_tone, KEY_TONE));
-		printf(settings_bright_while_in_use_fstr, aquaero_settings.brightness_while_in_use);
-		printf(settings_bright_while_idle_fstr, aquaero_settings.brightness_while_idle);
-		printf(settings_key_sens_fstr, "Down key", aquaero_settings.key_sensitivity.down_key);
-		printf(settings_key_sens_fstr, "Enter key", aquaero_settings.key_sensitivity.enter_key);
-		printf(settings_key_sens_fstr, "Up key", aquaero_settings.key_sensitivity.up_key);
-		printf(settings_key_sens_fstr, "Programmable key 1", aquaero_settings.key_sensitivity.programmable_key_1);
-		printf(settings_key_sens_fstr, "Programmable key 2", aquaero_settings.key_sensitivity.programmable_key_2);
-		printf(settings_key_sens_fstr, "Programmable key 3", aquaero_settings.key_sensitivity.programmable_key_3);
-		printf(settings_key_sens_fstr, "Programmable key 4", aquaero_settings.key_sensitivity.programmable_key_4);
-
-		printf(settings_display_contrast_fstr, aquaero_settings.display_contrast);
-		printf(settings_display_brightness_while_in_use_fstr, aquaero_settings.display_brightness_while_in_use);
-		printf(settings_display_brightness_while_idle_fstr, aquaero_settings.display_brightness_while_idle);
-		printf(settings_display_illumination_time_fstr, aquaero_settings.display_illumination_time);
-		printf(settings_display_illumination_mode_fstr, libaquaero5_get_string(aquaero_settings.display_illumination_mode, ILLUM_MODE));
-		printf(settings_display_mode_fstr, libaquaero5_get_string(aquaero_settings.display_mode, DISPLAY_MODE));
-		printf(settings_menu_display_duration_fstr, aquaero_settings.menu_display_duration);
-		printf(settings_display_duration_after_page_selection_fstr, aquaero_settings.display_duration_after_page_selection);
-
-		printf(settings_temp_units_fstr, libaquaero5_get_string(aquaero_settings.temp_units, TEMP_UNITS));
-		printf(settings_flow_units_fstr, libaquaero5_get_string(aquaero_settings.flow_units, FLOW_UNITS));
-		printf(settings_pressure_units_fstr, libaquaero5_get_string(aquaero_settings.pressure_units, PRESSURE_UNITS));
-		printf(settings_decimal_separator_fstr, libaquaero5_get_string(aquaero_settings.decimal_separator, DECIMAL_SEPARATOR));
-		for (int n=0; n<AQ5_NUM_INFO_PAGE; n++) {
-			if (aquaero_settings.info_page[n].page_display_mode != HIDE_PAGE) {
-				printf(settings_info_page_display_mode_fstr,  n+1, libaquaero5_get_string(aquaero_settings.info_page[n].page_display_mode, PAGE_DISPLAY_MODE));
-				printf(settings_info_page_display_time_fstr,  n+1, aquaero_settings.info_page[n].display_time);
-				printf(settings_info_page_page_type_fstr,  n+1, libaquaero5_get_string(aquaero_settings.info_page[n].info_page_type, INFO_SCREEN));
-			}
-		}
-		
-		/* System settings */
-		printf(settings_time_format_fstr, libaquaero5_get_string(aquaero_settings.time_format, TIME_FORMAT));
-		printf(settings_date_format_fstr, libaquaero5_get_string(aquaero_settings.date_format, DATE_FORMAT));
-		printf(settings_auto_dst_fstr, libaquaero5_get_string(aquaero_settings.auto_dst, AUTO_DST));
-		printf(settings_time_zone_fstr, aquaero_settings.time_zone);
-
-		printf(settings_standby_display_contrast_fstr, aquaero_settings.standby_display_contrast);
-		printf(settings_standby_lcd_backlight_brightness_fstr, aquaero_settings.standby_lcd_backlight_brightness);
-		printf(settings_standby_key_backlight_brightness_fstr, aquaero_settings.standby_key_backlight_brightness);
-		printf(settings_standby_timeout_key_and_display_brightness_fstr, aquaero_settings.standby_timeout_key_and_display_brightness);
-		printf(settings_standby_action_at_power_down_fstr, libaquaero5_get_string(aquaero_settings.standby_action_at_power_down, STANDBY_ACTION));
-		printf(settings_standby_action_at_power_up_fstr, libaquaero5_get_string(aquaero_settings.standby_action_at_power_up, STANDBY_ACTION));
-
-		for (int n=0; n<AQ5_NUM_TEMP; n++)
-			if (aquaero_data.temp[n] != AQ5_FLOAT_UNDEF)
-				printf(settings_temp_offset_fstr, n+1, aquaero_settings.temp_offset[n]);
-	
-		for (int n=0; n<AQ5_NUM_FAN; n++) {
-			printf(settings_fan_vrm_temp_offset_fstr, n+1, aquaero_settings.fan_vrm_temp_offset[n]);
-			printf(settings_fan_min_rpm_fstr, n+1, aquaero_settings.fan_min_rpm[n]);
-			printf(settings_fan_max_rpm_fstr, n+1, aquaero_settings.fan_max_rpm[n]);
-			printf(settings_fan_min_duty_cycle_fstr, n+1, aquaero_settings.fan_min_duty_cycle[n]);
-			printf(settings_fan_max_duty_cycle_fstr, n+1, aquaero_settings.fan_max_duty_cycle[n]);
-			printf(settings_fan_startboost_duty_cycle_fstr, n+1, aquaero_settings.fan_startboost_duty_cycle[n]);
-			printf(settings_fan_startboost_duration_fstr, n+1, aquaero_settings.fan_startboost_duration[n]);
-			printf(settings_fan_pulses_per_revolution_fstr, n+1, aquaero_settings.fan_pulses_per_revolution[n]);
-			printf(settings_fan_control_regulation_mode_fstr, n+1, aquaero_settings.fan_control_mode[n].fan_regulation_mode);
-			printf(settings_fan_control_use_startboost_fstr, n+1, aquaero_settings.fan_control_mode[n].use_startboost);
-			printf(settings_fan_control_use_fuse_fstr, n+1, aquaero_settings.fan_control_mode[n].use_programmable_fuse);
-			printf(settings_fan_control_hold_min_power_fstr, n+1, aquaero_settings.fan_control_mode[n].hold_minimum_power);
-			printf(settings_fan_data_source_fstr, n+1, libaquaero5_get_string(aquaero_settings.fan_data_source[n], FAN_DATA_SRC));
-			printf(settings_fan_programmable_fuse_fstr, n+1, aquaero_settings.fan_programmable_fuse[n]);
-		}
-
-		for (int n=0; n<AQ5_NUM_CPU; n++) {
-			if (aquaero_data.cpu_temp[n] != AQ5_FLOAT_UNDEF)
-				printf(settings_cpu_temp_offset_fstr, n+1, aquaero_settings.cpu_temp_offset[n]);
-		}
-
+	if (out_format == F_STD) {
+		/* Human-Readable Output, please */
+		print_system(&aquaero_data, &aquaero_settings);
+		print_sensors(&aquaero_data, &aquaero_settings);
+		print_fans(&aquaero_data, &aquaero_settings);
+		print_flow(&aquaero_data, &aquaero_settings);
+		print_levels(&aquaero_data, &aquaero_settings);
+		if (out_all)
+			print_settings(&aquaero_data, &aquaero_settings);
+	} else if (out_format == F_SCRIPT) {
+		/* Bunch of Bytes, please */
+		print_export(&aquaero_data, &aquaero_settings);
 	}
 
 	/* Shut down communications and clean up */

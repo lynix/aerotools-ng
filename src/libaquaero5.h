@@ -21,6 +21,7 @@
 #define LIBAQUAERO5_H_
 
 #include <stdint.h>
+#include <time.h>
 
 /* sensor quantity */
 #define AQ5_NUM_TEMP			44
@@ -36,19 +37,21 @@
 
 
 /* structures holding device data */
+typedef struct tm aq5_time_t;
+
 typedef struct {
-	uint32_t	current_time;
+	aq5_time_t	time_utc;
 	uint16_t	serial_major;
 	uint16_t	serial_minor;
 	uint16_t	firmware_version;
 	uint16_t	bootloader_version;
 	uint16_t	hardware_version;
-	uint32_t	uptime;
-	uint32_t	total_time;
+	aq5_time_t	uptime;
+	aq5_time_t	total_time;
 	double		temp[AQ5_NUM_TEMP];
 	uint16_t	fan_current[AQ5_NUM_FAN];
 	uint16_t	fan_rpm[AQ5_NUM_FAN];
-	double		fan_duty_cycle[AQ5_NUM_FAN];
+	uint8_t		fan_duty[AQ5_NUM_FAN];
 	double		fan_voltage[AQ5_NUM_FAN];
 	double		fan_vrm_temp[AQ5_NUM_FAN];
 	double		flow[AQ5_NUM_FLOW];
@@ -376,9 +379,9 @@ typedef enum {
 } standby_action_t;
 
 typedef struct {
-	double			standby_display_contrast;
-	double			standby_lcd_backlight_brightness;
-	double			standby_key_backlight_brightness;
+	uint8_t			standby_display_contrast;
+	uint8_t			standby_lcd_backlight_brightness;
+	uint8_t			standby_key_backlight_brightness;
 	uint16_t		standby_timeout_key_and_display_brightness;
 	standby_action_t	standby_action_at_power_down;
 	standby_action_t	standby_action_at_power_up;
@@ -386,17 +389,17 @@ typedef struct {
 	date_format_t		date_format;
 	auto_dst_t		auto_dst;
 	int8_t			time_zone;
-	double			display_contrast;
-	double			display_brightness_while_in_use;
-	double			display_brightness_while_idle;
+	uint8_t			display_contrast;
+	uint8_t			display_brightness_while_in_use;
+	uint8_t			display_brightness_while_idle;
 	uint16_t		display_illumination_time;
 	illumination_mode_t	display_illumination_mode;
 	display_mode_t		display_mode;
 	uint16_t		menu_display_duration;
 	uint16_t		display_duration_after_page_selection;
 	disable_keys_t		disable_keys;
-	double			brightness_while_in_use;
-	double			brightness_while_idle;
+	uint8_t			brightness_while_in_use;
+	uint8_t			brightness_while_idle;
 	illumination_mode_t	illumination_mode;
 	key_tone_t		key_tone;
 	key_sensitivity_t	key_sensitivity;
@@ -411,9 +414,9 @@ typedef struct {
 	double			cpu_temp_offset[AQ5_NUM_TEMP];
 	uint16_t		fan_min_rpm[AQ5_NUM_FAN];
 	uint16_t		fan_max_rpm[AQ5_NUM_FAN];
-	double			fan_max_duty_cycle[AQ5_NUM_FAN];
-	double			fan_min_duty_cycle[AQ5_NUM_FAN];
-	double			fan_startboost_duty_cycle[AQ5_NUM_FAN];
+	uint8_t			fan_max_duty[AQ5_NUM_FAN];
+	uint8_t			fan_min_duty[AQ5_NUM_FAN];
+	uint8_t			fan_startboost_duty[AQ5_NUM_FAN];
 	uint16_t		fan_startboost_duration[AQ5_NUM_FAN];
 	uint16_t		fan_pulses_per_revolution[AQ5_NUM_FAN];
 	aq5_fan_control_mode_t	fan_control_mode[AQ5_NUM_FAN];
