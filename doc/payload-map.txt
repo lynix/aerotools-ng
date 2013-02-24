@@ -430,6 +430,25 @@ offset		type	value		description
 0x158		int16	cpu7_temp offset	External CPU temp7 offset? 
 0x15a		int16	cpu8_temp offset	External CPU temp8 offset? 
 
+0x15c		int16	virt_sensor_1_data_source_1	Virtual sensor 1 data source 1
+0x15e		int16	virt_sensor_1_data_source_2	Virtual sensor 1 data source 2
+0x160		int16	virt_sensor_1_data_source_3	Virtual sensor 1 data source 3
+0x162		int8	virt_sensor_1_mode		Virtual sensor 1 mode
+
+0x163		int16	virt_sensor_2_data_source_1	Virtual sensor 2 data source 1
+0x165		int16	virt_sensor_2_data_source_2	Virtual sensor 2 data source 2
+0x167		int16	virt_sensor_2_data_source_3	Virtual sensor 2 data source 3
+0x169		int8	virt_sensor_2_mode		Virtual sensor 2 mode
+
+0x16a		int16	virt_sensor_3_data_source_1	Virtual sensor 3 data source 1
+0x16c		int16	virt_sensor_3_data_source_2	Virtual sensor 3 data source 2
+0x16e		int16	virt_sensor_3_data_source_3	Virtual sensor 3 data source 3
+0x170		int8	virt_sensor_3_mode		Virtual sensor 3 mode
+
+0x171		int16	virt_sensor_4_data_source_1	Virtual sensor 4 data source 1
+0x173		int16	virt_sensor_4_data_source_2	Virtual sensor 4 data source 2
+0x175		int16	virt_sensor_4_data_source_3	Virtual sensor 4 data source 34
+0x177		int8	virt_sensor_4_mode		Virtual sensor 4 mode
 
 0x20c		int16			Internal fan 1 Min RPM
 0x20e		int16			Internal fan 1 Max RPM
@@ -563,3 +582,4 @@ offset		type	value		description
 0x2d0		int16			External (aquabus) fan 12 Data source
 0x2d2		int16			External (aquabus) fan 12 Programmable fuse setting in mA
 
+0x972		int8			Allow output override
