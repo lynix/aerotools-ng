@@ -289,7 +289,7 @@ val_str_t time_format_strings[] = {
 val_str_t auto_dst_strings[] = {
 	{ (auto_dst_t)DISABLED,	"Enabled" },
 	{ (auto_dst_t)ENABLED,	"Disabled" },
-	{ -1,			"Unknown DST mode" },
+	{ -1,			"Unknown DST mode" }
 	
 };
 
@@ -320,7 +320,33 @@ val_str_t standby_action_strings[] = {
 	{ (standby_action_t)USB_KEYBD_POWER_KEY,	"USB keyboard: power key" },
 	{ (standby_action_t)USB_KEYBD_SLEEP_KEY,	"USB keyboard: sleep key" },
 	{ (standby_action_t)USB_KEYBD_WAKEUP_KEY,	"USB keyboard: wakeup key" },
-	{ -1,						"Unknown standby action" },
+	{ -1,						"Unknown standby action" }
+};
+
+/* Data source strings */
+val_str_t virt_sensor_data_source_strings[] = {
+	{ (virt_sensor_data_source_t)NO_DATA_SOURCE,	"No data source selected" },
+	{ (virt_sensor_data_source_t)SENSOR_1,		"Sensor 1" },
+	{ (virt_sensor_data_source_t)VIRT_SENSOR_1,	"Virtual sensor 1"},
+	{ (virt_sensor_data_source_t)FAN_AMP_1,		"Fan amplifier 1" },
+	{ (virt_sensor_data_source_t)FAN_AMP_2,		"Fan amplifier 2" },
+	{ (virt_sensor_data_source_t)FAN_AMP_3,		"Fan amplifier 3" },
+	{ (virt_sensor_data_source_t)FAN_AMP_4,		"Fan amplifier 4" },
+	{ (virt_sensor_data_source_t)FAN_AMP_5,		"Fan amplifier 5" },
+	{ (virt_sensor_data_source_t)FAN_AMP_6,		"Fan amplifier 6" },
+	{ (virt_sensor_data_source_t)FAN_AMP_7,		"Fan amplifier 7" },
+	{ (virt_sensor_data_source_t)AQUAERO_CPU,	"Aquaero CPU" },
+	{ -1,						"Unknown data source" }
+};
+
+/* Virtual sensor mode strings */
+val_str_t virt_sensor_mode_strings[] = {
+	{ (virt_sensor_mode_t)HIGHEST_TEMP,	"Highest temperature" },
+	{ (virt_sensor_mode_t)LOWEST_TEMP,	"Lowest temperature" },
+	{ (virt_sensor_mode_t)AVERAGE_TEMP,	"Average temperature" },
+	{ (virt_sensor_mode_t)DIFFERENCE,	"Difference (Sensor 1 - Sensor 2)" },
+	{ (virt_sensor_mode_t)DIFFERENCE_ABS,	"Difference absolute (Sen.1 - Sen.2)" },
+	{ -1,					"Unknown mode" }
 };
 
 

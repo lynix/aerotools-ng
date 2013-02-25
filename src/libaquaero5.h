@@ -30,6 +30,7 @@
 #define AQ5_NUM_CPU			8
 #define AQ5_NUM_LEVEL			4
 #define AQ5_NUM_INFO_PAGE		32
+#define AQ5_NUM_VIRT_SENSORS		4
 
 
 /* constant for unknown value */
@@ -280,6 +281,8 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	VIRT_SENSOR_DATA_SOURCE,
+	VIRT_SENSOR_MODE,
 	STANDBY_ACTION,
 	DATE_FORMAT,
 	TIME_FORMAT,
@@ -378,7 +381,40 @@ typedef enum {
 	USB_KEYBD_WAKEUP_KEY	= 0x0010
 } standby_action_t;
 
+typedef enum {
+	NO_DATA_SOURCE		= 0xffff,
+	SENSOR_1		= 0x0000,
+	/* Unknown */
+	VIRT_SENSOR_1		= 0x0018,
+	/* Unknown */
+	FAN_AMP_1		= 0x002c,
+	FAN_AMP_2		= 0x002d,
+	FAN_AMP_3		= 0x002e,
+	FAN_AMP_4		= 0x002f,
+	FAN_AMP_5		= 0x0030,
+	FAN_AMP_6		= 0x0031,
+	FAN_AMP_7		= 0x0032,
+	/* Unknown */
+	AQUAERO_CPU		= 0x0038
+} virt_sensor_data_source_t;
+
+typedef enum {
+	HIGHEST_TEMP		= 0x00,
+	LOWEST_TEMP		= 0x01,
+	AVERAGE_TEMP		= 0x02,
+	DIFFERENCE		= 0x03,
+	DIFFERENCE_ABS		= 0x04
+} virt_sensor_mode_t;
+
 typedef struct {
+	virt_sensor_data_source_t	data_source_1;
+	virt_sensor_data_source_t	data_source_2;
+	virt_sensor_data_source_t	data_source_3;
+	virt_sensor_mode_t		mode;
+} virt_sensor_config_t;
+
+typedef struct {
+	virt_sensor_config_t	virt_sensor_config[AQ5_NUM_VIRT_SENSORS];
 	uint8_t			standby_display_contrast;
 	uint8_t			standby_lcd_backlight_brightness;
 	uint8_t			standby_key_backlight_brightness;

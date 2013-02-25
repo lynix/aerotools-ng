@@ -103,6 +103,8 @@
 #define AQ5_SETTINGS_STNDBY_TMO_KAD_BRT_OFFS	0x0cc
 #define AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS	0x0d2
 #define AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS	0x0d0
+#define AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS	0x15c
+#define AQ5_SETTINGS_VIRT_SENSOR_DIST		7
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -419,6 +421,14 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->cpu_temp_offset[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
 	}
 
+	/* Virtual sensor settings */
+	for (int i=0; i<AQ5_NUM_VIRT_SENSORS; i++) {
+		settings_dest->virt_sensor_config[i].data_source_1 = aq5_get_int16(aq5_buf_settings,AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
+		settings_dest->virt_sensor_config[i].data_source_2 = aq5_get_int16(aq5_buf_settings,AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 2 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
+		settings_dest->virt_sensor_config[i].data_source_3 = aq5_get_int16(aq5_buf_settings,AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 4 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
+		settings_dest->virt_sensor_config[i].mode = aq5_buf_settings[AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 6 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST];
+	}
+
 	/* fan settings */
 	int n;
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
@@ -560,6 +570,12 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case VIRT_SENSOR_DATA_SOURCE:
+			val_str = virt_sensor_data_source_strings;
+			break;
+		case VIRT_SENSOR_MODE:
+			val_str = virt_sensor_mode_strings;
+			break;
 		case STANDBY_ACTION:
 			val_str = standby_action_strings;
 			break;
