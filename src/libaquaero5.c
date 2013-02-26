@@ -340,8 +340,8 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 
 	/* User interface settings */
 	settings_dest->disable_keys = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISABLE_KEYS_OFFS);
-	settings_dest->brightness_while_in_use = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IN_USE_OFFS);
-	settings_dest->brightness_while_idle = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IDLE_OFFS);
+	settings_dest->brightness_while_in_use = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IN_USE_OFFS) /100;
+	settings_dest->brightness_while_idle = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IDLE_OFFS) /100;
 	settings_dest->illumination_mode = aq5_buf_settings[AQ5_SETTINGS_ILLUM_MODE_OFFS];
 	settings_dest->key_tone = aq5_buf_settings[AQ5_SETTINGS_KEY_TONE_OFFS];
 	settings_dest->key_sensitivity.down_key = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_KEY_DOWN_SENS_OFFS);	
@@ -355,9 +355,9 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	settings_dest->language = aq5_buf_settings[AQ5_SETTINGS_LANGUAGE_OFFS];
 
 	settings_dest->time_zone = aq5_buf_settings[AQ5_SETTINGS_TIME_ZONE_OFFS];
-	settings_dest->display_contrast = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_CONTRAST_OFFS);
-	settings_dest->display_brightness_while_in_use = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IN_USE_OFFS);
-	settings_dest->display_brightness_while_idle = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IDLE_OFFS);
+	settings_dest->display_contrast = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_CONTRAST_OFFS) /100;
+	settings_dest->display_brightness_while_in_use = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IN_USE_OFFS) /100;
+	settings_dest->display_brightness_while_idle = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IDLE_OFFS) /100;
 	settings_dest->display_illumination_time = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_ILLUM_TIME_OFFS);
 	settings_dest->display_illumination_mode = aq5_buf_settings[AQ5_SETTINGS_DISP_ILLUM_MODE_OFFS];
 	settings_dest->display_mode = aq5_buf_settings[AQ5_SETTINGS_DISP_MODE_OFFS];
@@ -399,9 +399,9 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	}
 
 	/* System - standby config */
-	settings_dest->standby_display_contrast = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_DISP_CONTRAST_OFFS);
-	settings_dest->standby_lcd_backlight_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_LCD_BL_BRT_OFFS);
-	settings_dest->standby_key_backlight_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_KEY_BL_BRT_OFFS);
+	settings_dest->standby_display_contrast = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_DISP_CONTRAST_OFFS) /100;
+	settings_dest->standby_lcd_backlight_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_LCD_BL_BRT_OFFS) /100;
+	settings_dest->standby_key_backlight_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_KEY_BL_BRT_OFFS) /100;
 	settings_dest->standby_timeout_key_and_display_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_TMO_KAD_BRT_OFFS);
 	settings_dest->standby_action_at_power_down = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS);
 	settings_dest->standby_action_at_power_up = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS);
@@ -436,7 +436,7 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->fan_max_rpm[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 2 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_min_duty[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 4 + i * AQ5_SETTINGS_FAN_DIST) / 100;
 		settings_dest->fan_max_duty[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 6 + i * AQ5_SETTINGS_FAN_DIST) / 100;
-		settings_dest->fan_startboost_duty[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 8 + i * AQ5_SETTINGS_FAN_DIST) / 100.0;
+		settings_dest->fan_startboost_duty[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 8 + i * AQ5_SETTINGS_FAN_DIST) / 100;
 		settings_dest->fan_startboost_duration[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 10 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_pulses_per_revolution[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 12 + i * AQ5_SETTINGS_FAN_DIST);
 		n = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 14 + i * AQ5_SETTINGS_FAN_DIST);
