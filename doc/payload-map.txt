@@ -450,6 +450,38 @@ offset		type	value		description
 0x175		int16	virt_sensor_4_data_source_3	Virtual sensor 4 data source 34
 0x177		int8	virt_sensor_4_mode		Virtual sensor 4 mode
 
+0x178		int8	soft_sensor_1_config		Software sensor 1 configuration
+0x179		int16	soft_sensor_1_fallback_val	Software sensor 1 fallback value for interrupted com.
+0x17b		int16	soft_sensor_1_timeout		Software sensor 1 timeout to activate fallback value
+
+0x17d		int8	soft_sensor_2_config		Software sensor 2 configuration
+0x17e		int16	soft_sensor_2_fallback_val	Software sensor 2 fallback value for interrupted com.
+0x180		int16	soft_sensor_2_timeout		Software sensor 2 timeout to activate fallback value
+
+0x182		int8	soft_sensor_3_config		Software sensor 3 configuration
+0x183		int16	soft_sensor_3_fallback_val	Software sensor 3 fallback value for interrupted com.
+0x185		int16	soft_sensor_3_timeout		Software sensor 3 timeout to activate fallback value
+
+0x187		int8	soft_sensor_4_config		Software sensor 4 configuration
+0x188		int16	soft_sensor_4_fallback_val	Software sensor 4 fallback value for interrupted com.
+0x18a		int16	soft_sensor_4_timeout		Software sensor 4 timeout to activate fallback value
+
+0x18c		int8	soft_sensor_5_config		Software sensor 5 configuration
+0x18d		int16	soft_sensor_5_fallback_val	Software sensor 5 fallback value for interrupted com.
+0x18f		int16	soft_sensor_5_timeout		Software sensor 5 timeout to activate fallback value
+
+0x191		int8	soft_sensor_6_config		Software sensor 6 configuration
+0x192		int16	soft_sensor_6_fallback_val	Software sensor 6 fallback value for interrupted com.
+0x194		int16	soft_sensor_6_timeout		Software sensor 6 timeout to activate fallback value
+
+0x196		int8	soft_sensor_7_config		Software sensor 7 configuration
+0x197		int16	soft_sensor_7_fallback_val	Software sensor 7 fallback value for interrupted com.
+0x199		int16	soft_sensor_7_timeout		Software sensor 7 timeout to activate fallback value
+
+0x19b		int8	soft_sensor_8_config		Software sensor 8 configuration
+0x19c		int16	soft_sensor_8_fallback_val	Software sensor 8 fallback value for interrupted com.
+0x19e		int16	soft_sensor_8_timeout		Software sensor 8 timeout to activate fallback value
+
 0x20c		int16			Internal fan 1 Min RPM
 0x20e		int16			Internal fan 1 Max RPM
 0x210		int16			Internal fan 1 Min duty cycle
