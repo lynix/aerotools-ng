@@ -482,6 +482,62 @@ offset		type	value		description
 0x19c		int16	soft_sensor_8_fallback_val	Software sensor 8 fallback value for interrupted com.
 0x19e		int16	soft_sensor_8_timeout		Software sensor 8 timeout to activate fallback value
 
+0x1a0		int16	flow_sensor_1_calibration	Flow sensor 1 calibration value
+0x1a2		int16	flow_sensor_1_lower_limit	Flow sensor 1 lower display limit
+0x1a4		int16	flow_sensor_1_upper_limit	Flow sensor 1 upper display limit
+
+0x1a6		int16	flow_sensor_2_calibration	Flow sensor 2 calibration value
+0x1a8		int16	flow_sensor_2_lower_limit	Flow sensor 2 lower display limit
+0x1aa		int16	flow_sensor_2_upper_limit	Flow sensor 2 upper display limit
+
+0x1ac		int16	flow_sensor_3_calibration	Flow sensor 3 calibration value
+0x1ae		int16	flow_sensor_3_lower_limit	Flow sensor 3 lower display limit
+0x1b0		int16	flow_sensor_3_upper_limit	Flow sensor 3 upper display limit
+
+0x1b2		int16	flow_sensor_4_calibration	Flow sensor 4 calibration value
+0x1b4		int16	flow_sensor_4_lower_limit	Flow sensor 4 lower display limit
+0x1b6		int16	flow_sensor_4_upper_limit	Flow sensor 4 upper display limit
+
+0x1b8		int16	flow_sensor_5_calibration	Flow sensor 5 calibration value
+0x1ba		int16	flow_sensor_5_lower_limit	Flow sensor 5 lower display limit
+0x1bc		int16	flow_sensor_5_upper_limit	Flow sensor 5 upper display limit
+
+0x1be		int16	flow_sensor_6_calibration	Flow sensor 6 calibration value
+0x1c0		int16	flow_sensor_6_lower_limit	Flow sensor 6 lower display limit
+0x1c2		int16	flow_sensor_6_upper_limit	Flow sensor 6 upper display limit
+
+0x1c4		int16	flow_sensor_7_calibration	Flow sensor 7 calibration value
+0x1c6		int16	flow_sensor_7_lower_limit	Flow sensor 7 lower display limit
+0x1c8		int16	flow_sensor_7_upper_limit	Flow sensor 7 upper display limit
+
+0x1ca		int16	flow_sensor_8_calibration	Flow sensor 8 calibration value
+0x1cc		int16	flow_sensor_8_lower_limit	Flow sensor 8 lower display limit
+0x1ce		int16	flow_sensor_8_upper_limit	Flow sensor 8 upper display limit
+
+0x1d0		int16	flow_sensor_9_calibration	Flow sensor 9 calibration value
+0x1d2		int16	flow_sensor_9_lower_limit	Flow sensor 9 lower display limit
+0x1d4		int16	flow_sensor_9_upper_limit	Flow sensor 9 upper display limit
+
+0x1d6		int16	flow_sensor_10_calibration	Flow sensor 10 calibration value
+0x1d8		int16	flow_sensor_10_lower_limit	Flow sensor 10 lower display limit
+0x1da		int16	flow_sensor_10_upper_limit	Flow sensor 10 upper display limit
+
+0x1dc		int16	flow_sensor_11_calibration	Flow sensor 11 calibration value
+0x1de		int16	flow_sensor_11_lower_limit	Flow sensor 11 lower display limit
+0x1e0		int16	flow_sensor_11_upper_limit	Flow sensor 11 upper display limit
+
+0x1e2		int16	flow_sensor_12_calibration	Flow sensor 12 calibration value
+0x1e4		int16	flow_sensor_12_lower_limit	Flow sensor 12 lower display limit
+0x1e6		int16	flow_sensor_12_upper_limit	Flow sensor 12 upper display limit
+
+0x1e8		int16	flow_sensor_13_calibration	Flow sensor 13 calibration value
+0x1ea		int16	flow_sensor_13_lower_limit	Flow sensor 13 lower display limit
+0x1ec		int16	flow_sensor_13_upper_limit	Flow sensor 13 upper display limit
+
+0x1ee		int16	flow_sensor_14_calibration	Flow sensor 14 calibration value
+0x1f0		int16	flow_sensor_14_lower_limit	Flow sensor 14 lower display limit
+0x1f2		int16	flow_sensor_14_upper_limit	Flow sensor 14 upper display limit
+
 0x20c		int16			Internal fan 1 Min RPM
 0x20e		int16			Internal fan 1 Max RPM
 0x210		int16			Internal fan 1 Min duty cycle
