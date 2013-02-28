@@ -538,6 +538,22 @@ offset		type	value		description
 0x1f0		int16	flow_sensor_14_lower_limit	Flow sensor 14 lower display limit
 0x1f2		int16	flow_sensor_14_upper_limit	Flow sensor 14 upper display limit
 
+0x1f4		int16	power_consumption_1_flow	Power consumption 1 flow sensor
+0x1f6		int16	power_consumption_1_temp1	Power consumption 1 temperature sensor 1
+0x1f8		int16	power_consumption_1_temp2	Power consumption 1 temperature sensor 2
+
+0x1fa		int16	power_consumption_2_flow	Power consumption 2 flow sensor
+0x1fc		int16	power_consumption_2_temp1	Power consumption 2 temperature sensor 1
+0x1fe		int16	power_consumption_2_temp2	Power consumption 2 temperature sensor 2
+
+0x200		int16	power_consumption_3_flow	Power consumption 3 flow sensor
+0x202		int16	power_consumption_3_temp1	Power consumption 3 temperature sensor 1
+0x204		int16	power_consumption_3_temp2	Power consumption 3 temperature sensor 2
+
+0x206		int16	power_consumption_4_flow	Power consumption 4 flow sensor
+0x208		int16	power_consumption_4_temp1	Power consumption 4 temperature sensor 1
+0x20a		int16	power_consumption_4_temp2	Power consumption 4 temperature sensor 2
+
 0x20c		int16			Internal fan 1 Min RPM
 0x20e		int16			Internal fan 1 Max RPM
 0x210		int16			Internal fan 1 Min duty cycle
