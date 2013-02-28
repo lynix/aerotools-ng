@@ -386,8 +386,33 @@ typedef enum {
 typedef enum {
 	NO_DATA_SOURCE		= 0xffff,
 	SENSOR_1		= 0x0000,
-	/* Unknown */
+	SENSOR_2		= 0x0001,
+	SENSOR_3		= 0x0002,
+	SENSOR_4		= 0x0003,
+	SENSOR_5		= 0x0004,
+	SENSOR_6		= 0x0005,
+	SENSOR_7		= 0x0006,
+	SENSOR_8		= 0x0007,
+	SENSOR_9		= 0x0008,
+	SENSOR_10		= 0x0009,
+	SENSOR_11		= 0x000a,
+	SENSOR_12		= 0x000b,
+	SENSOR_13		= 0x000c,
+	SENSOR_14		= 0x000d,
+	SENSOR_15		= 0x000e,
+	SENSOR_16		= 0x000f,
+	SOFT_SENSOR_1		= 0x0010,
+	SOFT_SENSOR_2		= 0x0011,
+	SOFT_SENSOR_3		= 0x0012,
+	SOFT_SENSOR_4		= 0x0013,
+	SOFT_SENSOR_5		= 0x0014,
+	SOFT_SENSOR_6		= 0x0015,
+	SOFT_SENSOR_7		= 0x0016,
+	SOFT_SENSOR_8		= 0x0017,
 	VIRT_SENSOR_1		= 0x0018,
+	VIRT_SENSOR_2		= 0x0019,
+	VIRT_SENSOR_3		= 0x001a,
+	VIRT_SENSOR_4		= 0x001b,
 	/* Unknown */
 	FAN_AMP_1		= 0x002c,
 	FAN_AMP_2		= 0x002d,
@@ -396,7 +421,11 @@ typedef enum {
 	FAN_AMP_5		= 0x0030,
 	FAN_AMP_6		= 0x0031,
 	FAN_AMP_7		= 0x0032,
-	/* Unknown */
+	FAN_AMP_8		= 0x0033,
+	FAN_AMP_9		= 0x0034,
+	FAN_AMP_10		= 0x0035,
+	FAN_AMP_11		= 0x0036,
+	FAN_AMP_12		= 0x0037,
 	AQUAERO_CPU		= 0x0038
 } sensor_data_source_t;
 
