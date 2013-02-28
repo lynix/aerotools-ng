@@ -31,6 +31,7 @@
 #define AQ5_NUM_LEVEL			4
 #define AQ5_NUM_INFO_PAGE		32
 #define AQ5_NUM_VIRT_SENSORS		4
+#define AQ5_NUM_SOFT_SENSORS		8
 
 
 /* constant for unknown value */
@@ -281,6 +282,7 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	SOFT_SENSOR_STATE,
 	VIRT_SENSOR_DATA_SOURCE,
 	VIRT_SENSOR_MODE,
 	STANDBY_ACTION,
@@ -413,7 +415,18 @@ typedef struct {
 	virt_sensor_mode_t		mode;
 } virt_sensor_config_t;
 
+typedef enum {
+	SENSOR_DISABLED		= 0x00,
+	SENSOR_ENABLED		= 0x01
+} soft_sensor_state_t;
+
 typedef struct {
+	soft_sensor_state_t	soft_sensor_state[AQ5_NUM_SOFT_SENSORS];
+	double			soft_sensor_fallback_value[AQ5_NUM_SOFT_SENSORS];
+	uint16_t		soft_sensor_timeout[AQ5_NUM_SOFT_SENSORS];
+	uint16_t		flow_sensor_calibration_value[AQ5_NUM_FLOW];
+	double			flow_sensor_lower_limit[AQ5_NUM_FLOW];
+	double			flow_sensor_upper_limit[AQ5_NUM_FLOW];
 	virt_sensor_config_t	virt_sensor_config[AQ5_NUM_VIRT_SENSORS];
 	uint8_t			standby_display_contrast;
 	uint8_t			standby_lcd_backlight_brightness;

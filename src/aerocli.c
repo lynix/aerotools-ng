@@ -323,6 +323,16 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("VIRT_SENSOR%d_DATA_SOURCE_3='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_3, VIRT_SENSOR_DATA_SOURCE));
 			printf("VIRT_SENSOR%d_MODE='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].mode, VIRT_SENSOR_MODE));
 		}
+		for (int n=0; n<AQ5_NUM_SOFT_SENSORS; n++) {
+			printf("SOFT_SENSOR%d_STATE='%s'\n", n+1, libaquaero5_get_string(aq_sett->soft_sensor_state[n], SOFT_SENSOR_STATE));
+			printf("SOFT_SENSOR%d_FALLBACK_VALUE=%.2f\n", n+1, aq_sett->soft_sensor_fallback_value[n]);
+			printf("SOFT_SENSOR%d_TIMEOUT=%d\n", n+1, aq_sett->soft_sensor_timeout[n]);
+		}
+		for (int n=0; n<AQ5_NUM_FLOW; n++) {
+			printf("FLOW_SENSOR%d_CALIBRATION_VALUE=%d\n", n+1, aq_sett->flow_sensor_calibration_value[n]);
+			printf("FLOW_SENSOR%d_LOWER_LIMIT=%.1f\n", n+1, aq_sett->flow_sensor_lower_limit[n]);
+			printf("FLOW_SENSOR%d_UPPER_LIMIT=%.1f\n", n+1, aq_sett->flow_sensor_upper_limit[n]);
+		}
 		for (int n=0; n<AQ5_NUM_FAN; n++) {
 			printf("FAN%d_CURRENT=%d\n", n+1, aq_data->fan_current[n]);
 			printf("FAN%d_VOLTAGE=%.2f\n", n+1, aq_data->fan_voltage[n]);

@@ -105,6 +105,10 @@
 #define AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS	0x0d0
 #define AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS	0x15c
 #define AQ5_SETTINGS_VIRT_SENSOR_DIST		7
+#define AQ5_SETTINGS_SOFT_SENSOR_OFFS		0x178
+#define AQ5_SETTINGS_SOFT_SENSOR_DIST		5
+#define AQ5_SETTINGS_FLOW_SENSOR_OFFS		0x1a0
+#define AQ5_SETTINGS_FLOW_SENSOR_DIST		6
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -423,10 +427,24 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 
 	/* Virtual sensor settings */
 	for (int i=0; i<AQ5_NUM_VIRT_SENSORS; i++) {
-		settings_dest->virt_sensor_config[i].data_source_1 = aq5_get_int16(aq5_buf_settings,AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
-		settings_dest->virt_sensor_config[i].data_source_2 = aq5_get_int16(aq5_buf_settings,AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 2 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
-		settings_dest->virt_sensor_config[i].data_source_3 = aq5_get_int16(aq5_buf_settings,AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 4 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
+		settings_dest->virt_sensor_config[i].data_source_1 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
+		settings_dest->virt_sensor_config[i].data_source_2 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 2 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
+		settings_dest->virt_sensor_config[i].data_source_3 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 4 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
 		settings_dest->virt_sensor_config[i].mode = aq5_buf_settings[AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 6 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST];
+	}
+
+	/* Software sensor settings */
+	for (int i=0; i<AQ5_NUM_SOFT_SENSORS; i++) {
+		settings_dest->soft_sensor_state[i] = aq5_buf_settings[AQ5_SETTINGS_SOFT_SENSOR_OFFS + i * AQ5_SETTINGS_SOFT_SENSOR_DIST];
+		settings_dest->soft_sensor_fallback_value[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_SOFT_SENSOR_OFFS + 1 + i * AQ5_SETTINGS_SOFT_SENSOR_DIST) /100.0;
+		settings_dest->soft_sensor_timeout[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_SOFT_SENSOR_OFFS + 3 + i * AQ5_SETTINGS_SOFT_SENSOR_DIST);
+	}
+
+	/* Flow sensor settings */
+	for (int i=0; i<AQ5_NUM_FLOW; i++) {
+		settings_dest->flow_sensor_calibration_value[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FLOW_SENSOR_OFFS + i * AQ5_SETTINGS_FLOW_SENSOR_DIST);
+		settings_dest->flow_sensor_lower_limit[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FLOW_SENSOR_OFFS + 2 + i * AQ5_SETTINGS_FLOW_SENSOR_DIST) /10.0;
+		settings_dest->flow_sensor_upper_limit[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FLOW_SENSOR_OFFS + 4 + i * AQ5_SETTINGS_FLOW_SENSOR_DIST) /10.0;
 	}
 
 	/* fan settings */
@@ -570,6 +588,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case SOFT_SENSOR_STATE:
+			val_str = soft_sensor_state_strings;
+			break;
 		case VIRT_SENSOR_DATA_SOURCE:
 			val_str = virt_sensor_data_source_strings;
 			break;

@@ -287,10 +287,9 @@ val_str_t time_format_strings[] = {
 
 /* Auto DST format strings */
 val_str_t auto_dst_strings[] = {
-	{ (auto_dst_t)DISABLED,	"Enabled" },
-	{ (auto_dst_t)ENABLED,	"Disabled" },
+	{ (auto_dst_t)DISABLED,	"Disabled" },
+	{ (auto_dst_t)ENABLED,	"Enabled" },
 	{ -1,			"Unknown DST mode" }
-	
 };
 
 /* Display mode strings */
@@ -349,5 +348,11 @@ val_str_t virt_sensor_mode_strings[] = {
 	{ -1,					"Unknown mode" }
 };
 
+/* Software sensor configuration strings */
+val_str_t soft_sensor_state_strings[] = {
+	{ (soft_sensor_state_t)SENSOR_DISABLED,	"Disabled" },
+	{ (soft_sensor_state_t)SENSOR_ENABLED,	"Enabled" },
+	{ -1,					"Unknown configuration" }
+};
 
 #endif /* AQUAERO5_USER_STRINGS_H_ */
