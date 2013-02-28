@@ -318,9 +318,9 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
 				printf("TEMP%d_OFFS=%.2f\n", n+1, aq_sett->temp_offset[n]);
 		for (int n=0; n<AQ5_NUM_VIRT_SENSORS; n++) {
-			printf("VIRT_SENSOR%d_DATA_SOURCE_1='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_1, VIRT_SENSOR_DATA_SOURCE));
-			printf("VIRT_SENSOR%d_DATA_SOURCE_2='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_2, VIRT_SENSOR_DATA_SOURCE));
-			printf("VIRT_SENSOR%d_DATA_SOURCE_3='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_3, VIRT_SENSOR_DATA_SOURCE));
+			printf("VIRT_SENSOR%d_DATA_SOURCE_1='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_1, SENSOR_DATA_SOURCE));
+			printf("VIRT_SENSOR%d_DATA_SOURCE_2='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_2, SENSOR_DATA_SOURCE));
+			printf("VIRT_SENSOR%d_DATA_SOURCE_3='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_3, SENSOR_DATA_SOURCE));
 			printf("VIRT_SENSOR%d_MODE='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].mode, VIRT_SENSOR_MODE));
 		}
 		for (int n=0; n<AQ5_NUM_SOFT_SENSORS; n++) {

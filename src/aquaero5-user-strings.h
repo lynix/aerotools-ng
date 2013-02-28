@@ -323,18 +323,18 @@ val_str_t standby_action_strings[] = {
 };
 
 /* Data source strings */
-val_str_t virt_sensor_data_source_strings[] = {
-	{ (virt_sensor_data_source_t)NO_DATA_SOURCE,	"No data source selected" },
-	{ (virt_sensor_data_source_t)SENSOR_1,		"Sensor 1" },
-	{ (virt_sensor_data_source_t)VIRT_SENSOR_1,	"Virtual sensor 1"},
-	{ (virt_sensor_data_source_t)FAN_AMP_1,		"Fan amplifier 1" },
-	{ (virt_sensor_data_source_t)FAN_AMP_2,		"Fan amplifier 2" },
-	{ (virt_sensor_data_source_t)FAN_AMP_3,		"Fan amplifier 3" },
-	{ (virt_sensor_data_source_t)FAN_AMP_4,		"Fan amplifier 4" },
-	{ (virt_sensor_data_source_t)FAN_AMP_5,		"Fan amplifier 5" },
-	{ (virt_sensor_data_source_t)FAN_AMP_6,		"Fan amplifier 6" },
-	{ (virt_sensor_data_source_t)FAN_AMP_7,		"Fan amplifier 7" },
-	{ (virt_sensor_data_source_t)AQUAERO_CPU,	"Aquaero CPU" },
+val_str_t sensor_data_source_strings[] = {
+	{ (sensor_data_source_t)NO_DATA_SOURCE,		"No data source selected" },
+	{ (sensor_data_source_t)SENSOR_1,		"Sensor 1" },
+	{ (sensor_data_source_t)VIRT_SENSOR_1,		"Virtual sensor 1"},
+	{ (sensor_data_source_t)FAN_AMP_1,		"Fan amplifier 1" },
+	{ (sensor_data_source_t)FAN_AMP_2,		"Fan amplifier 2" },
+	{ (sensor_data_source_t)FAN_AMP_3,		"Fan amplifier 3" },
+	{ (sensor_data_source_t)FAN_AMP_4,		"Fan amplifier 4" },
+	{ (sensor_data_source_t)FAN_AMP_5,		"Fan amplifier 5" },
+	{ (sensor_data_source_t)FAN_AMP_6,		"Fan amplifier 6" },
+	{ (sensor_data_source_t)FAN_AMP_7,		"Fan amplifier 7" },
+	{ (sensor_data_source_t)AQUAERO_CPU,		"Aquaero CPU" },
 	{ -1,						"Unknown data source" }
 };
 

@@ -283,7 +283,7 @@ typedef enum {
 
 typedef enum {
 	SOFT_SENSOR_STATE,
-	VIRT_SENSOR_DATA_SOURCE,
+	SENSOR_DATA_SOURCE,
 	VIRT_SENSOR_MODE,
 	STANDBY_ACTION,
 	DATE_FORMAT,
@@ -398,7 +398,7 @@ typedef enum {
 	FAN_AMP_7		= 0x0032,
 	/* Unknown */
 	AQUAERO_CPU		= 0x0038
-} virt_sensor_data_source_t;
+} sensor_data_source_t;
 
 typedef enum {
 	HIGHEST_TEMP		= 0x00,
@@ -409,9 +409,9 @@ typedef enum {
 } virt_sensor_mode_t;
 
 typedef struct {
-	virt_sensor_data_source_t	data_source_1;
-	virt_sensor_data_source_t	data_source_2;
-	virt_sensor_data_source_t	data_source_3;
+	sensor_data_source_t		data_source_1;
+	sensor_data_source_t		data_source_2;
+	sensor_data_source_t		data_source_3;
 	virt_sensor_mode_t		mode;
 } virt_sensor_config_t;
 

@@ -591,8 +591,8 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 		case SOFT_SENSOR_STATE:
 			val_str = soft_sensor_state_strings;
 			break;
-		case VIRT_SENSOR_DATA_SOURCE:
-			val_str = virt_sensor_data_source_strings;
+		case SENSOR_DATA_SOURCE:
+			val_str = sensor_data_source_strings;
 			break;
 		case VIRT_SENSOR_MODE:
 			val_str = virt_sensor_mode_strings;
