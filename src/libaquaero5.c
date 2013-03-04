@@ -109,6 +109,9 @@
 #define AQ5_SETTINGS_SOFT_SENSOR_DIST		5
 #define AQ5_SETTINGS_FLOW_SENSOR_OFFS		0x1a0
 #define AQ5_SETTINGS_FLOW_SENSOR_DIST		6
+#define AQ5_SETTINGS_POWER_SENSOR_OFFS		0x1f4
+#define AQ5_SETTINGS_POWER_SENSOR_DIST		6
+
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -447,6 +450,13 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->flow_sensor_upper_limit[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FLOW_SENSOR_OFFS + 4 + i * AQ5_SETTINGS_FLOW_SENSOR_DIST) /10.0;
 	}
 
+	/* Power consumption sensors */
+	for (int i=0; i<AQ5_NUM_POWER_SENSORS; i++) {
+		settings_dest->power_consumption_config[i].flow_sensor_data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_SENSOR_OFFS + i * AQ5_SETTINGS_POWER_SENSOR_DIST);
+		settings_dest->power_consumption_config[i].temp_sensor_1 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_SENSOR_OFFS + 2 + i * AQ5_SETTINGS_POWER_SENSOR_DIST);
+		settings_dest->power_consumption_config[i].temp_sensor_2 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_SENSOR_OFFS + 4 + i * AQ5_SETTINGS_POWER_SENSOR_DIST);
+	};
+
 	/* fan settings */
 	int n;
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
@@ -588,6 +598,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case FLOW_DATA_SOURCE:
+			val_str = flow_sensor_data_source_strings;
+			break;
 		case SOFT_SENSOR_STATE:
 			val_str = soft_sensor_state_strings;
 			break;

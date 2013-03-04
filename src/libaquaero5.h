@@ -32,7 +32,7 @@
 #define AQ5_NUM_INFO_PAGE		32
 #define AQ5_NUM_VIRT_SENSORS		4
 #define AQ5_NUM_SOFT_SENSORS		8
-
+#define AQ5_NUM_POWER_SENSORS		4
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -282,6 +282,7 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	FLOW_DATA_SOURCE,
 	SOFT_SENSOR_STATE,
 	SENSOR_DATA_SOURCE,
 	VIRT_SENSOR_MODE,
@@ -449,7 +450,23 @@ typedef enum {
 	SENSOR_ENABLED		= 0x01
 } soft_sensor_state_t;
 
+typedef enum {
+	NO_FLOW_SOURCE		= 0xffff,
+	FLOW_1_SOURCE		= 0x0080,	
+	FLOW_2_SOURCE		= 0x0081,	
+	FLOW_3_SOURCE		= 0x0082,	
+	FLOW_4_SOURCE		= 0x0083,	
+	FLOW_5_SOURCE		= 0x0084,	
+} flow_sensor_data_source_t;
+
 typedef struct {
+	flow_sensor_data_source_t	flow_sensor_data_source;
+	sensor_data_source_t		temp_sensor_1;
+	sensor_data_source_t		temp_sensor_2;
+} power_consumption_config_t;
+
+typedef struct {
+	power_consumption_config_t	power_consumption_config[AQ5_NUM_POWER_SENSORS];
 	soft_sensor_state_t	soft_sensor_state[AQ5_NUM_SOFT_SENSORS];
 	double			soft_sensor_fallback_value[AQ5_NUM_SOFT_SENSORS];
 	uint16_t		soft_sensor_timeout[AQ5_NUM_SOFT_SENSORS];
