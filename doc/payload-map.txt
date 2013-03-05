@@ -686,4 +686,144 @@ offset		type	value		description
 0x2d0		int16			External (aquabus) fan 12 Data source
 0x2d2		int16			External (aquabus) fan 12 Programmable fuse setting in mA
 
+0x4f8		int16	curve_controller_1_ds		Curve controller 1 data source
+0x4fa		int16	curve_controller_1_startup_temp	Curve controller 1 startup temperature		
+0x4fc		int16	curve_controller_1_pt_1_temp	Curve controller 1 point 1 temperature	
+0x4fe		int16	curve_controller_1_pt_2_temp	Curve controller 1 point 2 temperature
+0x500		int16	curve_controller_1_pt_3_temp	Curve controller 1 point 3 temperature
+0x502		int16	curve_controller_1_pt_4_temp	Curve controller 1 point 4 temperature
+0x504		int16	curve_controller_1_pt_5_temp	Curve controller 1 point 5 temperature
+0x506		int16	curve_controller_1_pt_6_temp	Curve controller 1 point 6 temperature
+0x508		int16	curve_controller_1_pt_7_temp	Curve controller 1 point 7 temperature
+0x50a		int16	curve_controller_1_pt_8_temp	Curve controller 1 point 8 temperature
+0x50c		int16	curve_controller_1_pt_9_temp	Curve controller 1 point 9 temperature
+0x50e		int16	curve_controller_1_pt_10_temp	Curve controller 1 point 10 temperature
+0x510		int16	curve_controller_1_pt_11_temp	Curve controller 1 point 11 temperature
+0x512		int16	curve_controller_1_pt_12_temp	Curve controller 1 point 12 temperature
+0x514		int16	curve_controller_1_pt_13_temp	Curve controller 1 point 13 temperature
+0x516		int16	curve_controller_1_pt_14_temp	Curve controller 1 point 14 temperature
+0x518		int16	curve_controller_1_pt_15_temp	Curve controller 1 point 15 temperature
+0x51a		int16	curve_controller_1_pt_16_temp	Curve controller 1 point 16 temperature
+0x51c		int16	curve_controller_1_pt_1_percent	Curve controller 1 point 1 percent
+0x51e		int16	curve_controller_1_pt_2_percent	Curve controller 1 point 2 percent
+0x520		int16	curve_controller_1_pt_3_percent	Curve controller 1 point 3 percent
+0x522		int16	curve_controller_1_pt_4_percent	Curve controller 1 point 4 percent
+0x524		int16	curve_controller_1_pt_5_percent	Curve controller 1 point 5 percent
+0x526		int16	curve_controller_1_pt_6_percent	Curve controller 1 point 6 percent
+0x528		int16	curve_controller_1_pt_7_percent	Curve controller 1 point 7 percent
+0x52a		int16	curve_controller_1_pt_8_percent	Curve controller 1 point 8 percent
+0x52c		int16	curve_controller_1_pt_9_percent	Curve controller 1 point 9 percent
+0x52e		int16	curve_controller_1_pt_10_percent	Curve controller 1 point 10 percent
+0x530		int16	curve_controller_1_pt_11_percent	Curve controller 1 point 11 percent
+0x532		int16	curve_controller_1_pt_12_percent	Curve controller 1 point 12 percent
+0x534		int16	curve_controller_1_pt_13_percent	Curve controller 1 point 13 percent
+0x536		int16	curve_controller_1_pt_14_percent	Curve controller 1 point 14 percent
+0x538		int16	curve_controller_1_pt_15_percent	Curve controller 1 point 15 percent
+0x53a		int16	curve_controller_1_pt_16_percent	Curve controller 1 point 16 percent
+
+0x53c		int16	curve_controller_2_ds		Curve controller 2 data source
+0x53e		int16	curve_controller_2_startup_temp	Curve controller 2 startup temperature		
+0x540		int16	curve_controller_2_pt_1_temp	Curve controller 2 point 1 temperature	
+0x542		int16	curve_controller_2_pt_2_temp	Curve controller 2 point 2 temperature
+0x544		int16	curve_controller_2_pt_3_temp	Curve controller 2 point 3 temperature
+0x546		int16	curve_controller_2_pt_4_temp	Curve controller 2 point 4 temperature
+0x548		int16	curve_controller_2_pt_5_temp	Curve controller 2 point 5 temperature
+0x54a		int16	curve_controller_2_pt_6_temp	Curve controller 2 point 6 temperature
+0x54c		int16	curve_controller_2_pt_7_temp	Curve controller 2 point 7 temperature
+0x54e		int16	curve_controller_2_pt_8_temp	Curve controller 2 point 8 temperature
+0x550		int16	curve_controller_2_pt_9_temp	Curve controller 2 point 9 temperature
+0x552		int16	curve_controller_2_pt_10_temp	Curve controller 2 point 10 temperature
+0x554		int16	curve_controller_2_pt_11_temp	Curve controller 2 point 11 temperature
+0x556		int16	curve_controller_2_pt_12_temp	Curve controller 2 point 12 temperature
+0x558		int16	curve_controller_2_pt_13_temp	Curve controller 2 point 13 temperature
+0x55a		int16	curve_controller_2_pt_14_temp	Curve controller 2 point 14 temperature
+0x55c		int16	curve_controller_2_pt_15_temp	Curve controller 2 point 15 temperature
+0x55e		int16	curve_controller_2_pt_16_temp	Curve controller 2 point 16 temperature
+0x560		int16	curve_controller_2_pt_1_percent	Curve controller 2 point 1 percent
+0x562		int16	curve_controller_2_pt_2_percent	Curve controller 2 point 2 percent
+0x564		int16	curve_controller_2_pt_3_percent	Curve controller 2 point 3 percent
+0x566		int16	curve_controller_2_pt_4_percent	Curve controller 2 point 4 percent
+0x568		int16	curve_controller_2_pt_5_percent	Curve controller 2 point 5 percent
+0x56a		int16	curve_controller_2_pt_6_percent	Curve controller 2 point 6 percent
+0x56c		int16	curve_controller_2_pt_7_percent	Curve controller 2 point 7 percent
+0x56e		int16	curve_controller_2_pt_8_percent	Curve controller 2 point 8 percent
+0x570		int16	curve_controller_2_pt_9_percent	Curve controller 2 point 9 percent
+0x572		int16	curve_controller_2_pt_10_percent	Curve controller 2 point 10 percent
+0x574		int16	curve_controller_2_pt_11_percent	Curve controller 2 point 11 percent
+0x576		int16	curve_controller_2_pt_12_percent	Curve controller 2 point 12 percent
+0x578		int16	curve_controller_2_pt_13_percent	Curve controller 2 point 13 percent
+0x57a		int16	curve_controller_2_pt_14_percent	Curve controller 2 point 14 percent
+0x57c		int16	curve_controller_2_pt_15_percent	Curve controller 2 point 15 percent
+0x57e		int16	curve_controller_2_pt_16_percent	Curve controller 2 point 16 percent
+
+0x580		int16	curve_controller_3_ds		Curve controller 3 data source
+0x582		int16	curve_controller_3_startup_temp	Curve controller 3 startup temperature		
+0x584		int16	curve_controller_3_pt_1_temp	Curve controller 3 point 1 temperature	
+0x586		int16	curve_controller_3_pt_2_temp	Curve controller 3 point 2 temperature
+0x588		int16	curve_controller_3_pt_3_temp	Curve controller 3 point 3 temperature
+0x58a		int16	curve_controller_3_pt_4_temp	Curve controller 3 point 4 temperature
+0x58c		int16	curve_controller_3_pt_5_temp	Curve controller 3 point 5 temperature
+0x58e		int16	curve_controller_3_pt_6_temp	Curve controller 3 point 6 temperature
+0x590		int16	curve_controller_3_pt_7_temp	Curve controller 3 point 7 temperature
+0x592		int16	curve_controller_3_pt_8_temp	Curve controller 3 point 8 temperature
+0x594		int16	curve_controller_3_pt_9_temp	Curve controller 3 point 9 temperature
+0x596		int16	curve_controller_3_pt_10_temp	Curve controller 3 point 10 temperature
+0x598		int16	curve_controller_3_pt_11_temp	Curve controller 3 point 11 temperature
+0x59a		int16	curve_controller_3_pt_12_temp	Curve controller 3 point 12 temperature
+0x59c		int16	curve_controller_3_pt_13_temp	Curve controller 3 point 13 temperature
+0x59e		int16	curve_controller_3_pt_14_temp	Curve controller 3 point 14 temperature
+0x5a0		int16	curve_controller_3_pt_15_temp	Curve controller 3 point 15 temperature
+0x5a2		int16	curve_controller_3_pt_16_temp	Curve controller 3 point 16 temperature
+0x5a4		int16	curve_controller_3_pt_1_percent	Curve controller 3 point 1 percent
+0x5a6		int16	curve_controller_3_pt_2_percent	Curve controller 3 point 2 percent
+0x5a8		int16	curve_controller_3_pt_3_percent	Curve controller 3 point 3 percent
+0x5aa		int16	curve_controller_3_pt_4_percent	Curve controller 3 point 4 percent
+0x5ac		int16	curve_controller_3_pt_5_percent	Curve controller 3 point 5 percent
+0x5ae		int16	curve_controller_3_pt_6_percent	Curve controller 3 point 6 percent
+0x5b0		int16	curve_controller_3_pt_7_percent	Curve controller 3 point 7 percent
+0x5b2		int16	curve_controller_3_pt_8_percent	Curve controller 3 point 8 percent
+0x5b4		int16	curve_controller_3_pt_9_percent	Curve controller 3 point 9 percent
+0x5b6		int16	curve_controller_3_pt_10_percent	Curve controller 3 point 10 percent
+0x5b8		int16	curve_controller_3_pt_11_percent	Curve controller 3 point 11 percent
+0x5ba		int16	curve_controller_3_pt_12_percent	Curve controller 3 point 12 percent
+0x5bc		int16	curve_controller_3_pt_13_percent	Curve controller 3 point 13 percent
+0x5be		int16	curve_controller_3_pt_14_percent	Curve controller 3 point 14 percent
+0x5c0		int16	curve_controller_3_pt_15_percent	Curve controller 3 point 15 percent
+0x5c2		int16	curve_controller_3_pt_16_percent	Curve controller 3 point 16 percent
+
+0x5c4		int16	curve_controller_4_ds		Curve controller 4 data source
+0x5c6		int16	curve_controller_4_startup_temp	Curve controller 4 startup temperature		
+0x5c8		int16	curve_controller_4_pt_1_temp	Curve controller 4 point 1 temperature	
+0x5ca		int16	curve_controller_4_pt_2_temp	Curve controller 4 point 2 temperature
+0x5cc		int16	curve_controller_4_pt_3_temp	Curve controller 4 point 3 temperature
+0x5ce		int16	curve_controller_4_pt_4_temp	Curve controller 4 point 4 temperature
+0x5d0		int16	curve_controller_4_pt_5_temp	Curve controller 4 point 5 temperature
+0x5d2		int16	curve_controller_4_pt_6_temp	Curve controller 4 point 6 temperature
+0x5d4		int16	curve_controller_4_pt_7_temp	Curve controller 4 point 7 temperature
+0x5d6		int16	curve_controller_4_pt_8_temp	Curve controller 4 point 8 temperature
+0x5d8		int16	curve_controller_4_pt_9_temp	Curve controller 4 point 9 temperature
+0x5da		int16	curve_controller_4_pt_10_temp	Curve controller 4 point 10 temperature
+0x5dc		int16	curve_controller_4_pt_11_temp	Curve controller 4 point 11 temperature
+0x5de		int16	curve_controller_4_pt_12_temp	Curve controller 4 point 12 temperature
+0x5e0		int16	curve_controller_4_pt_13_temp	Curve controller 4 point 13 temperature
+0x5e2		int16	curve_controller_4_pt_14_temp	Curve controller 4 point 14 temperature
+0x5e4		int16	curve_controller_4_pt_15_temp	Curve controller 4 point 15 temperature
+0x5e6		int16	curve_controller_4_pt_16_temp	Curve controller 4 point 16 temperature
+0x5e8		int16	curve_controller_4_pt_1_percent	Curve controller 4 point 1 percent
+0x5ea		int16	curve_controller_4_pt_2_percent	Curve controller 4 point 2 percent
+0x5ec		int16	curve_controller_4_pt_3_percent	Curve controller 4 point 3 percent
+0x5ee		int16	curve_controller_4_pt_4_percent	Curve controller 4 point 4 percent
+0x5f0		int16	curve_controller_4_pt_5_percent	Curve controller 4 point 5 percent
+0x5f2		int16	curve_controller_4_pt_6_percent	Curve controller 4 point 6 percent
+0x5f4		int16	curve_controller_4_pt_7_percent	Curve controller 4 point 7 percent
+0x5f6		int16	curve_controller_4_pt_8_percent	Curve controller 4 point 8 percent
+0x5f8		int16	curve_controller_4_pt_9_percent	Curve controller 4 point 9 percent
+0x5fa		int16	curve_controller_4_pt_10_percent	Curve controller 4 point 10 percent
+0x5fc		int16	curve_controller_4_pt_11_percent	Curve controller 4 point 11 percent
+0x5fe		int16	curve_controller_4_pt_12_percent	Curve controller 4 point 12 percent
+0x600		int16	curve_controller_4_pt_13_percent	Curve controller 4 point 13 percent
+0x602		int16	curve_controller_4_pt_14_percent	Curve controller 4 point 14 percent
+0x604		int16	curve_controller_4_pt_15_percent	Curve controller 4 point 15 percent
+0x606		int16	curve_controller_4_pt_16_percent	Curve controller 4 point 16 percent
+
 0x972		int8			Allow output override
