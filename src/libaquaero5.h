@@ -35,6 +35,7 @@
 #define AQ5_NUM_POWER_SENSORS		4
 #define AQ5_NUM_CURVE_POINTS		16
 #define AQ5_NUM_CURVE_CONTROLLERS	4
+#define AQ5_NUM_TARGET_VAL_CONTROLLERS	8
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -479,6 +480,17 @@ typedef struct {
 } curve_controller_config_t;
 
 typedef struct {
+	uint16_t	data_source;
+	double		target_val;
+	uint16_t	factor_p;
+	double		factor_i;
+	uint16_t	factor_d;
+	double		reset_time;
+	double		hysteresis;
+} target_value_controller_config_t;
+
+typedef struct {
+	target_value_controller_config_t	target_value_controller_config[AQ5_NUM_TARGET_VAL_CONTROLLERS];
 	curve_controller_config_t	curve_controller_config[AQ5_NUM_CURVE_CONTROLLERS];
 	power_consumption_config_t	power_consumption_config[AQ5_NUM_POWER_SENSORS];
 	soft_sensor_state_t	soft_sensor_state[AQ5_NUM_SOFT_SENSORS];

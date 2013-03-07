@@ -113,6 +113,8 @@
 #define AQ5_SETTINGS_POWER_SENSOR_DIST		6
 #define AQ5_SETTINGS_CURVE_CONTROLLER_OFFS	0x4f8
 #define AQ5_SETTINGS_CURVE_CONTROLLER_DIST	68
+#define AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS	0x488
+#define AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST	14
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -487,6 +489,17 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		}
 		settings_dest->fan_data_source[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 16 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_programmable_fuse[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 18 + i * AQ5_SETTINGS_FAN_DIST);
+	}
+
+	/* Target value controller settings */
+	for (int i=0; i<AQ5_NUM_TARGET_VAL_CONTROLLERS; i++) {
+		settings_dest->target_value_controller_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST);
+		settings_dest->target_value_controller_config[i].target_val = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 2 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST) /100.0;
+		settings_dest->target_value_controller_config[i].factor_p = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 4 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST);
+		settings_dest->target_value_controller_config[i].factor_i = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 6 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST) /10.0;
+		settings_dest->target_value_controller_config[i].factor_d = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 8 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST);
+		settings_dest->target_value_controller_config[i].reset_time = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 10 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST) /10.0;
+		settings_dest->target_value_controller_config[i].hysteresis = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 12 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST) /100.0;
 	}
 
 	/* Curve controller settings */
