@@ -686,6 +686,70 @@ offset		type	value		description
 0x2d0		int16			External (aquabus) fan 12 Data source
 0x2d2		int16			External (aquabus) fan 12 Programmable fuse setting in mA
 
+0x488		int16	target_val_controller_1_ds		Target value controller 1 data source 
+0x48a		int16	target_val_controller_1_target_val	Target value controller 1 target value
+0x48c		int16	target_val_controller_1_factor_p	Target value controller 1 factor P
+0x48e		int16	target_val_controller_1_factor_i	Target value controller 1 factor I
+0x490		int16	target_val_controller_1_factor_d	Target value controller 1 factor D
+0x492		int16	target_val_controller_1_reset_time	Target value controller 1 reset time
+0x494		int16	target_val_controller_1_hysteresis	Target value controller 1 hysteresis
+
+0x496		int16	target_val_controller_2_ds		Target value controller 2 data source 
+0x498		int16	target_val_controller_2_target_val	Target value controller 2 target value
+0x49a		int16	target_val_controller_2_factor_p	Target value controller 2 factor P
+0x49c		int16	target_val_controller_2_factor_i	Target value controller 2 factor I
+0x49e		int16	target_val_controller_2_factor_d	Target value controller 2 factor D
+0x4a0		int16	target_val_controller_2_reset_time	Target value controller 2 reset time
+0x4a2		int16	target_val_controller_2_hysteresis	Target value controller 2 hysteresis
+
+0x4a4		int16	target_val_controller_3_ds		Target value controller 3 data source 
+0x4a6		int16	target_val_controller_3_target_val	Target value controller 3 target value
+0x4a8		int16	target_val_controller_3_factor_p	Target value controller 3 factor P
+0x4aa		int16	target_val_controller_3_factor_i	Target value controller 3 factor I
+0x4ac		int16	target_val_controller_3_factor_d	Target value controller 3 factor D
+0x4ae		int16	target_val_controller_3_reset_time	Target value controller 3 reset time
+0x4b0		int16	target_val_controller_3_hysteresis	Target value controller 3 hysteresis
+
+0x4b2		int16	target_val_controller_4_ds		Target value controller 4 data source 
+0x4b4		int16	target_val_controller_4_target_val	Target value controller 4 target value
+0x4b6		int16	target_val_controller_4_factor_p	Target value controller 4 factor P
+0x4b8		int16	target_val_controller_4_factor_i	Target value controller 4 factor I
+0x4ba		int16	target_val_controller_4_factor_d	Target value controller 4 factor D
+0x4bc		int16	target_val_controller_4_reset_time	Target value controller 4 reset time
+0x4be		int16	target_val_controller_4_hysteresis	Target value controller 4 hysteresis
+
+0x4c0		int16	target_val_controller_5_ds		Target value controller 5 data source 
+0x4c2		int16	target_val_controller_5_target_val	Target value controller 5 target value
+0x4c4		int16	target_val_controller_5_factor_p	Target value controller 5 factor P
+0x4c6		int16	target_val_controller_5_factor_i	Target value controller 5 factor I
+0x4c8		int16	target_val_controller_5_factor_d	Target value controller 5 factor D
+0x4ca		int16	target_val_controller_5_reset_time	Target value controller 5 reset time
+0x4cc		int16	target_val_controller_5_hysteresis	Target value controller 5 hysteresis
+
+0x4ce		int16	target_val_controller_6_ds		Target value controller 6 data source 
+0x4d0		int16	target_val_controller_6_target_val	Target value controller 6 target value
+0x4d2		int16	target_val_controller_6_factor_p	Target value controller 6 factor P
+0x4d4		int16	target_val_controller_6_factor_i	Target value controller 6 factor I
+0x4d6		int16	target_val_controller_6_factor_d	Target value controller 6 factor D
+0x4d8		int16	target_val_controller_6_reset_time	Target value controller 6 reset time
+0x4da		int16	target_val_controller_6_hysteresis	Target value controller 6 hysteresis
+
+0x4dc		int16	target_val_controller_7_ds		Target value controller 7 data source 
+0x4de		int16	target_val_controller_7_target_val	Target value controller 7 target value
+0x4e0		int16	target_val_controller_7_factor_p	Target value controller 7 factor P
+0x4e2		int16	target_val_controller_7_factor_i	Target value controller 7 factor I
+0x4e4		int16	target_val_controller_7_factor_d	Target value controller 7 factor D
+0x4e6		int16	target_val_controller_7_reset_time	Target value controller 7 reset time
+0x4e8		int16	target_val_controller_7_hysteresis	Target value controller 7 hysteresis
+
+0x4ea		int16	target_val_controller_8_ds		Target value controller 8 data source 
+0x4ec		int16	target_val_controller_8_target_val	Target value controller 8 target value
+0x4ee		int16	target_val_controller_8_factor_p	Target value controller 8 factor P
+0x4f0		int16	target_val_controller_8_factor_i	Target value controller 8 factor I
+0x4f2		int16	target_val_controller_8_factor_d	Target value controller 8 factor D
+0x4f4		int16	target_val_controller_8_reset_time	Target value controller 8 reset time
+0x4f6		int16	target_val_controller_8_hysteresis	Target value controller 8 hysteresis
+
 0x4f8		int16	curve_controller_1_ds		Curve controller 1 data source
 0x4fa		int16	curve_controller_1_startup_temp	Curve controller 1 startup temperature		
 0x4fc		int16	curve_controller_1_pt_1_temp	Curve controller 1 point 1 temperature	
