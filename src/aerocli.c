@@ -359,7 +359,14 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		}
 		for (int n=0; n<AQ5_NUM_LEVEL; n++)
 			printf("LEVEL%d=%.2f\n", n+1, aq_data->level[n]);
-
+		for (int n=0; n<AQ5_NUM_CURVE_CONTROLLERS; n++) {
+			printf("CURVE_CONTROLLER%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->curve_controller_config[n].data_source, SENSOR_DATA_SOURCE));
+			printf("CURVE_CONTROLLER%d_STARTUP_TEMP=%.2f\n", n+1, aq_sett->curve_controller_config[n].startup_temp);
+			for (int m=0; m<AQ5_NUM_CURVE_POINTS; m++) {
+				printf("CURVE_CONTROLLER%d_POINT%d_TEMP=%.2f\n", n+1, m+1, aq_sett->curve_controller_config[n].curve_point[m].temp);
+				printf("CURVE_CONTROLLER%d_POINT%d_PERCENT=%d\n", n+1, m+1, aq_sett->curve_controller_config[n].curve_point[m].percent);
+			}
+		}
 
 	}
 }

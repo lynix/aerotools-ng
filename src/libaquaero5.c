@@ -111,7 +111,8 @@
 #define AQ5_SETTINGS_FLOW_SENSOR_DIST		6
 #define AQ5_SETTINGS_POWER_SENSOR_OFFS		0x1f4
 #define AQ5_SETTINGS_POWER_SENSOR_DIST		6
-
+#define AQ5_SETTINGS_CURVE_CONTROLLER_OFFS	0x4f8
+#define AQ5_SETTINGS_CURVE_CONTROLLER_DIST	68
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -486,6 +487,16 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		}
 		settings_dest->fan_data_source[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 16 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_programmable_fuse[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 18 + i * AQ5_SETTINGS_FAN_DIST);
+	}
+
+	/* Curve controller settings */
+	for (int i=0; i<AQ5_NUM_CURVE_CONTROLLERS; i++) {
+		settings_dest->curve_controller_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CURVE_CONTROLLER_OFFS + i * AQ5_SETTINGS_CURVE_CONTROLLER_DIST);
+		settings_dest->curve_controller_config[i].startup_temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CURVE_CONTROLLER_OFFS + 2 + i * AQ5_SETTINGS_CURVE_CONTROLLER_DIST) /100.0;
+		for (int j=0; j<AQ5_NUM_CURVE_POINTS; j++) {
+			settings_dest->curve_controller_config[i].curve_point[j].temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CURVE_CONTROLLER_OFFS + 4 + (i * AQ5_SETTINGS_CURVE_CONTROLLER_DIST) + (j * 2)) /100.0; 
+			settings_dest->curve_controller_config[i].curve_point[j].percent = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CURVE_CONTROLLER_OFFS + 36 + (i * AQ5_SETTINGS_CURVE_CONTROLLER_DIST) + (j * 2)) /100; 
+		}
 	}
 
 	return 0;
