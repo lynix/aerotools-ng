@@ -686,6 +686,70 @@ offset		type	value		description
 0x2d0		int16			External (aquabus) fan 12 Data source
 0x2d2		int16			External (aquabus) fan 12 Programmable fuse setting in mA
 
+0x3e8		int16	two_point_controller_1_ds		Two point controller 1 data source
+0x3ea		int16	two_point_controller_1_upper_limit	Two point controller 1 upper limit
+0x3ec		int16	two_point_controller_1_lower_limit	Two point controller 1 lower limit
+
+0x3ee		int16	two_point_controller_2_ds		Two point controller 2 data source
+0x3f0		int16	two_point_controller_2_upper_limit	Two point controller 2 upper limit
+0x3f2		int16	two_point_controller_2_lower_limit	Two point controller 2 lower limit
+
+0x3f4		int16	two_point_controller_3_ds		Two point controller 3 data source
+0x3f6		int16	two_point_controller_3_upper_limit	Two point controller 3 upper limit
+0x3f8		int16	two_point_controller_3_lower_limit	Two point controller 3 lower limit
+
+0x3fa		int16	two_point_controller_4_ds		Two point controller 4 data source
+0x3fc		int16	two_point_controller_4_upper_limit	Two point controller 4 upper limit
+0x3fe		int16	two_point_controller_4_lower_limit	Two point controller 4 lower limit
+
+0x400		int16	two_point_controller_5_ds		Two point controller 5 data source
+0x402		int16	two_point_controller_5_upper_limit	Two point controller 5 upper limit
+0x404		int16	two_point_controller_5_lower_limit	Two point controller 5 lower limit
+
+0x406		int16	two_point_controller_6_ds		Two point controller 6 data source
+0x408		int16	two_point_controller_6_upper_limit	Two point controller 6 upper limit
+0x40a		int16	two_point_controller_6_lower_limit	Two point controller 6 lower limit
+
+0x40c		int16	two_point_controller_7_ds		Two point controller 7 data source
+0x40e		int16	two_point_controller_7_upper_limit	Two point controller 7 upper limit
+0x410		int16	two_point_controller_7_lower_limit	Two point controller 7 lower limit
+
+0x412		int16	two_point_controller_8_ds		Two point controller 8 data source
+0x414		int16	two_point_controller_8_upper_limit	Two point controller 8 upper limit
+0x416		int16	two_point_controller_8_lower_limit	Two point controller 8 lower limit
+
+0x418		int16	two_point_controller_9_ds		Two point controller 9 data source
+0x41a		int16	two_point_controller_9_upper_limit	Two point controller 9 upper limit
+0x41c		int16	two_point_controller_9_lower_limit	Two point controller 9 lower limit
+
+0x41e		int16	two_point_controller_10_ds		Two point controller 10 data source
+0x420		int16	two_point_controller_10_upper_limit	Two point controller 10 upper limit
+0x422		int16	two_point_controller_10_lower_limit	Two point controller 10 lower limit
+
+0x424		int16	two_point_controller_11_ds		Two point controller 11 data source
+0x426		int16	two_point_controller_11_upper_limit	Two point controller 11 upper limit
+0x428		int16	two_point_controller_11_lower_limit	Two point controller 11 lower limit
+
+0x42a		int16	two_point_controller_12_ds		Two point controller 12 data source
+0x42c		int16	two_point_controller_12_upper_limit	Two point controller 12 upper limit
+0x42e		int16	two_point_controller_12_lower_limit	Two point controller 12 lower limit
+
+0x430		int16	two_point_controller_13_ds		Two point controller 13 data source
+0x432		int16	two_point_controller_13_upper_limit	Two point controller 13 upper limit
+0x434		int16	two_point_controller_13_lower_limit	Two point controller 13 lower limit
+
+0x436		int16	two_point_controller_14_ds		Two point controller 14 data source
+0x438		int16	two_point_controller_14_upper_limit	Two point controller 14 upper limit
+0x43a		int16	two_point_controller_14_lower_limit	Two point controller 14 lower limit
+
+0x43c		int16	two_point_controller_15_ds		Two point controller 15 data source
+0x43e		int16	two_point_controller_15_upper_limit	Two point controller 15 upper limit
+0x440		int16	two_point_controller_15_lower_limit	Two point controller 15 lower limit
+
+0x442		int16	two_point_controller_16_ds		Two point controller 16 data source
+0x444		int16	two_point_controller_16_upper_limit	Two point controller 16 upper limit
+0x446		int16	two_point_controller_16_lower_limit	Two point controller 16 lower limit
+
 0x488		int16	target_val_controller_1_ds		Target value controller 1 data source 
 0x48a		int16	target_val_controller_1_target_val	Target value controller 1 target value
 0x48c		int16	target_val_controller_1_factor_p	Target value controller 1 factor P
