@@ -36,6 +36,7 @@
 #define AQ5_NUM_CURVE_POINTS		16
 #define AQ5_NUM_CURVE_CONTROLLERS	4
 #define AQ5_NUM_TARGET_VAL_CONTROLLERS	8
+#define AQ5_NUM_TWO_POINT_CONTROLLERS	16
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -490,6 +491,13 @@ typedef struct {
 } target_value_controller_config_t;
 
 typedef struct {
+	uint16_t	data_source;
+	double		upper_limit;
+	double		lower_limit;
+} two_point_controller_config_t;
+
+typedef struct {
+	two_point_controller_config_t	two_point_controller_config[AQ5_NUM_TWO_POINT_CONTROLLERS];
 	target_value_controller_config_t	target_value_controller_config[AQ5_NUM_TARGET_VAL_CONTROLLERS];
 	curve_controller_config_t	curve_controller_config[AQ5_NUM_CURVE_CONTROLLERS];
 	power_consumption_config_t	power_consumption_config[AQ5_NUM_POWER_SENSORS];

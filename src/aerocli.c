@@ -359,6 +359,11 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		}
 		for (int n=0; n<AQ5_NUM_LEVEL; n++)
 			printf("LEVEL%d=%.2f\n", n+1, aq_data->level[n]);
+		for (int n=0; n<AQ5_NUM_TWO_POINT_CONTROLLERS; n++) {
+			printf("TWO_POINT_CONTROLLER%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->two_point_controller_config[n].data_source, SENSOR_DATA_SOURCE));
+			printf("TWO_POINT_CONTROLLER%d_UPPER_LIMIT=%.2f\n", n+1, aq_sett->two_point_controller_config[n].upper_limit);
+			printf("TWO_POINT_CONTROLLER%d_LOWER_LIMIT=%.2f\n", n+1, aq_sett->two_point_controller_config[n].lower_limit);
+		}
 		for (int n=0; n<AQ5_NUM_TARGET_VAL_CONTROLLERS; n++) {
 			printf("TARGET_VAL_CONTROLLER%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->target_value_controller_config[n].data_source, SENSOR_DATA_SOURCE));
 			printf("TARGET_VAL_CONTROLLER%d_TARGET_VALUE=%.2f\n", n+1, aq_sett->target_value_controller_config[n].target_val);
