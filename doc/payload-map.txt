@@ -987,4 +987,19 @@ offset		type	value		description
 0x604		int16	curve_controller_4_pt_15_percent	Curve controller 4 point 15 percent
 0x606		int16	curve_controller_4_pt_16_percent	Curve controller 4 point 16 percent
 
+0x608		int16	rgb_led_controller_data_source		RGB LED data source
+0x60a		int8	rgb_led_controller_pulsating_brightness	RGB LED pulsating brightness
+0x60b		int16	rgb_led_controller_low_temp_temp	RGB LED low temperature temperature setting
+0x60d		int16	rgb_led_controller_low_temp_red_led	RGB LED low temperature red LED
+0x60f		int16	rgb_led_controller_low_temp_green_led	RGB LED low temperature green LED
+0x611		int16	rgb_led_controller_low_temp_blue_led	RGB LED low temperature blue LED
+0x613		int16	rgb_led_controller_optimum_temp_temp	RGB LED optimum temperature temperature setting
+0x615		int16	rgb_led_controller_optimum_temp_red_led	RGB LED optimum temperature red LED
+0x617		int16	rgb_led_controller_optimum_temp_green_led	RGB LED optimum temperature green LED
+0x619		int16	rgb_led_controller_optimum_temp_blue_led	RGB LED optimum temperature blue LED
+0x61b		int16	rgb_led_controller_high_temp_temp	RGB LED high temperature temperature setting
+0x61d		int16	rgb_led_controller_high_temp_red_led	RGB LED high temperature red LED
+0x61f		int16	rgb_led_controller_high_temp_green_led	RGB LED high temperature green LED
+0x621		int16	rgb_led_controller_high_temp_blue_led	RGB LED high temperature blue LED
+
 0x972		int8			Allow output override
