@@ -117,6 +117,7 @@
 #define AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST	14
 #define AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS	0x3e8
 #define AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST	6
+#define AQ5_SETTINGS_PRESET_VAL_CONTRLR_OFFS	0x448
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -498,6 +499,11 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->two_point_controller_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS + i * AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST);
 		settings_dest->two_point_controller_config[i].upper_limit = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS + 2 + i * AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST) /100.0;
 		settings_dest->two_point_controller_config[i].lower_limit = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS + 4 + i * AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST) /100.0;
+	}
+
+	/* Preset value controller settings  */
+	for (int i=0; i<AQ5_NUM_PRESET_VAL_CONTROLLERS; i++) {
+		settings_dest->preset_value_controller[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_PRESET_VAL_CONTRLR_OFFS + i * 2) /100;
 	}
 
 	/* Target value controller settings */
