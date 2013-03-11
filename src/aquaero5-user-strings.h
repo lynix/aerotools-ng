@@ -398,5 +398,13 @@ val_str_t flow_sensor_data_source_strings[] = {
 	{ -1,						"Unknown flow sensor" }
 };
 
+/* RGB LED pulsating brightness strings */
+val_str_t rgb_led_pulsating_brightness_strings[] = {
+	{ (rgb_led_pulsating_brightness_t)PB_OFF,	"Off"},
+	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_1,	"Variant 1"},
+	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_2,	"Variant 2"},
+	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_3,	"Variant 3"},
+	{ -1,						"Unknown mode"}
+};
 
 #endif /* AQUAERO5_USER_STRINGS_H_ */

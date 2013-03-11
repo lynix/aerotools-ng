@@ -357,6 +357,20 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("FAN%d_DATA_SRC='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_data_source[n], CONTROLLER_DATA_SRC));
 			printf("FAN%d_FUSE_CURRENT=%d\n", n+1, aq_sett->fan_programmable_fuse[n]);
 		}
+		printf("RGB_LED_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->rgb_led_controller_config.data_source, SENSOR_DATA_SOURCE));
+		printf("RGB_LED_PULSATING_BRIGHTNESS='%s'\n", libaquaero5_get_string(aq_sett->rgb_led_controller_config.pulsating_brightness, LED_PB_MODE));
+		printf("RGB_LED_LOW_TEMP_TEMP=%.2f\n", aq_sett->rgb_led_controller_config.low_temp.temp);
+		printf("RGB_LED_LOW_TEMP_RED_LED=%d\n", aq_sett->rgb_led_controller_config.low_temp.red_led);
+		printf("RGB_LED_LOW_TEMP_GREEN_LED=%d\n", aq_sett->rgb_led_controller_config.low_temp.green_led);
+		printf("RGB_LED_LOW_TEMP_BLUE_LED=%d\n", aq_sett->rgb_led_controller_config.low_temp.blue_led);
+		printf("RGB_LED_OPTIMUM_TEMP_TEMP=%.2f\n", aq_sett->rgb_led_controller_config.optimum_temp.temp);
+		printf("RGB_LED_OPTIMUM_TEMP_RED_LED=%d\n", aq_sett->rgb_led_controller_config.optimum_temp.red_led);
+		printf("RGB_LED_OPTIMUM_TEMP_GREEN_LED=%d\n", aq_sett->rgb_led_controller_config.optimum_temp.green_led);
+		printf("RGB_LED_OPTIMUM_TEMP_BLUE_LED=%d\n", aq_sett->rgb_led_controller_config.optimum_temp.blue_led);
+		printf("RGB_LED_HIGH_TEMP_TEMP=%.2f\n", aq_sett->rgb_led_controller_config.high_temp.temp);
+		printf("RGB_LED_HIGH_TEMP_RED_LED=%d\n", aq_sett->rgb_led_controller_config.high_temp.red_led);
+		printf("RGB_LED_HIGH_TEMP_GREEN_LED=%d\n", aq_sett->rgb_led_controller_config.high_temp.green_led);
+		printf("RGB_LED_HIGH_TEMP_BLUE_LED=%d\n", aq_sett->rgb_led_controller_config.high_temp.blue_led);
 		for (int n=0; n<AQ5_NUM_LEVEL; n++)
 			printf("LEVEL%d=%.2f\n", n+1, aq_data->level[n]);
 		for (int n=0; n<AQ5_NUM_TWO_POINT_CONTROLLERS; n++) {

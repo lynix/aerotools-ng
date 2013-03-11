@@ -287,6 +287,7 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	LED_PB_MODE,
 	FLOW_DATA_SOURCE,
 	SOFT_SENSOR_STATE,
 	SENSOR_DATA_SOURCE,
@@ -498,6 +499,29 @@ typedef struct {
 } two_point_controller_config_t;
 
 typedef struct {
+	double		temp;
+	uint8_t		red_led;
+	uint8_t		green_led;
+	uint8_t		blue_led;
+} led_config_t;
+
+typedef enum {
+	PB_OFF		= 0x00,
+	PB_VARIANT_1	= 0x01,
+	PB_VARIANT_2	= 0x02,
+	PB_VARIANT_3	= 0x03,
+} rgb_led_pulsating_brightness_t;
+
+typedef struct {
+	uint16_t	data_source;
+	rgb_led_pulsating_brightness_t	pulsating_brightness;
+	led_config_t	low_temp;
+	led_config_t	optimum_temp;
+	led_config_t	high_temp;
+} rgb_led_controller_config_t;
+
+typedef struct {
+	rgb_led_controller_config_t	rgb_led_controller_config;
 	uint8_t			preset_value_controller[AQ5_NUM_PRESET_VAL_CONTROLLERS];
 	two_point_controller_config_t	two_point_controller_config[AQ5_NUM_TWO_POINT_CONTROLLERS];
 	target_value_controller_config_t	target_value_controller_config[AQ5_NUM_TARGET_VAL_CONTROLLERS];

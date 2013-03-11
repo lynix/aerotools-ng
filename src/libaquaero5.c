@@ -118,6 +118,7 @@
 #define AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS	0x3e8
 #define AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST	6
 #define AQ5_SETTINGS_PRESET_VAL_CONTRLR_OFFS	0x448
+#define AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS	0x608
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -494,6 +495,25 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->fan_programmable_fuse[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 18 + i * AQ5_SETTINGS_FAN_DIST);
 	}
 
+	/* RGB LED controller settings */
+	settings_dest->rgb_led_controller_config.data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS);
+	settings_dest->rgb_led_controller_config.pulsating_brightness = aq5_buf_settings[AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 2];
+
+	settings_dest->rgb_led_controller_config.low_temp.temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 3) /100.0;
+	settings_dest->rgb_led_controller_config.low_temp.red_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 5) /100;
+	settings_dest->rgb_led_controller_config.low_temp.green_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 7) /100;
+	settings_dest->rgb_led_controller_config.low_temp.blue_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 9) /100;
+	
+	settings_dest->rgb_led_controller_config.optimum_temp.temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 11) /100.0;
+	settings_dest->rgb_led_controller_config.optimum_temp.red_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 13) /100;
+	settings_dest->rgb_led_controller_config.optimum_temp.green_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 15) /100;
+	settings_dest->rgb_led_controller_config.optimum_temp.blue_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 17) /100;
+	
+	settings_dest->rgb_led_controller_config.high_temp.temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 19) /100.0;
+	settings_dest->rgb_led_controller_config.high_temp.red_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 21) /100;
+	settings_dest->rgb_led_controller_config.high_temp.green_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 23) /100;
+	settings_dest->rgb_led_controller_config.high_temp.blue_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 25) /100;
+
 	/* Two point controller settings */
 	for (int i=0; i<AQ5_NUM_TWO_POINT_CONTROLLERS; i++) {
 		settings_dest->two_point_controller_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS + i * AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST);
@@ -637,6 +657,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case LED_PB_MODE:
+			val_str = rgb_led_pulsating_brightness_strings;
+			break;
 		case FLOW_DATA_SOURCE:
 			val_str = flow_sensor_data_source_strings;
 			break;
