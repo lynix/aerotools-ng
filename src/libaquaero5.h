@@ -142,7 +142,7 @@ typedef enum {
 	PRESET_VAL_30	=	0x007d,
 	PRESET_VAL_31	=	0x007e,
 	PRESET_VAL_32	=	0x007f
-} fan_data_source_t;
+} controller_data_source_t;
 
 typedef struct {
 	fan_regulation_mode_t	fan_regulation_mode;
@@ -295,7 +295,7 @@ typedef enum {
 	TIME_FORMAT,
 	AUTO_DST,
 	DISPLAY_MODE,
-	FAN_DATA_SRC, 
+	CONTROLLER_DATA_SRC, 
 	LANGUAGE, 
 	TEMP_UNITS, 
 	FLOW_UNITS, 
@@ -549,7 +549,7 @@ typedef struct {
 	uint16_t		fan_startboost_duration[AQ5_NUM_FAN];
 	uint16_t		fan_pulses_per_revolution[AQ5_NUM_FAN];
 	aq5_fan_control_mode_t	fan_control_mode[AQ5_NUM_FAN];
-	fan_data_source_t	fan_data_source[AQ5_NUM_FAN];
+	controller_data_source_t	fan_data_source[AQ5_NUM_FAN];
 	uint16_t		fan_programmable_fuse[AQ5_NUM_FAN];
 } aq5_settings_t;
 

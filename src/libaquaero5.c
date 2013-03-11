@@ -658,8 +658,8 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 		case DISPLAY_MODE:
 			val_str = display_mode_strings;
 			break;
-		case FAN_DATA_SRC:
-			val_str = fan_data_source_strings;
+		case CONTROLLER_DATA_SRC:
+			val_str = controller_data_source_strings;
 			break;
 		case LANGUAGE:
 			val_str = language_strings;
