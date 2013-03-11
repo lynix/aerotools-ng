@@ -750,6 +750,39 @@ offset		type	value		description
 0x444		int16	two_point_controller_16_upper_limit	Two point controller 16 upper limit
 0x446		int16	two_point_controller_16_lower_limit	Two point controller 16 lower limit
 
+0x448		int16	preset_value_controller 1		Preset value controller 1
+0x44a		int16	preset_value_controller 2		Preset value controller 2
+0x44c		int16	preset_value_controller 3		Preset value controller 3
+0x44e		int16	preset_value_controller 4		Preset value controller 4
+0x450		int16	preset_value_controller 5		Preset value controller 5
+0x452		int16	preset_value_controller 6		Preset value controller 6
+0x454		int16	preset_value_controller 7		Preset value controller 7
+0x456		int16	preset_value_controller 8		Preset value controller 8
+0x458		int16	preset_value_controller 9		Preset value controller 9
+0x45a		int16	preset_value_controller 10		Preset value controller 10
+0x45c		int16	preset_value_controller 11		Preset value controller 11
+0x45e		int16	preset_value_controller 12		Preset value controller 12
+0x460		int16	preset_value_controller 13		Preset value controller 13
+0x462		int16	preset_value_controller 14		Preset value controller 14
+0x464		int16	preset_value_controller 15		Preset value controller 15
+0x466		int16	preset_value_controller 16		Preset value controller 16
+0x468		int16	preset_value_controller 17		Preset value controller 17
+0x46a		int16	preset_value_controller 18		Preset value controller 18
+0x46c		int16	preset_value_controller 19		Preset value controller 19
+0x46e		int16	preset_value_controller 20		Preset value controller 20
+0x470		int16	preset_value_controller 21		Preset value controller 21
+0x472		int16	preset_value_controller 22		Preset value controller 22
+0x474		int16	preset_value_controller 23		Preset value controller 23
+0x476		int16	preset_value_controller 24		Preset value controller 24
+0x478		int16	preset_value_controller 25		Preset value controller 25
+0x47a		int16	preset_value_controller 26		Preset value controller 26
+0x47c		int16	preset_value_controller 27		Preset value controller 27
+0x47e		int16	preset_value_controller 28		Preset value controller 28
+0x480		int16	preset_value_controller 29		Preset value controller 29
+0x482		int16	preset_value_controller 30		Preset value controller 30
+0x484		int16	preset_value_controller 31		Preset value controller 31
+0x486		int16	preset_value_controller 32		Preset value controller 32
+
 0x488		int16	target_val_controller_1_ds		Target value controller 1 data source 
 0x48a		int16	target_val_controller_1_target_val	Target value controller 1 target value
 0x48c		int16	target_val_controller_1_factor_p	Target value controller 1 factor P
