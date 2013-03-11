@@ -686,6 +686,20 @@ offset		type	value		description
 0x2d0		int16			External (aquabus) fan 12 Data source
 0x2d2		int16			External (aquabus) fan 12 Programmable fuse setting in mA
 
+0x30c		int16	power_output_1_min_power	Power ouput 1 minimum power 
+0x30e		int16	power_output_1_max_power	Power ouput 1 maximum power 
+0x310		int16	power_output_1_ds		Power ouput 1 data source
+0x312		int8	power_output_1_mode		Power ouput 1 mode
+
+0x313		int16	power_output_2_min_power	Power ouput 2 minimum power 
+0x315		int16	power_output_2_max_power	Power ouput 2 maximum power 
+0x317		int16	power_output_2_ds		Power ouput 2 data source
+0x319		int8	power_output_2_mode		Power ouput 2 mode
+
+0x31a		int16	power_output_aq_relay_ds	Power ouput Aquaero relay data source
+0x31c		int8	power_output_aq_relay_config	Power ouput Aquaero relay configuration
+0x31d		int16	power_output_aq_relay_switch_thresh	Power ouput Aquaero relay switch threshold
+
 0x3e8		int16	two_point_controller_1_ds		Two point controller 1 data source
 0x3ea		int16	two_point_controller_1_upper_limit	Two point controller 1 upper limit
 0x3ec		int16	two_point_controller_1_lower_limit	Two point controller 1 lower limit
