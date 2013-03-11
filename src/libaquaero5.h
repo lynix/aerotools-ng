@@ -513,7 +513,7 @@ typedef enum {
 } rgb_led_pulsating_brightness_t;
 
 typedef struct {
-	uint16_t	data_source;
+	controller_data_source_t	data_source;
 	rgb_led_pulsating_brightness_t	pulsating_brightness;
 	led_config_t	low_temp;
 	led_config_t	optimum_temp;
