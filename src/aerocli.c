@@ -409,7 +409,10 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 				printf("CURVE_CONTROLLER%d_POINT%d_PERCENT=%d\n", n+1, m+1, aq_sett->curve_controller_config[n].curve_point[m].percent);
 			}
 		}
-
+		for (int n=0; n<AQ5_NUM_DATA_LOG; n++) {
+			printf("DATA_LOG%d_INTERVAL='%s'\n", n+1, libaquaero5_get_string(aq_sett->data_log_config[n].interval, DATA_LOG_INTERVAL));
+			printf("DATA_LOG%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->data_log_config[n].data_source, SENSOR_DATA_SOURCE));
+		}
 	}
 }
 

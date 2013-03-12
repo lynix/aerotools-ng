@@ -367,6 +367,8 @@ val_str_t sensor_data_source_strings[] = {
 	{ (sensor_data_source_t)FAN_AMP_11,		"Fan amplifier 11" },
 	{ (sensor_data_source_t)FAN_AMP_12,		"Fan amplifier 12" },
 	{ (sensor_data_source_t)AQUAERO_CPU,		"Aquaero CPU" },
+	/* Unknown */
+	{ (sensor_data_source_t)SENS_FILL_LEVEL_1,	"Fill level 1" },
 	{ -1,						"Unknown data source" }
 };
 
@@ -407,18 +409,34 @@ val_str_t rgb_led_pulsating_brightness_strings[] = {
 	{ -1,						"Unknown mode" }
 };
 
+/* Hold powre output minimum power user strings */
 val_str_t power_output_mode_strings[] = {
 	{ (power_output_mode_t)HMP_DISABLED,		"Disabled" },
 	{ (power_output_mode_t)HMP_ENABLED,		"Enabled" },
 	{ -1,						"Unknown" }
 };
 
+/* aquaero relay configuration user strings */
 val_str_t aquaero_relay_configuration_strings[] = {
 	{ (aquaero_relay_configuration_t)CONTROLLED_FROM_DS,	"Controlled from data source" },
 	{ (aquaero_relay_configuration_t)AQ_RELAY_ON,		"Relay on" },	
 	{ (aquaero_relay_configuration_t)AQ_RELAY_OFF,		"Relay off" },	
 	{ (aquaero_relay_configuration_t)CONTROLLED_FROM_EVENT_SYS,	"Controlled from event system" },
 	{ -1,							"Unknown"}	
+};
+
+/* data log interval user strings */
+val_str_t data_log_interval_strings[] = {
+	{ (data_log_interval_t)INT_OFF,			"Off" },
+	{ (data_log_interval_t)INT_EVERY_2_SEC, 	"Every 2 seconds" },
+	{ (data_log_interval_t)INT_EVERY_10_SEC, 	"Every 10 seconds" },
+	{ (data_log_interval_t)INT_EVERY_30_SEC,	"Every 30 seconds" },
+	{ (data_log_interval_t)INT_EVERY_MIN, 		"Every minute" },
+	{ (data_log_interval_t)INT_EVERY_5_MIN, 	"Every 5 minutes" },
+	{ (data_log_interval_t)INT_EVERY_10_MIN,	"Every 10 minutes" },
+	{ (data_log_interval_t)INT_EVERY_30_MIN,	"Every 30 minutes" },
+	{ (data_log_interval_t)INT_EVERY_HOUR, 		"Every hour" },
+	{ -1,						"Unknown"}
 };
 
 #endif /* AQUAERO5_USER_STRINGS_H_ */

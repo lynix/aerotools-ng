@@ -38,6 +38,7 @@
 #define AQ5_NUM_TARGET_VAL_CONTROLLERS	8
 #define AQ5_NUM_TWO_POINT_CONTROLLERS	16
 #define AQ5_NUM_PRESET_VAL_CONTROLLERS	32
+#define AQ5_NUM_DATA_LOG		16
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -287,6 +288,7 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	DATA_LOG_INTERVAL,
 	POWER_OUTPUT_MODE,
 	AQ_RELAY_CONFIG,
 	LED_PB_MODE,
@@ -435,7 +437,9 @@ typedef enum {
 	FAN_AMP_10		= 0x0035,
 	FAN_AMP_11		= 0x0036,
 	FAN_AMP_12		= 0x0037,
-	AQUAERO_CPU		= 0x0038
+	AQUAERO_CPU		= 0x0038,
+	/* Unknown */
+	SENS_FILL_LEVEL_1	= 0x00C6
 } sensor_data_source_t;
 
 typedef enum {
@@ -541,7 +545,25 @@ typedef enum {
 	CONTROLLED_FROM_EVENT_SYS	= 0x03
 } aquaero_relay_configuration_t;
 
+typedef enum {
+	INT_OFF				= 0x00,
+	INT_EVERY_2_SEC			= 0x01,
+	INT_EVERY_10_SEC		= 0x02,
+	INT_EVERY_30_SEC		= 0x03,
+	INT_EVERY_MIN			= 0x04,
+	INT_EVERY_5_MIN			= 0x05,
+	INT_EVERY_10_MIN		= 0x06,
+	INT_EVERY_30_MIN		= 0x07,
+	INT_EVERY_HOUR			= 0x08
+} data_log_interval_t;
+
 typedef struct {
+	data_log_interval_t	interval;
+	sensor_data_source_t	data_source;
+} data_log_config_t;
+
+typedef struct {
+	data_log_config_t	data_log_config[AQ5_NUM_DATA_LOG];
 	power_output_config_t	power_output_1_config;
 	power_output_config_t	power_output_2_config;
 	aquaero_relay_configuration_t	aquaero_relay_configuration;

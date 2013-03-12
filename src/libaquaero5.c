@@ -120,6 +120,8 @@
 #define AQ5_SETTINGS_PRESET_VAL_CONTRLR_OFFS	0x448
 #define AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS	0x608
 #define AQ5_SETTINGS_POWER_OUTPUT_OFFS		0x30c
+#define AQ5_SETTINGS_DATA_LOG_OFFS		0x623
+#define AQ5_SETTINGS_DATA_LOG_DIST		3
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -563,6 +565,12 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		}
 	}
 
+	/* Data log settings */
+	for (int i=0; i<AQ5_NUM_DATA_LOG; i++) {
+		settings_dest->data_log_config[i].interval = aq5_buf_settings[AQ5_SETTINGS_DATA_LOG_OFFS + i * AQ5_SETTINGS_DATA_LOG_DIST];
+		settings_dest->data_log_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DATA_LOG_OFFS + 1 + i * AQ5_SETTINGS_DATA_LOG_DIST);
+	}
+
 	return 0;
 }
 
@@ -673,6 +681,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case DATA_LOG_INTERVAL:
+			val_str = data_log_interval_strings;
+			break;
 		case POWER_OUTPUT_MODE:
 			val_str = power_output_mode_strings;
 			break;
