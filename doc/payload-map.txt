@@ -1016,4 +1016,52 @@ offset		type	value		description
 0x61f		int16	rgb_led_controller_high_temp_green_led	RGB LED high temperature green LED
 0x621		int16	rgb_led_controller_high_temp_blue_led	RGB LED high temperature blue LED
 
+0x623		int8	data_log_1_interval			Data log 1 interval
+0x624		int16	data_log_1_data_source			Data log 1 data source
+
+0x626		int8	data_log_2_interval			Data log 2 interval
+0x627		int16	data_log_2_data_source			Data log 2 data source
+
+0x629		int8	data_log_3_interval			Data log 3 interval
+0x62a		int16	data_log_3_data_source			Data log 3 data source
+
+0x62c		int8	data_log_4_interval			Data log 4 interval
+0x62d		int16	data_log_4_data_source			Data log 4 data source
+
+0x62f		int8	data_log_5_interval			Data log 5 interval
+0x630		int16	data_log_5_data_source			Data log 5 data source
+
+0x632		int8	data_log_6_interval			Data log 6 interval
+0x633		int16	data_log_6_data_source			Data log 6 data source
+
+0x635		int8	data_log_7_interval			Data log 7 interval
+0x636		int16	data_log_7_data_source			Data log 7 data source
+
+0x638		int8	data_log_8_interval			Data log 8 interval
+0x639		int16	data_log_8_data_source			Data log 8 data source
+
+0x63b		int8	data_log_9_interval			Data log 9 interval
+0x63c		int16	data_log_9_data_source			Data log 9 data source
+
+0x63e		int8	data_log_10_interval			Data log 10 interval
+0x63f		int16	data_log_10_data_source			Data log 10 data source
+
+0x641		int8	data_log_11_interval			Data log 11 interval
+0x642		int16	data_log_11_data_source			Data log 11 data source
+
+0x644		int8	data_log_12_interval			Data log 12 interval
+0x645		int16	data_log_12_data_source			Data log 12 data source
+
+0x647		int8	data_log_13_interval			Data log 13 interval
+0x648		int16	data_log_13_data_source			Data log 13 data source
+
+0x64a		int8	data_log_14_interval			Data log 14 interval
+0x64b		int16	data_log_14_data_source			Data log 14 data source
+
+0x64d		int8	data_log_15_interval			Data log 15 interval
+0x64e		int16	data_log_15_data_source			Data log 15 data source
+
+0x650		int8	data_log_16_interval			Data log 16 interval
+0x651		int16	data_log_16_data_source			Data log 16 data source
+
 0x972		int8			Allow output override
