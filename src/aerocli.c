@@ -357,6 +357,18 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("FAN%d_DATA_SRC='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_data_source[n], CONTROLLER_DATA_SRC));
 			printf("FAN%d_FUSE_CURRENT=%d\n", n+1, aq_sett->fan_programmable_fuse[n]);
 		}
+		printf("POWER_OUTPUT1_MIN_POWER=%d\n", aq_sett->power_output_1_config.min_power);
+		printf("POWER_OUTPUT1_MAX_POWER=%d\n", aq_sett->power_output_1_config.max_power);
+		printf("POWER_OUTPUT1_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->power_output_1_config.data_source, CONTROLLER_DATA_SRC));
+		printf("POWER_OUTPUT1_HOLD_MINIMUM_POWER='%s'\n", libaquaero5_get_string(aq_sett->power_output_1_config.mode, POWER_OUTPUT_MODE));
+		printf("POWER_OUTPUT2_MIN_POWER=%d\n", aq_sett->power_output_2_config.min_power);
+		printf("POWER_OUTPUT2_MAX_POWER=%d\n", aq_sett->power_output_2_config.max_power);
+		printf("POWER_OUTPUT2_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->power_output_2_config.data_source, CONTROLLER_DATA_SRC));
+		printf("POWER_OUTPUT2_HOLD_MINIMUM_POWER='%s'\n", libaquaero5_get_string(aq_sett->power_output_2_config.mode, POWER_OUTPUT_MODE));
+		printf("AQUAERO_RELAY_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->aquaero_relay_data_source, CONTROLLER_DATA_SRC));
+		printf("AQUAERO_RELAY_CONFIG='%s'\n", libaquaero5_get_string(aq_sett->aquaero_relay_configuration, AQ_RELAY_CONFIG));
+		printf("AQUAERO_RELAY_SWITCH_THRESHOLD=%d\n", aq_sett->aquaero_relay_switch_threshold);
+
 		printf("RGB_LED_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->rgb_led_controller_config.data_source, SENSOR_DATA_SOURCE));
 		printf("RGB_LED_PULSATING_BRIGHTNESS='%s'\n", libaquaero5_get_string(aq_sett->rgb_led_controller_config.pulsating_brightness, LED_PB_MODE));
 		printf("RGB_LED_LOW_TEMP_TEMP=%.2f\n", aq_sett->rgb_led_controller_config.low_temp.temp);

@@ -287,6 +287,8 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	POWER_OUTPUT_MODE,
+	AQ_RELAY_CONFIG,
 	LED_PB_MODE,
 	FLOW_DATA_SOURCE,
 	SOFT_SENSOR_STATE,
@@ -520,7 +522,31 @@ typedef struct {
 	led_config_t	high_temp;
 } rgb_led_controller_config_t;
 
+typedef enum {
+	HMP_DISABLED	= 0x00,
+	HMP_ENABLED	= 0x01
+} power_output_mode_t;
+
 typedef struct {
+	uint8_t		min_power;
+	uint8_t		max_power;
+	controller_data_source_t	data_source;
+	power_output_mode_t	mode;
+} power_output_config_t;
+
+typedef enum {
+	CONTROLLED_FROM_DS		= 0x00,
+	AQ_RELAY_ON			= 0x01,
+	AQ_RELAY_OFF			= 0x02,
+	CONTROLLED_FROM_EVENT_SYS	= 0x03
+} aquaero_relay_configuration_t;
+
+typedef struct {
+	power_output_config_t	power_output_1_config;
+	power_output_config_t	power_output_2_config;
+	aquaero_relay_configuration_t	aquaero_relay_configuration;
+	controller_data_source_t	aquaero_relay_data_source;
+	uint8_t			aquaero_relay_switch_threshold;
 	rgb_led_controller_config_t	rgb_led_controller_config;
 	uint8_t			preset_value_controller[AQ5_NUM_PRESET_VAL_CONTROLLERS];
 	two_point_controller_config_t	two_point_controller_config[AQ5_NUM_TWO_POINT_CONTROLLERS];

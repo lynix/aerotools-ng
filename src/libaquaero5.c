@@ -119,6 +119,7 @@
 #define AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST	6
 #define AQ5_SETTINGS_PRESET_VAL_CONTRLR_OFFS	0x448
 #define AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS	0x608
+#define AQ5_SETTINGS_POWER_OUTPUT_OFFS		0x30c
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -495,6 +496,21 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->fan_programmable_fuse[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 18 + i * AQ5_SETTINGS_FAN_DIST);
 	}
 
+	/* Power and relay output settings  */
+	settings_dest->power_output_1_config.min_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS) /100;
+	settings_dest->power_output_1_config.max_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 2) /100;
+	settings_dest->power_output_1_config.data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 4);
+	settings_dest->power_output_1_config.mode = aq5_buf_settings[AQ5_SETTINGS_POWER_OUTPUT_OFFS + 6];
+
+	settings_dest->power_output_2_config.min_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 7) /100;
+	settings_dest->power_output_2_config.max_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 9) /100;
+	settings_dest->power_output_2_config.data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 11);
+	settings_dest->power_output_2_config.mode = aq5_buf_settings[AQ5_SETTINGS_POWER_OUTPUT_OFFS + 13];
+
+	settings_dest->aquaero_relay_data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 14); 	
+	settings_dest->aquaero_relay_configuration = aq5_buf_settings[AQ5_SETTINGS_POWER_OUTPUT_OFFS + 16]; 	
+	settings_dest->aquaero_relay_switch_threshold = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 17) /100; 	
+
 	/* RGB LED controller settings */
 	settings_dest->rgb_led_controller_config.data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS);
 	settings_dest->rgb_led_controller_config.pulsating_brightness = aq5_buf_settings[AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 2];
@@ -657,6 +673,12 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case POWER_OUTPUT_MODE:
+			val_str = power_output_mode_strings;
+			break;
+		case AQ_RELAY_CONFIG:
+			val_str = aquaero_relay_configuration_strings;
+			break;
 		case LED_PB_MODE:
 			val_str = rgb_led_pulsating_brightness_strings;
 			break;

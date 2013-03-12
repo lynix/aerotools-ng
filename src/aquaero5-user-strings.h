@@ -400,11 +400,25 @@ val_str_t flow_sensor_data_source_strings[] = {
 
 /* RGB LED pulsating brightness strings */
 val_str_t rgb_led_pulsating_brightness_strings[] = {
-	{ (rgb_led_pulsating_brightness_t)PB_OFF,	"Off"},
-	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_1,	"Variant 1"},
-	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_2,	"Variant 2"},
-	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_3,	"Variant 3"},
-	{ -1,						"Unknown mode"}
+	{ (rgb_led_pulsating_brightness_t)PB_OFF,	"Off" },
+	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_1,	"Variant 1" },
+	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_2,	"Variant 2" },
+	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_3,	"Variant 3" },
+	{ -1,						"Unknown mode" }
+};
+
+val_str_t power_output_mode_strings[] = {
+	{ (power_output_mode_t)HMP_DISABLED,		"Disabled" },
+	{ (power_output_mode_t)HMP_ENABLED,		"Enabled" },
+	{ -1,						"Unknown" }
+};
+
+val_str_t aquaero_relay_configuration_strings[] = {
+	{ (aquaero_relay_configuration_t)CONTROLLED_FROM_DS,	"Controlled from data source" },
+	{ (aquaero_relay_configuration_t)AQ_RELAY_ON,		"Relay on" },	
+	{ (aquaero_relay_configuration_t)AQ_RELAY_OFF,		"Relay off" },	
+	{ (aquaero_relay_configuration_t)CONTROLLED_FROM_EVENT_SYS,	"Controlled from event system" },
+	{ -1,							"Unknown"}	
 };
 
 #endif /* AQUAERO5_USER_STRINGS_H_ */
