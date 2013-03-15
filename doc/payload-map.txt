@@ -1064,4 +1064,38 @@ offset		type	value		description
 0x650		int8	data_log_16_interval			Data log 16 interval
 0x651		int16	data_log_16_data_source			Data log 16 data source
 
+0x653		int16	alarm_normal_op 1st_action		normal operation 1st action
+0x655		int16	alarm_normal_op 2nd_action		normal operation 2nd action
+0x657		int16	alarm_normal_op 3rd_action		normal operation 3rd action
+
+0x659		int16	alarm_warning 1st_action		warning 1st action
+0x65b		int16	alarm_warning 2nd_action		warning operation 2nd action
+0x65d		int16	alarm_warning 3rd_action		warning operation 3rd action
+
+0x65f		int16	alarm_alarm 1st_action			alarm 1st action
+0x661		int16	alarm_alarm 2nd_action			alarm operation 2nd action
+0x663		int16	alarm_alarm 3rd_action			alarm operation 3rd action
+
+0x665		int16	alarm_alarm_warn_4 1st_action		alarm warning 4 1st action
+0x667		int16	alarm_alarm_warn_4 2nd_action		alarm warning 4 operation 2nd action
+0x669		int16	alarm_alarm_warn_4 3rd_action		alarm warning 4 warning operation 3rd action
+
+0x66b		int16	alarm_alarm_warn_5 1st_action		alarm warning 5 1st action
+0x66d		int16	alarm_alarm_warn_5 2nd_action		alarm warning 5 operation 2nd action
+0x66f		int16	alarm_alarm_warn_5 3rd_action		alarm warning 5 warning operation 3rd action
+
+0x671		int16	alarm_alarm_warn_6 1st_action		alarm warning 6 1st action
+0x672		int16	alarm_alarm_warn_6 2nd_action		alarm warning 6 operation 2nd action
+0x674		int16	alarm_alarm_warn_6 3rd_action		alarm warning 6 warning operation 3rd action
+
+0x676		int16	alarm_alarm_warn_7 1st_action		alarm warning 7 1st action
+0x678		int16	alarm_alarm_warn_7 2nd_action		alarm warning 7 operation 2nd action
+0x67a		int16	alarm_alarm_warn_7 3rd_action		alarm warning 7 warning operation 3rd action
+
+0x67c		int16	alarm_alarm_warn_8 1st_action		alarm warning 8 1st action
+0x67e		int16	alarm_alarm_warn_8 2nd_action		alarm warning 8 operation 2nd action
+0x680		int16	alarm_alarm_warn_8 3rd_action		alarm warning 8 warning operation 3rd action
+
+0x683		int16	suppress_alarm_at_poweron		Duration to supress alarm at power on
+
 0x972		int8			Allow output override
