@@ -1085,16 +1085,16 @@ offset		type	value		description
 0x66f		int16	alarm_alarm_warn_5 3rd_action		alarm warning 5 warning operation 3rd action
 
 0x671		int16	alarm_alarm_warn_6 1st_action		alarm warning 6 1st action
-0x672		int16	alarm_alarm_warn_6 2nd_action		alarm warning 6 operation 2nd action
-0x674		int16	alarm_alarm_warn_6 3rd_action		alarm warning 6 warning operation 3rd action
+0x673		int16	alarm_alarm_warn_6 2nd_action		alarm warning 6 operation 2nd action
+0x675		int16	alarm_alarm_warn_6 3rd_action		alarm warning 6 warning operation 3rd action
 
-0x676		int16	alarm_alarm_warn_7 1st_action		alarm warning 7 1st action
-0x678		int16	alarm_alarm_warn_7 2nd_action		alarm warning 7 operation 2nd action
-0x67a		int16	alarm_alarm_warn_7 3rd_action		alarm warning 7 warning operation 3rd action
+0x677		int16	alarm_alarm_warn_7 1st_action		alarm warning 7 1st action
+0x679		int16	alarm_alarm_warn_7 2nd_action		alarm warning 7 operation 2nd action
+0x67b		int16	alarm_alarm_warn_7 3rd_action		alarm warning 7 warning operation 3rd action
 
-0x67c		int16	alarm_alarm_warn_8 1st_action		alarm warning 8 1st action
-0x67e		int16	alarm_alarm_warn_8 2nd_action		alarm warning 8 operation 2nd action
-0x680		int16	alarm_alarm_warn_8 3rd_action		alarm warning 8 warning operation 3rd action
+0x67d		int16	alarm_alarm_warn_8 1st_action		alarm warning 8 1st action
+0x67f		int16	alarm_alarm_warn_8 2nd_action		alarm warning 8 operation 2nd action
+0x681		int16	alarm_alarm_warn_8 3rd_action		alarm warning 8 warning operation 3rd action
 
 0x683		int16	suppress_alarm_at_poweron		Duration to supress alarm at power on
 
