@@ -1098,4 +1098,11 @@ offset		type	value		description
 
 0x683		int16	suppress_alarm_at_poweron		Duration to supress alarm at power on
 
+0x685		int16	alarm_temp_1 data_souce			Temperature alarm 1 data source
+0x687		int8	alarm_temp_1 configuration		Temperature alarm 1 configuration
+0x688		int16	alarm_temp_1 limit_for_warning		Temperature alarm 1 limit for warning
+0x68a		int8	alarm_temp_1 set_warning_level		Temperature alarm 1 set warning level
+0x68b		int16	alarm_temp_1 limit_for_alarm		Temperature alarm 1 limit for alarm
+0x68d		int8	alarm_temp_1 set_alrm_level		Temperature alarm 1 set alarm level
+
 0x972		int8			Allow output override
