@@ -1298,4 +1298,20 @@ offset		type	value		description
 0x766		int16	alarm_flow_4 limit_for_alarm		Flow alarm 4 limit for alarm
 0x768		int8	alarm_flow_4 set_alrm_level		Flow alarm 4 set alarm level
 
+0x769		int16	alarm_pump_1 data_source		Pump alarm 1 data source
+0x76b		int8	alarm_pump_1 configuration		Pump alarm 1 configuration
+0x76c		int8	alarm_pump_1 set_alrm_level		Pump alarm 1 set alarm level
+
+0x76d		int16	alarm_pump_2 data_source		Pump alarm 2 data source
+0x76f		int8	alarm_pump_2 configuration		Pump alarm 2 configuration
+0x770		int8	alarm_pump_2 set_alrm_level		Pump alarm 2 set alarm level
+
+0x771		int16	alarm_pump_3 data_source		Pump alarm 3 data source
+0x773		int8	alarm_pump_3 configuration		Pump alarm 3 configuration
+0x774		int8	alarm_pump_3 set_alrm_level		Pump alarm 3 set alarm level
+
+0x775		int16	alarm_pump_4 data_source		Pump alarm 4 data source
+0x777		int8	alarm_pump_4 configuration		Pump alarm 4 configuration
+0x778		int8	alarm_pump_4 set_alrm_level		Pump alarm 4 set alarm level
+
 0x972		int8			Allow output override
