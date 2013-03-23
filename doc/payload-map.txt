@@ -1210,4 +1210,64 @@ offset		type	value		description
 0x712		int16	alarm_temp_16 limit_for_alarm		Temperature alarm 16 limit for alarm
 0x714		int8	alarm_temp_16 set_alrm_level		Temperature alarm 16 set alarm level
 
+0x715		int8	alarm_fan_1 limit_for_warning		Fan alarm 1 limit for warning
+0x716		int8	alarm_fan_1 set_warning_level		Fan alarm 1 set warning level
+0x717		int8	alarm_fan_1 limit_for_alarm		Fan alarm 1 limit for alarm
+0x718		int8	alarm_fan_1 set_alrm_level		Fan alarm 1 set alarm level
+
+0x719		int8	alarm_fan_2 limit_for_warning		Fan alarm 2 limit for warning
+0x71a		int8	alarm_fan_2 set_warning_level		Fan alarm 2 set warning level
+0x71b		int8	alarm_fan_2 limit_for_alarm		Fan alarm 2 limit for alarm
+0x71c		int8	alarm_fan_2 set_alrm_level		Fan alarm 2 set alarm level
+
+0x71d		int8	alarm_fan_3 limit_for_warning		Fan alarm 3 limit for warning
+0x71e		int8	alarm_fan_3 set_warning_level		Fan alarm 3 set warning level
+0x71f		int8	alarm_fan_3 limit_for_alarm		Fan alarm 3 limit for alarm
+0x720		int8	alarm_fan_3 set_alrm_level		Fan alarm 3 set alarm level
+
+0x721		int8	alarm_fan_4 limit_for_warning		Fan alarm 4 limit for warning
+0x722		int8	alarm_fan_4 set_warning_level		Fan alarm 4 set warning level
+0x723		int8	alarm_fan_4 limit_for_alarm		Fan alarm 4 limit for alarm
+0x724		int8	alarm_fan_4 set_alrm_level		Fan alarm 4 set alarm level
+
+0x725		int8	alarm_fan_5 limit_for_warning		Fan alarm 5 limit for warning
+0x726		int8	alarm_fan_5 set_warning_level		Fan alarm 5 set warning level
+0x727		int8	alarm_fan_5 limit_for_alarm		Fan alarm 5 limit for alarm
+0x728		int8	alarm_fan_5 set_alrm_level		Fan alarm 5 set alarm level
+
+0x729		int8	alarm_fan_6 limit_for_warning		Fan alarm 6 limit for warning
+0x72a		int8	alarm_fan_6 set_warning_level		Fan alarm 6 set warning level
+0x72b		int8	alarm_fan_6 limit_for_alarm		Fan alarm 6 limit for alarm
+0x72c		int8	alarm_fan_6 set_alrm_level		Fan alarm 6 set alarm level
+
+0x72d		int8	alarm_fan_7 limit_for_warning		Fan alarm 7 limit for warning
+0x72e		int8	alarm_fan_7 set_warning_level		Fan alarm 7 set warning level
+0x72f		int8	alarm_fan_7 limit_for_alarm		Fan alarm 7 limit for alarm
+0x730		int8	alarm_fan_7 set_alrm_level		Fan alarm 7 set alarm level
+
+0x731		int8	alarm_fan_8 limit_for_warning		Fan alarm 8 limit for warning
+0x732		int8	alarm_fan_8 set_warning_level		Fan alarm 8 set warning level
+0x733		int8	alarm_fan_8 limit_for_alarm		Fan alarm 8 limit for alarm
+0x734		int8	alarm_fan_8 set_alrm_level		Fan alarm 8 set alarm level
+
+0x735		int8	alarm_fan_9 limit_for_warning		Fan alarm 9 limit for warning
+0x736		int8	alarm_fan_9 set_warning_level		Fan alarm 9 set warning level
+0x737		int8	alarm_fan_9 limit_for_alarm		Fan alarm 9 limit for alarm
+0x738		int8	alarm_fan_9 set_alrm_level		Fan alarm 9 set alarm level
+
+0x739		int8	alarm_fan_10 limit_for_warning		Fan alarm 10 limit for warning
+0x73a		int8	alarm_fan_10 set_warning_level		Fan alarm 10 set warning level
+0x73b		int8	alarm_fan_10 limit_for_alarm		Fan alarm 10 limit for alarm
+0x73c		int8	alarm_fan_10 set_alrm_level		Fan alarm 10 set alarm level
+
+0x73d		int8	alarm_fan_11 limit_for_warning		Fan alarm 11 limit for warning
+0x73e		int8	alarm_fan_11 set_warning_level		Fan alarm 11 set warning level
+0x73f		int8	alarm_fan_11 limit_for_alarm		Fan alarm 11 limit for alarm
+0x740		int8	alarm_fan_11 set_alrm_level		Fan alarm 11 set alarm level
+
+0x741		int8	alarm_fan_12 limit_for_warning		Fan alarm 12 limit for warning
+0x742		int8	alarm_fan_12 set_warning_level		Fan alarm 12 set warning level
+0x743		int8	alarm_fan_12 limit_for_alarm		Fan alarm 12 limit for alarm
+0x744		int8	alarm_fan_12 set_alrm_level		Fan alarm 12 set alarm level
+
 0x972		int8			Allow output override
