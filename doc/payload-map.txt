@@ -1270,4 +1270,32 @@ offset		type	value		description
 0x743		int8	alarm_fan_12 limit_for_alarm		Fan alarm 12 limit for alarm
 0x744		int8	alarm_fan_12 set_alrm_level		Fan alarm 12 set alarm level
 
+0x745		int16	alarm_flow_1 data_source		Flow alarm 1 data source
+0x747		int8	alarm_flow_1 configuration		Flow alarm 1 configuration
+0x748		int16	alarm_flow_1 limit_for_warning		Flow alarm 1 limit for warning
+0x74a		int8	alarm_flow_1 set_warning_level		Flow alarm 1 set warning level
+0x74b		int16	alarm_flow_1 limit_for_alarm		Flow alarm 1 limit for alarm
+0x74d		int8	alarm_flow_1 set_alrm_level		Flow alarm 1 set alarm level
+
+0x74e		int16	alarm_flow_2 data_source		Flow alarm 2 data source
+0x750		int8	alarm_flow_2 configuration		Flow alarm 2 configuration
+0x751		int16	alarm_flow_2 limit_for_warning		Flow alarm 2 limit for warning
+0x753		int8	alarm_flow_2 set_warning_level		Flow alarm 2 set warning level
+0x754		int16	alarm_flow_2 limit_for_alarm		Flow alarm 2 limit for alarm
+0x756		int8	alarm_flow_2 set_alrm_level		Flow alarm 2 set alarm level
+
+0x757		int16	alarm_flow_3 data_source		Flow alarm 3 data source
+0x759		int8	alarm_flow_3 configuration		Flow alarm 3 configuration
+0x75a		int16	alarm_flow_3 limit_for_warning		Flow alarm 3 limit for warning
+0x75c		int8	alarm_flow_3 set_warning_level		Flow alarm 3 set warning level
+0x75d		int16	alarm_flow_3 limit_for_alarm		Flow alarm 3 limit for alarm
+0x75f		int8	alarm_flow_3 set_alrm_level		Flow alarm 3 set alarm level
+
+0x760		int16	alarm_flow_4 data_source		Flow alarm 4 data source
+0x762		int8	alarm_flow_4 configuration		Flow alarm 4 configuration
+0x763		int16	alarm_flow_4 limit_for_warning		Flow alarm 4 limit for warning
+0x765		int8	alarm_flow_4 set_warning_level		Flow alarm 4 set warning level
+0x766		int16	alarm_flow_4 limit_for_alarm		Flow alarm 4 limit for alarm
+0x768		int8	alarm_flow_4 set_alrm_level		Flow alarm 4 set alarm level
+
 0x972		int8			Allow output override
