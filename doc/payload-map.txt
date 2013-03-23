@@ -1105,4 +1105,109 @@ offset		type	value		description
 0x68b		int16	alarm_temp_1 limit_for_alarm		Temperature alarm 1 limit for alarm
 0x68d		int8	alarm_temp_1 set_alrm_level		Temperature alarm 1 set alarm level
 
+0x68e		int16	alarm_temp_2 data_souce			Temperature alarm 2 data source
+0x690		int8	alarm_temp_2 configuration		Temperature alarm 2 configuration
+0x691		int16	alarm_temp_2 limit_for_warning		Temperature alarm 2 limit for warning
+0x693		int8	alarm_temp_2 set_warning_level		Temperature alarm 2 set warning level
+0x694		int16	alarm_temp_2 limit_for_alarm		Temperature alarm 2 limit for alarm
+0x696		int8	alarm_temp_2 set_alrm_level		Temperature alarm 2 set alarm level
+
+0x697		int16	alarm_temp_3 data_souce			Temperature alarm 3 data source
+0x699		int8	alarm_temp_3 configuration		Temperature alarm 3 configuration
+0x69a		int16	alarm_temp_3 limit_for_warning		Temperature alarm 3 limit for warning
+0x69c		int8	alarm_temp_3 set_warning_level		Temperature alarm 3 set warning level
+0x69d		int16	alarm_temp_3 limit_for_alarm		Temperature alarm 3 limit for alarm
+0x69f		int8	alarm_temp_3 set_alrm_level		Temperature alarm 3 set alarm level
+
+0x6a0		int16	alarm_temp_4 data_souce			Temperature alarm 4 data source
+0x6a2		int8	alarm_temp_4 configuration		Temperature alarm 4 configuration
+0x6a3		int16	alarm_temp_4 limit_for_warning		Temperature alarm 4 limit for warning
+0x6a5		int8	alarm_temp_4 set_warning_level		Temperature alarm 4 set warning level
+0x6a6		int16	alarm_temp_4 limit_for_alarm		Temperature alarm 4 limit for alarm
+0x6a8		int8	alarm_temp_4 set_alrm_level		Temperature alarm 4 set alarm level
+
+0x6a9		int16	alarm_temp_5 data_souce			Temperature alarm 5 data source
+0x6ab		int8	alarm_temp_5 configuration		Temperature alarm 5 configuration
+0x6ac		int16	alarm_temp_5 limit_for_warning		Temperature alarm 5 limit for warning
+0x6ae		int8	alarm_temp_5 set_warning_level		Temperature alarm 5 set warning level
+0x6af		int16	alarm_temp_5 limit_for_alarm		Temperature alarm 5 limit for alarm
+0x6b1		int8	alarm_temp_5 set_alrm_level		Temperature alarm 5 set alarm level
+
+0x6b2		int16	alarm_temp_6 data_souce			Temperature alarm 6 data source
+0x6b4		int8	alarm_temp_6 configuration		Temperature alarm 6 configuration
+0x6b5		int16	alarm_temp_6 limit_for_warning		Temperature alarm 6 limit for warning
+0x6b7		int8	alarm_temp_6 set_warning_level		Temperature alarm 6 set warning level
+0x6b8		int16	alarm_temp_6 limit_for_alarm		Temperature alarm 6 limit for alarm
+0x6ba		int8	alarm_temp_6 set_alrm_level		Temperature alarm 6 set alarm level
+
+0x6bb		int16	alarm_temp_7 data_souce			Temperature alarm 7 data source
+0x6bd		int8	alarm_temp_7 configuration		Temperature alarm 7 configuration
+0x6be		int16	alarm_temp_7 limit_for_warning		Temperature alarm 7 limit for warning
+0x6c0		int8	alarm_temp_7 set_warning_level		Temperature alarm 7 set warning level
+0x6c1		int16	alarm_temp_7 limit_for_alarm		Temperature alarm 7 limit for alarm
+0x6c3		int8	alarm_temp_7 set_alrm_level		Temperature alarm 7 set alarm level
+
+0x6c4		int16	alarm_temp_8 data_souce			Temperature alarm 8 data source
+0x6c6		int8	alarm_temp_8 configuration		Temperature alarm 8 configuration
+0x6c7		int16	alarm_temp_8 limit_for_warning		Temperature alarm 8 limit for warning
+0x6c9		int8	alarm_temp_8 set_warning_level		Temperature alarm 8 set warning level
+0x6ca		int16	alarm_temp_8 limit_for_alarm		Temperature alarm 8 limit for alarm
+0x6cc		int8	alarm_temp_8 set_alrm_level		Temperature alarm 8 set alarm level
+
+0x6cd		int16	alarm_temp_9 data_souce			Temperature alarm 9 data source
+0x6cf		int8	alarm_temp_9 configuration		Temperature alarm 9 configuration
+0x6d0		int16	alarm_temp_9 limit_for_warning		Temperature alarm 9 limit for warning
+0x6d2		int8	alarm_temp_9 set_warning_level		Temperature alarm 9 set warning level
+0x6d3		int16	alarm_temp_9 limit_for_alarm		Temperature alarm 9 limit for alarm
+0x6d5		int8	alarm_temp_9 set_alrm_level		Temperature alarm 9 set alarm level
+
+0x6d6		int16	alarm_temp_10 data_souce		Temperature alarm 10 data source
+0x6d8		int8	alarm_temp_10 configuration		Temperature alarm 10 configuration
+0x6d9		int16	alarm_temp_10 limit_for_warning		Temperature alarm 10 limit for warning
+0x6db		int8	alarm_temp_10 set_warning_level		Temperature alarm 10 set warning level
+0x6dc		int16	alarm_temp_10 limit_for_alarm		Temperature alarm 10 limit for alarm
+0x6de		int8	alarm_temp_10 set_alrm_level		Temperature alarm 10 set alarm level
+
+0x6df		int16	alarm_temp_11 data_souce		Temperature alarm 11 data source
+0x6e1		int8	alarm_temp_11 configuration		Temperature alarm 11 configuration
+0x6e2		int16	alarm_temp_11 limit_for_warning		Temperature alarm 11 limit for warning
+0x6e4		int8	alarm_temp_11 set_warning_level		Temperature alarm 11 set warning level
+0x6e5		int16	alarm_temp_11 limit_for_alarm		Temperature alarm 11 limit for alarm
+0x6e7		int8	alarm_temp_11 set_alrm_level		Temperature alarm 11 set alarm level
+
+0x6e8		int16	alarm_temp_12 data_souce		Temperature alarm 12 data source
+0x6ea		int8	alarm_temp_12 configuration		Temperature alarm 12 configuration
+0x6eb		int16	alarm_temp_12 limit_for_warning		Temperature alarm 12 limit for warning
+0x6ed		int8	alarm_temp_12 set_warning_level		Temperature alarm 12 set warning level
+0x6ee		int16	alarm_temp_12 limit_for_alarm		Temperature alarm 12 limit for alarm
+0x6f0		int8	alarm_temp_12 set_alrm_level		Temperature alarm 12 set alarm level
+
+0x6f1		int16	alarm_temp_13 data_souce		Temperature alarm 13 data source
+0x6f3		int8	alarm_temp_13 configuration		Temperature alarm 13 configuration
+0x6f4		int16	alarm_temp_13 limit_for_warning		Temperature alarm 13 limit for warning
+0x6f6		int8	alarm_temp_13 set_warning_level		Temperature alarm 13 set warning level
+0x6f7		int16	alarm_temp_13 limit_for_alarm		Temperature alarm 13 limit for alarm
+0x6f9		int8	alarm_temp_13 set_alrm_level		Temperature alarm 13 set alarm level
+
+0x6fa		int16	alarm_temp_14 data_souce		Temperature alarm 14 data source
+0x6fc		int8	alarm_temp_14 configuration		Temperature alarm 14 configuration
+0x6fd		int16	alarm_temp_14 limit_for_warning		Temperature alarm 14 limit for warning
+0x6ff		int8	alarm_temp_14 set_warning_level		Temperature alarm 14 set warning level
+0x700		int16	alarm_temp_14 limit_for_alarm		Temperature alarm 14 limit for alarm
+0x702		int8	alarm_temp_14 set_alrm_level		Temperature alarm 14 set alarm level
+
+0x703		int16	alarm_temp_15 data_souce		Temperature alarm 15 data source
+0x705		int8	alarm_temp_15 configuration		Temperature alarm 15 configuration
+0x706		int16	alarm_temp_15 limit_for_warning		Temperature alarm 15 limit for warning
+0x708		int8	alarm_temp_15 set_warning_level		Temperature alarm 15 set warning level
+0x709		int16	alarm_temp_15 limit_for_alarm		Temperature alarm 15 limit for alarm
+0x70b		int8	alarm_temp_15 set_alrm_level		Temperature alarm 15 set alarm level
+
+0x70c		int16	alarm_temp_16 data_souce		Temperature alarm 16 data source
+0x70e		int8	alarm_temp_16 configuration		Temperature alarm 16 configuration
+0x70f		int16	alarm_temp_16 limit_for_warning		Temperature alarm 16 limit for warning
+0x711		int8	alarm_temp_16 set_warning_level		Temperature alarm 16 set warning level
+0x712		int16	alarm_temp_16 limit_for_alarm		Temperature alarm 16 limit for alarm
+0x714		int8	alarm_temp_16 set_alrm_level		Temperature alarm 16 set alarm level
+
 0x972		int8			Allow output override
