@@ -1314,4 +1314,32 @@ offset		type	value		description
 0x777		int8	alarm_pump_4 configuration		Pump alarm 4 configuration
 0x778		int8	alarm_pump_4 set_alrm_level		Pump alarm 4 set alarm level
 
+0x779		int16	alarm_fill_1 data_source		Fill alarm 1 data source
+0x77b		int8	alarm_fill_1 configuration		Fill alarm 1 configuration
+0x77c		int16	alarm_fill_1 limit_for_warning		Fill alarm 1 limit for warning
+0x77e		int8	alarm_fill_1 set_warning_level		Fill alarm 1 set warning level
+0x77f		int16	alarm_fill_1 limit_for_alarm		Fill alarm 1 limit for alarm
+0x781		int8	alarm_fill_1 set_alrm_level		Fill alarm 1 set alarm level
+
+0x782		int16	alarm_fill_2 data_source		Fill alarm 2 data source
+0x784		int8	alarm_fill_2 configuration		Fill alarm 2 configuration
+0x785		int16	alarm_fill_2 limit_for_warning		Fill alarm 2 limit for warning
+0x787		int8	alarm_fill_2 set_warning_level		Fill alarm 2 set warning level
+0x788		int16	alarm_fill_2 limit_for_alarm		Fill alarm 2 limit for alarm
+0x78a		int8	alarm_fill_2 set_alrm_level		Fill alarm 2 set alarm level
+
+0x78b		int16	alarm_fill_3 data_source		Fill alarm 3 data source
+0x78d		int8	alarm_fill_3 configuration		Fill alarm 3 configuration
+0x78e		int16	alarm_fill_3 limit_for_warning		Fill alarm 3 limit for warning
+0x790		int8	alarm_fill_3 set_warning_level		Fill alarm 3 set warning level
+0x791		int16	alarm_fill_3 limit_for_alarm		Fill alarm 3 limit for alarm
+0x793		int8	alarm_fill_3 set_alrm_level		Fill alarm 3 set alarm level
+
+0x794		int16	alarm_fill_4 data_source		Fill alarm 4 data source
+0x796		int8	alarm_fill_4 configuration		Fill alarm 4 configuration
+0x797		int16	alarm_fill_4 limit_for_warning		Fill alarm 4 limit for warning
+0x799		int8	alarm_fill_4 set_warning_level		Fill alarm 4 set warning level
+0x79a		int16	alarm_fill_4 limit_for_alarm		Fill alarm 4 limit for alarm
+0x79c		int8	alarm_fill_4 set_alrm_level		Fill alarm 4 set alarm level
+
 0x972		int8			Allow output override
