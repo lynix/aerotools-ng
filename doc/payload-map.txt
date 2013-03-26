@@ -1342,4 +1342,134 @@ offset		type	value		description
 0x79a		int16	alarm_fill_4 limit_for_alarm		Fill alarm 4 limit for alarm
 0x79c		int8	alarm_fill_4 set_alrm_level		Fill alarm 4 set alarm level
 
+0x79d-0x7c0	unknown, but looks like fill level sensors
+
+0x7c1		int8	timer_1 active_days			Timer 1 active on these days
+0x7c2		int32	timer_1 switching_time			Timer 1 switching time
+0x7c6		int16	timer_1 action				Timer 1 action to be performed
+
+0x7c8		int8	timer_2 active_days			Timer 2 active on these days
+0x7c9		int32	timer_2 switching_time			Timer 2 switching time
+0x7cd		int16	timer_2 action				Timer 2 action to be performed
+
+0x7cf		int8	timer_3 active_days			Timer 3 active on these days
+0x7d0		int32	timer_3 switching_time			Timer 3 switching time
+0x7d4		int16	timer_3 action				Timer 3 action to be performed
+
+0x7d6		int8	timer_4 active_days			Timer 4 active on these days
+0x7d7		int32	timer_4 switching_time			Timer 4 switching time
+0x7db		int16	timer_4 action				Timer 4 action to be performed
+
+0x7dd		int8	timer_5 active_days			Timer 5 active on these days
+0x7de		int32	timer_5 switching_time			Timer 5 switching time
+0x7e2		int16	timer_5 action				Timer 5 action to be performed
+
+0x7e4		int8	timer_6 active_days			Timer 6 active on these days
+0x7e5		int32	timer_6 switching_time			Timer 6 switching time
+0x7e9		int16	timer_6 action				Timer 6 action to be performed
+
+0x7eb		int8	timer_7 active_days			Timer 7 active on these days
+0x7ec		int32	timer_7 switching_time			Timer 7 switching time
+0x7f0		int16	timer_7 action				Timer 7 action to be performed
+
+0x7f2		int8	timer_8 active_days			Timer 8 active on these days
+0x7f3		int32	timer_8 switching_time			Timer 8 switching time
+0x7f7		int16	timer_8 action				Timer 8 action to be performed
+
+0x7f9		int8	timer_9 active_days			Timer 9 active on these days
+0x7fa		int32	timer_9 switching_time			Timer 9 switching time
+0x7fe		int16	timer_9 action				Timer 9 action to be performed
+
+0x800		int8	timer_10 active_days			Timer 10 active on these days
+0x801		int32	timer_10 switching_time			Timer 10 switching time
+0x805		int16	timer_10 action				Timer 10 action to be performed
+
+0x807		int8	timer_11 active_days			Timer 11 active on these days
+0x808		int32	timer_11 switching_time			Timer 11 switching time
+0x80c		int16	timer_11 action				Timer 11 action to be performed
+
+0x80e		int8	timer_12 active_days			Timer 12 active on these days
+0x80f		int32	timer_12 switching_time			Timer 12 switching time
+0x813		int16	timer_12 action				Timer 12 action to be performed
+
+0x815		int8	timer_13 active_days			Timer 13 active on these days
+0x816		int32	timer_13 switching_time			Timer 13 switching time
+0x81a		int16	timer_13 action				Timer 13 action to be performed
+
+0x81c		int8	timer_14 active_days			Timer 14 active on these days
+0x81d		int32	timer_14 switching_time			Timer 14 switching time
+0x821		int16	timer_14 action				Timer 14 action to be performed
+
+0x823		int8	timer_15 active_days			Timer 15 active on these days
+0x824		int32	timer_15 switching_time			Timer 15 switching time
+0x828		int16	timer_15 action				Timer 15 action to be performed
+
+0x82a		int8	timer_16 active_days			Timer 16 active on these days
+0x82b		int32	timer_16 switching_time			Timer 16 switching time
+0x82f		int16	timer_16 action				Timer 16 action to be performed
+
+0x831		int8	timer_17 active_days			Timer 17 active on these days
+0x832		int32	timer_17 switching_time			Timer 17 switching time
+0x836		int16	timer_17 action				Timer 17 action to be performed
+
+0x838		int8	timer_18 active_days			Timer 18 active on these days
+0x839		int32	timer_18 switching_time			Timer 18 switching time
+0x83d		int16	timer_18 action				Timer 18 action to be performed
+
+0x83f		int8	timer_19 active_days			Timer 19 active on these days
+0x840		int32	timer_19 switching_time			Timer 19 switching time
+0x844		int16	timer_19 action				Timer 19 action to be performed
+
+0x846		int8	timer_20 active_days			Timer 20 active on these days
+0x847		int32	timer_20 switching_time			Timer 20 switching time
+0x84b		int16	timer_20 action				Timer 20 action to be performed
+
+0x84d		int8	timer_21 active_days			Timer 21 active on these days
+0x84e		int32	timer_21 switching_time			Timer 21 switching time
+0x852		int16	timer_21 action				Timer 21 action to be performed
+
+0x854		int8	timer_22 active_days			Timer 22 active on these days
+0x855		int32	timer_22 switching_time			Timer 22 switching time
+0x859		int16	timer_22 action				Timer 22 action to be performed
+
+0x85b		int8	timer_23 active_days			Timer 23 active on these days
+0x85c		int32	timer_23 switching_time			Timer 23 switching time
+0x860		int16	timer_23 action				Timer 23 action to be performed
+
+0x862		int8	timer_24 active_days			Timer 24 active on these days
+0x863		int32	timer_24 switching_time			Timer 24 switching time
+0x867		int16	timer_24 action				Timer 24 action to be performed
+
+0x869		int8	timer_25 active_days			Timer 25 active on these days
+0x86a		int32	timer_25 switching_time			Timer 25 switching time
+0x86e		int16	timer_25 action				Timer 25 action to be performed
+
+0x870		int8	timer_26 active_days			Timer 26 active on these days
+0x871		int32	timer_26 switching_time			Timer 26 switching time
+0x875		int16	timer_26 action				Timer 26 action to be performed
+
+0x877		int8	timer_27 active_days			Timer 27 active on these days
+0x878		int32	timer_27 switching_time			Timer 27 switching time
+0x87c		int16	timer_27 action				Timer 27 action to be performed
+
+0x87e		int8	timer_28 active_days			Timer 28 active on these days
+0x87f		int32	timer_28 switching_time			Timer 28 switching time
+0x883		int16	timer_28 action				Timer 28 action to be performed
+
+0x885		int8	timer_29 active_days			Timer 29 active on these days
+0x886		int32	timer_29 switching_time			Timer 29 switching time
+0x88a		int16	timer_29 action				Timer 29 action to be performed
+
+0x88c		int8	timer_30 active_days			Timer 30 active on these days
+0x88d		int32	timer_30 switching_time			Timer 30 switching time
+0x891		int16	timer_30 action				Timer 30 action to be performed
+
+0x893		int8	timer_31 active_days			Timer 31 active on these days
+0x894		int32	timer_31 switching_time			Timer 31 switching time
+0x898		int16	timer_31 action				Timer 31 action to be performed
+
+0x89a		int8	timer_32 active_days			Timer 32 active on these days
+0x89b		int32	timer_32 switching_time			Timer 32 switching time
+0x89f		int16	timer_32 action				Timer 32 action to be performed
+
 0x972		int8			Allow output override
