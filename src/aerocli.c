@@ -317,6 +317,27 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		for (int n=0; n<AQ5_NUM_TEMP; n++)
 			if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
 				printf("TEMP%d_OFFS=%.2f\n", n+1, aq_sett->temp_offset[n]);
+		for (int n=0; n<AQ5_NUM_VIRT_SENSORS; n++) {
+			printf("VIRT_SENSOR%d_DATA_SOURCE_1='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_1, SENSOR_DATA_SOURCE));
+			printf("VIRT_SENSOR%d_DATA_SOURCE_2='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_2, SENSOR_DATA_SOURCE));
+			printf("VIRT_SENSOR%d_DATA_SOURCE_3='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_3, SENSOR_DATA_SOURCE));
+			printf("VIRT_SENSOR%d_MODE='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].mode, VIRT_SENSOR_MODE));
+		}
+		for (int n=0; n<AQ5_NUM_SOFT_SENSORS; n++) {
+			printf("SOFT_SENSOR%d_STATE='%s'\n", n+1, libaquaero5_get_string(aq_sett->soft_sensor_state[n], SOFT_SENSOR_STATE));
+			printf("SOFT_SENSOR%d_FALLBACK_VALUE=%.2f\n", n+1, aq_sett->soft_sensor_fallback_value[n]);
+			printf("SOFT_SENSOR%d_TIMEOUT=%d\n", n+1, aq_sett->soft_sensor_timeout[n]);
+		}
+		for (int n=0; n<AQ5_NUM_FLOW; n++) {
+			printf("FLOW_SENSOR%d_CALIBRATION_VALUE=%d\n", n+1, aq_sett->flow_sensor_calibration_value[n]);
+			printf("FLOW_SENSOR%d_LOWER_LIMIT=%.1f\n", n+1, aq_sett->flow_sensor_lower_limit[n]);
+			printf("FLOW_SENSOR%d_UPPER_LIMIT=%.1f\n", n+1, aq_sett->flow_sensor_upper_limit[n]);
+		}
+		for (int n=0; n<AQ5_NUM_POWER_SENSORS; n++) {
+			printf("POWER_SENSOR%d_FLOW_SENSOR=%s\n", n+1, libaquaero5_get_string(aq_sett->power_consumption_config[n].flow_sensor_data_source, FLOW_DATA_SOURCE));
+			printf("POWER_SENSOR%d_TEMP_SENSOR_1=%s\n", n+1, libaquaero5_get_string(aq_sett->power_consumption_config[n].temp_sensor_1, SENSOR_DATA_SOURCE));
+			printf("POWER_SENSOR%d_TEMP_SENSOR_2=%s\n", n+1, libaquaero5_get_string(aq_sett->power_consumption_config[n].temp_sensor_2, SENSOR_DATA_SOURCE));
+		}
 		for (int n=0; n<AQ5_NUM_FAN; n++) {
 			printf("FAN%d_CURRENT=%d\n", n+1, aq_data->fan_current[n]);
 			printf("FAN%d_VOLTAGE=%.2f\n", n+1, aq_data->fan_voltage[n]);
@@ -333,13 +354,65 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("FAN%d_BOOST_ENABLED=%d\n", n+1, aq_sett->fan_control_mode[n].use_startboost);
 			printf("FAN%d_FUSE_ENABLED=%d\n", n+1, aq_sett->fan_control_mode[n].use_programmable_fuse);
 			printf("FAN%d HOLD_MIN_DUTY=%d\n", n+1, aq_sett->fan_control_mode[n].hold_minimum_power);
-			printf("FAN%d_DATA_SRC='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_data_source[n], FAN_DATA_SRC));
+			printf("FAN%d_DATA_SRC='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_data_source[n], CONTROLLER_DATA_SRC));
 			printf("FAN%d_FUSE_CURRENT=%d\n", n+1, aq_sett->fan_programmable_fuse[n]);
 		}
+		printf("POWER_OUTPUT1_MIN_POWER=%d\n", aq_sett->power_output_1_config.min_power);
+		printf("POWER_OUTPUT1_MAX_POWER=%d\n", aq_sett->power_output_1_config.max_power);
+		printf("POWER_OUTPUT1_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->power_output_1_config.data_source, CONTROLLER_DATA_SRC));
+		printf("POWER_OUTPUT1_HOLD_MINIMUM_POWER='%s'\n", libaquaero5_get_string(aq_sett->power_output_1_config.mode, POWER_OUTPUT_MODE));
+		printf("POWER_OUTPUT2_MIN_POWER=%d\n", aq_sett->power_output_2_config.min_power);
+		printf("POWER_OUTPUT2_MAX_POWER=%d\n", aq_sett->power_output_2_config.max_power);
+		printf("POWER_OUTPUT2_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->power_output_2_config.data_source, CONTROLLER_DATA_SRC));
+		printf("POWER_OUTPUT2_HOLD_MINIMUM_POWER='%s'\n", libaquaero5_get_string(aq_sett->power_output_2_config.mode, POWER_OUTPUT_MODE));
+		printf("AQUAERO_RELAY_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->aquaero_relay_data_source, CONTROLLER_DATA_SRC));
+		printf("AQUAERO_RELAY_CONFIG='%s'\n", libaquaero5_get_string(aq_sett->aquaero_relay_configuration, AQ_RELAY_CONFIG));
+		printf("AQUAERO_RELAY_SWITCH_THRESHOLD=%d\n", aq_sett->aquaero_relay_switch_threshold);
+
+		printf("RGB_LED_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->rgb_led_controller_config.data_source, SENSOR_DATA_SOURCE));
+		printf("RGB_LED_PULSATING_BRIGHTNESS='%s'\n", libaquaero5_get_string(aq_sett->rgb_led_controller_config.pulsating_brightness, LED_PB_MODE));
+		printf("RGB_LED_LOW_TEMP_TEMP=%.2f\n", aq_sett->rgb_led_controller_config.low_temp.temp);
+		printf("RGB_LED_LOW_TEMP_RED_LED=%d\n", aq_sett->rgb_led_controller_config.low_temp.red_led);
+		printf("RGB_LED_LOW_TEMP_GREEN_LED=%d\n", aq_sett->rgb_led_controller_config.low_temp.green_led);
+		printf("RGB_LED_LOW_TEMP_BLUE_LED=%d\n", aq_sett->rgb_led_controller_config.low_temp.blue_led);
+		printf("RGB_LED_OPTIMUM_TEMP_TEMP=%.2f\n", aq_sett->rgb_led_controller_config.optimum_temp.temp);
+		printf("RGB_LED_OPTIMUM_TEMP_RED_LED=%d\n", aq_sett->rgb_led_controller_config.optimum_temp.red_led);
+		printf("RGB_LED_OPTIMUM_TEMP_GREEN_LED=%d\n", aq_sett->rgb_led_controller_config.optimum_temp.green_led);
+		printf("RGB_LED_OPTIMUM_TEMP_BLUE_LED=%d\n", aq_sett->rgb_led_controller_config.optimum_temp.blue_led);
+		printf("RGB_LED_HIGH_TEMP_TEMP=%.2f\n", aq_sett->rgb_led_controller_config.high_temp.temp);
+		printf("RGB_LED_HIGH_TEMP_RED_LED=%d\n", aq_sett->rgb_led_controller_config.high_temp.red_led);
+		printf("RGB_LED_HIGH_TEMP_GREEN_LED=%d\n", aq_sett->rgb_led_controller_config.high_temp.green_led);
+		printf("RGB_LED_HIGH_TEMP_BLUE_LED=%d\n", aq_sett->rgb_led_controller_config.high_temp.blue_led);
 		for (int n=0; n<AQ5_NUM_LEVEL; n++)
 			printf("LEVEL%d=%.2f\n", n+1, aq_data->level[n]);
-
-
+		for (int n=0; n<AQ5_NUM_TWO_POINT_CONTROLLERS; n++) {
+			printf("TWO_POINT_CONTROLLER%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->two_point_controller_config[n].data_source, SENSOR_DATA_SOURCE));
+			printf("TWO_POINT_CONTROLLER%d_UPPER_LIMIT=%.2f\n", n+1, aq_sett->two_point_controller_config[n].upper_limit);
+			printf("TWO_POINT_CONTROLLER%d_LOWER_LIMIT=%.2f\n", n+1, aq_sett->two_point_controller_config[n].lower_limit);
+		}
+		for (int n=0; n<AQ5_NUM_PRESET_VAL_CONTROLLERS; n++)
+			printf("PRESET_VAL_CONTROLLER%d=%d\n", n+1, aq_sett->preset_value_controller[n]);
+		for (int n=0; n<AQ5_NUM_TARGET_VAL_CONTROLLERS; n++) {
+			printf("TARGET_VAL_CONTROLLER%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->target_value_controller_config[n].data_source, SENSOR_DATA_SOURCE));
+			printf("TARGET_VAL_CONTROLLER%d_TARGET_VALUE=%.2f\n", n+1, aq_sett->target_value_controller_config[n].target_val);
+			printf("TARGET_VAL_CONTROLLER%d_FACTOR_P=%d\n", n+1, aq_sett->target_value_controller_config[n].factor_p);
+			printf("TARGET_VAL_CONTROLLER%d_FACTOR_I=%.1f\n", n+1, aq_sett->target_value_controller_config[n].factor_i);
+			printf("TARGET_VAL_CONTROLLER%d_FACTOR_D=%d\n", n+1, aq_sett->target_value_controller_config[n].factor_d);
+			printf("TARGET_VAL_CONTROLLER%d_RESET_TIME=%.1f\n", n+1, aq_sett->target_value_controller_config[n].reset_time);
+			printf("TARGET_VAL_CONTROLLER%d_HYSTERESIS=%.2f\n", n+1, aq_sett->target_value_controller_config[n].hysteresis);
+		}
+		for (int n=0; n<AQ5_NUM_CURVE_CONTROLLERS; n++) {
+			printf("CURVE_CONTROLLER%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->curve_controller_config[n].data_source, SENSOR_DATA_SOURCE));
+			printf("CURVE_CONTROLLER%d_STARTUP_TEMP=%.2f\n", n+1, aq_sett->curve_controller_config[n].startup_temp);
+			for (int m=0; m<AQ5_NUM_CURVE_POINTS; m++) {
+				printf("CURVE_CONTROLLER%d_POINT%d_TEMP=%.2f\n", n+1, m+1, aq_sett->curve_controller_config[n].curve_point[m].temp);
+				printf("CURVE_CONTROLLER%d_POINT%d_PERCENT=%d\n", n+1, m+1, aq_sett->curve_controller_config[n].curve_point[m].percent);
+			}
+		}
+		for (int n=0; n<AQ5_NUM_DATA_LOG; n++) {
+			printf("DATA_LOG%d_INTERVAL='%s'\n", n+1, libaquaero5_get_string(aq_sett->data_log_config[n].interval, DATA_LOG_INTERVAL));
+			printf("DATA_LOG%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->data_log_config[n].data_source, SENSOR_DATA_SOURCE));
+		}
 	}
 }
 

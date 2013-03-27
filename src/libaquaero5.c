@@ -103,6 +103,25 @@
 #define AQ5_SETTINGS_STNDBY_TMO_KAD_BRT_OFFS	0x0cc
 #define AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS	0x0d2
 #define AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS	0x0d0
+#define AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS	0x15c
+#define AQ5_SETTINGS_VIRT_SENSOR_DIST		7
+#define AQ5_SETTINGS_SOFT_SENSOR_OFFS		0x178
+#define AQ5_SETTINGS_SOFT_SENSOR_DIST		5
+#define AQ5_SETTINGS_FLOW_SENSOR_OFFS		0x1a0
+#define AQ5_SETTINGS_FLOW_SENSOR_DIST		6
+#define AQ5_SETTINGS_POWER_SENSOR_OFFS		0x1f4
+#define AQ5_SETTINGS_POWER_SENSOR_DIST		6
+#define AQ5_SETTINGS_CURVE_CONTROLLER_OFFS	0x4f8
+#define AQ5_SETTINGS_CURVE_CONTROLLER_DIST	68
+#define AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS	0x488
+#define AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST	14
+#define AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS	0x3e8
+#define AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST	6
+#define AQ5_SETTINGS_PRESET_VAL_CONTRLR_OFFS	0x448
+#define AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS	0x608
+#define AQ5_SETTINGS_POWER_OUTPUT_OFFS		0x30c
+#define AQ5_SETTINGS_DATA_LOG_OFFS		0x623
+#define AQ5_SETTINGS_DATA_LOG_DIST		3
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -338,8 +357,8 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 
 	/* User interface settings */
 	settings_dest->disable_keys = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISABLE_KEYS_OFFS);
-	settings_dest->brightness_while_in_use = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IN_USE_OFFS);
-	settings_dest->brightness_while_idle = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IDLE_OFFS);
+	settings_dest->brightness_while_in_use = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IN_USE_OFFS) /100;
+	settings_dest->brightness_while_idle = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_BRT_WHILE_IDLE_OFFS) /100;
 	settings_dest->illumination_mode = aq5_buf_settings[AQ5_SETTINGS_ILLUM_MODE_OFFS];
 	settings_dest->key_tone = aq5_buf_settings[AQ5_SETTINGS_KEY_TONE_OFFS];
 	settings_dest->key_sensitivity.down_key = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_KEY_DOWN_SENS_OFFS);	
@@ -353,9 +372,9 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	settings_dest->language = aq5_buf_settings[AQ5_SETTINGS_LANGUAGE_OFFS];
 
 	settings_dest->time_zone = aq5_buf_settings[AQ5_SETTINGS_TIME_ZONE_OFFS];
-	settings_dest->display_contrast = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_CONTRAST_OFFS);
-	settings_dest->display_brightness_while_in_use = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IN_USE_OFFS);
-	settings_dest->display_brightness_while_idle = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IDLE_OFFS);
+	settings_dest->display_contrast = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_CONTRAST_OFFS) /100;
+	settings_dest->display_brightness_while_in_use = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IN_USE_OFFS) /100;
+	settings_dest->display_brightness_while_idle = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_BRT_WHILE_IDLE_OFFS) /100;
 	settings_dest->display_illumination_time = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DISP_ILLUM_TIME_OFFS);
 	settings_dest->display_illumination_mode = aq5_buf_settings[AQ5_SETTINGS_DISP_ILLUM_MODE_OFFS];
 	settings_dest->display_mode = aq5_buf_settings[AQ5_SETTINGS_DISP_MODE_OFFS];
@@ -397,9 +416,9 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	}
 
 	/* System - standby config */
-	settings_dest->standby_display_contrast = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_DISP_CONTRAST_OFFS);
-	settings_dest->standby_lcd_backlight_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_LCD_BL_BRT_OFFS);
-	settings_dest->standby_key_backlight_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_KEY_BL_BRT_OFFS);
+	settings_dest->standby_display_contrast = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_DISP_CONTRAST_OFFS) /100;
+	settings_dest->standby_lcd_backlight_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_LCD_BL_BRT_OFFS) /100;
+	settings_dest->standby_key_backlight_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_KEY_BL_BRT_OFFS) /100;
 	settings_dest->standby_timeout_key_and_display_brightness = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_TMO_KAD_BRT_OFFS);
 	settings_dest->standby_action_at_power_down = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_ACT_PWR_DOWN_OFFS);
 	settings_dest->standby_action_at_power_up = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STNDBY_ACT_PWR_ON_OFFS);
@@ -419,6 +438,35 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->cpu_temp_offset[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
 	}
 
+	/* Virtual sensor settings */
+	for (int i=0; i<AQ5_NUM_VIRT_SENSORS; i++) {
+		settings_dest->virt_sensor_config[i].data_source_1 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
+		settings_dest->virt_sensor_config[i].data_source_2 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 2 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
+		settings_dest->virt_sensor_config[i].data_source_3 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 4 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST);
+		settings_dest->virt_sensor_config[i].mode = aq5_buf_settings[AQ5_SETTINGS_VIRT_SENSOR_CONFIG_OFFS + 6 + i * AQ5_SETTINGS_VIRT_SENSOR_DIST];
+	}
+
+	/* Software sensor settings */
+	for (int i=0; i<AQ5_NUM_SOFT_SENSORS; i++) {
+		settings_dest->soft_sensor_state[i] = aq5_buf_settings[AQ5_SETTINGS_SOFT_SENSOR_OFFS + i * AQ5_SETTINGS_SOFT_SENSOR_DIST];
+		settings_dest->soft_sensor_fallback_value[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_SOFT_SENSOR_OFFS + 1 + i * AQ5_SETTINGS_SOFT_SENSOR_DIST) /100.0;
+		settings_dest->soft_sensor_timeout[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_SOFT_SENSOR_OFFS + 3 + i * AQ5_SETTINGS_SOFT_SENSOR_DIST);
+	}
+
+	/* Flow sensor settings */
+	for (int i=0; i<AQ5_NUM_FLOW; i++) {
+		settings_dest->flow_sensor_calibration_value[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FLOW_SENSOR_OFFS + i * AQ5_SETTINGS_FLOW_SENSOR_DIST);
+		settings_dest->flow_sensor_lower_limit[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FLOW_SENSOR_OFFS + 2 + i * AQ5_SETTINGS_FLOW_SENSOR_DIST) /10.0;
+		settings_dest->flow_sensor_upper_limit[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FLOW_SENSOR_OFFS + 4 + i * AQ5_SETTINGS_FLOW_SENSOR_DIST) /10.0;
+	}
+
+	/* Power consumption sensors */
+	for (int i=0; i<AQ5_NUM_POWER_SENSORS; i++) {
+		settings_dest->power_consumption_config[i].flow_sensor_data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_SENSOR_OFFS + i * AQ5_SETTINGS_POWER_SENSOR_DIST);
+		settings_dest->power_consumption_config[i].temp_sensor_1 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_SENSOR_OFFS + 2 + i * AQ5_SETTINGS_POWER_SENSOR_DIST);
+		settings_dest->power_consumption_config[i].temp_sensor_2 = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_SENSOR_OFFS + 4 + i * AQ5_SETTINGS_POWER_SENSOR_DIST);
+	};
+
 	/* fan settings */
 	int n;
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
@@ -426,7 +474,7 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->fan_max_rpm[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 2 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_min_duty[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 4 + i * AQ5_SETTINGS_FAN_DIST) / 100;
 		settings_dest->fan_max_duty[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 6 + i * AQ5_SETTINGS_FAN_DIST) / 100;
-		settings_dest->fan_startboost_duty[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 8 + i * AQ5_SETTINGS_FAN_DIST) / 100.0;
+		settings_dest->fan_startboost_duty[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 8 + i * AQ5_SETTINGS_FAN_DIST) / 100;
 		settings_dest->fan_startboost_duration[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 10 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_pulses_per_revolution[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 12 + i * AQ5_SETTINGS_FAN_DIST);
 		n = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 14 + i * AQ5_SETTINGS_FAN_DIST);
@@ -448,6 +496,79 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		}
 		settings_dest->fan_data_source[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 16 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_programmable_fuse[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 18 + i * AQ5_SETTINGS_FAN_DIST);
+	}
+
+	/* Power and relay output settings  */
+	settings_dest->power_output_1_config.min_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS) /100;
+	settings_dest->power_output_1_config.max_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 2) /100;
+	settings_dest->power_output_1_config.data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 4);
+	settings_dest->power_output_1_config.mode = aq5_buf_settings[AQ5_SETTINGS_POWER_OUTPUT_OFFS + 6];
+
+	settings_dest->power_output_2_config.min_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 7) /100;
+	settings_dest->power_output_2_config.max_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 9) /100;
+	settings_dest->power_output_2_config.data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 11);
+	settings_dest->power_output_2_config.mode = aq5_buf_settings[AQ5_SETTINGS_POWER_OUTPUT_OFFS + 13];
+
+	settings_dest->aquaero_relay_data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 14); 	
+	settings_dest->aquaero_relay_configuration = aq5_buf_settings[AQ5_SETTINGS_POWER_OUTPUT_OFFS + 16]; 	
+	settings_dest->aquaero_relay_switch_threshold = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 17) /100; 	
+
+	/* RGB LED controller settings */
+	settings_dest->rgb_led_controller_config.data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS);
+	settings_dest->rgb_led_controller_config.pulsating_brightness = aq5_buf_settings[AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 2];
+
+	settings_dest->rgb_led_controller_config.low_temp.temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 3) /100.0;
+	settings_dest->rgb_led_controller_config.low_temp.red_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 5) /100;
+	settings_dest->rgb_led_controller_config.low_temp.green_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 7) /100;
+	settings_dest->rgb_led_controller_config.low_temp.blue_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 9) /100;
+	
+	settings_dest->rgb_led_controller_config.optimum_temp.temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 11) /100.0;
+	settings_dest->rgb_led_controller_config.optimum_temp.red_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 13) /100;
+	settings_dest->rgb_led_controller_config.optimum_temp.green_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 15) /100;
+	settings_dest->rgb_led_controller_config.optimum_temp.blue_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 17) /100;
+	
+	settings_dest->rgb_led_controller_config.high_temp.temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 19) /100.0;
+	settings_dest->rgb_led_controller_config.high_temp.red_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 21) /100;
+	settings_dest->rgb_led_controller_config.high_temp.green_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 23) /100;
+	settings_dest->rgb_led_controller_config.high_temp.blue_led = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_RGB_LED_CONTRLR_OFFS + 25) /100;
+
+	/* Two point controller settings */
+	for (int i=0; i<AQ5_NUM_TWO_POINT_CONTROLLERS; i++) {
+		settings_dest->two_point_controller_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS + i * AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST);
+		settings_dest->two_point_controller_config[i].upper_limit = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS + 2 + i * AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST) /100.0;
+		settings_dest->two_point_controller_config[i].lower_limit = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS + 4 + i * AQ5_SETTINGS_TWO_POINT_CONTRLR_DIST) /100.0;
+	}
+
+	/* Preset value controller settings  */
+	for (int i=0; i<AQ5_NUM_PRESET_VAL_CONTROLLERS; i++) {
+		settings_dest->preset_value_controller[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_PRESET_VAL_CONTRLR_OFFS + i * 2) /100;
+	}
+
+	/* Target value controller settings */
+	for (int i=0; i<AQ5_NUM_TARGET_VAL_CONTROLLERS; i++) {
+		settings_dest->target_value_controller_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST);
+		settings_dest->target_value_controller_config[i].target_val = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 2 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST) /100.0;
+		settings_dest->target_value_controller_config[i].factor_p = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 4 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST);
+		settings_dest->target_value_controller_config[i].factor_i = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 6 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST) /10.0;
+		settings_dest->target_value_controller_config[i].factor_d = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 8 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST);
+		settings_dest->target_value_controller_config[i].reset_time = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 10 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST) /10.0;
+		settings_dest->target_value_controller_config[i].hysteresis = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS + 12 + i * AQ5_SETTINGS_TARGET_VAL_CONTRLR_DIST) /100.0;
+	}
+
+	/* Curve controller settings */
+	for (int i=0; i<AQ5_NUM_CURVE_CONTROLLERS; i++) {
+		settings_dest->curve_controller_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CURVE_CONTROLLER_OFFS + i * AQ5_SETTINGS_CURVE_CONTROLLER_DIST);
+		settings_dest->curve_controller_config[i].startup_temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CURVE_CONTROLLER_OFFS + 2 + i * AQ5_SETTINGS_CURVE_CONTROLLER_DIST) /100.0;
+		for (int j=0; j<AQ5_NUM_CURVE_POINTS; j++) {
+			settings_dest->curve_controller_config[i].curve_point[j].temp = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CURVE_CONTROLLER_OFFS + 4 + (i * AQ5_SETTINGS_CURVE_CONTROLLER_DIST) + (j * 2)) /100.0; 
+			settings_dest->curve_controller_config[i].curve_point[j].percent = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_CURVE_CONTROLLER_OFFS + 36 + (i * AQ5_SETTINGS_CURVE_CONTROLLER_DIST) + (j * 2)) /100; 
+		}
+	}
+
+	/* Data log settings */
+	for (int i=0; i<AQ5_NUM_DATA_LOG; i++) {
+		settings_dest->data_log_config[i].interval = aq5_buf_settings[AQ5_SETTINGS_DATA_LOG_OFFS + i * AQ5_SETTINGS_DATA_LOG_DIST];
+		settings_dest->data_log_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DATA_LOG_OFFS + 1 + i * AQ5_SETTINGS_DATA_LOG_DIST);
 	}
 
 	return 0;
@@ -560,6 +681,30 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case DATA_LOG_INTERVAL:
+			val_str = data_log_interval_strings;
+			break;
+		case POWER_OUTPUT_MODE:
+			val_str = power_output_mode_strings;
+			break;
+		case AQ_RELAY_CONFIG:
+			val_str = aquaero_relay_configuration_strings;
+			break;
+		case LED_PB_MODE:
+			val_str = rgb_led_pulsating_brightness_strings;
+			break;
+		case FLOW_DATA_SOURCE:
+			val_str = flow_sensor_data_source_strings;
+			break;
+		case SOFT_SENSOR_STATE:
+			val_str = soft_sensor_state_strings;
+			break;
+		case SENSOR_DATA_SOURCE:
+			val_str = sensor_data_source_strings;
+			break;
+		case VIRT_SENSOR_MODE:
+			val_str = virt_sensor_mode_strings;
+			break;
 		case STANDBY_ACTION:
 			val_str = standby_action_strings;
 			break;
@@ -575,8 +720,8 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 		case DISPLAY_MODE:
 			val_str = display_mode_strings;
 			break;
-		case FAN_DATA_SRC:
-			val_str = fan_data_source_strings;
+		case CONTROLLER_DATA_SRC:
+			val_str = controller_data_source_strings;
 			break;
 		case LANGUAGE:
 			val_str = language_strings;
