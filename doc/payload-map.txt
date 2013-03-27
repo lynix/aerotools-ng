@@ -1472,4 +1472,145 @@ offset		type	value		description
 0x89b		int32	timer_32 switching_time			Timer 32 switching time
 0x89f		int16	timer_32 action				Timer 32 action to be performed
 
+0x9a1		int8	infrared_functions			Infrared function control
+0x8a2		int8	infrared_keyboard_layout		Infrared keyboard layout
+
+0x8a3		int8	ir_command_1 config			Infrared command 1 configuration
+0x8a4		int8	ir_command_1 ?				Infrared command 1 ?
+0x8a5		int16	ir_command_1 action			Infrared command 1 action to be performed
+0x8a7		int16	ir_command_1 refresh_rate		Infrared command 1 refresh rate for infrared signal
+0x8a9		int16	ir_command_1 learned_signal_1		Infrared command 1 learned signal part 1/3
+0x8ab		int16	ir_command_1 learned_signal_2		Infrared command 1 learned signal part 2/3
+0x8ad		int16	ir_command_1 learned_signal_3		Infrared command 1 learned signal part 3/3
+
+0x8af		int8	ir_command_2 config			Infrared command 2 configuration
+0x8b0		int8	ir_command_2 ?				Infrared command 2 ?
+0x8b1		int16	ir_command_2 action			Infrared command 2 action to be performed
+0x8b3		int16	ir_command_2 refresh_rate		Infrared command 2 refresh rate for infrared signal
+0x8b5		int16	ir_command_2 learned_signal_1		Infrared command 2 learned signal part 1/3
+0x8b7		int16	ir_command_2 learned_signal_2		Infrared command 2 learned signal part 2/3
+0x8b9		int16	ir_command_2 learned_signal_3		Infrared command 2 learned signal part 3/3
+
+0x8bb		int8	ir_command_3 config			Infrared command 3 configuration
+0x8bc		int8	ir_command_3 ?				Infrared command 3 ?
+0x8bd		int16	ir_command_3 action			Infrared command 3 action to be performed
+0x8bf		int16	ir_command_3 refresh_rate		Infrared command 3 refresh rate for infrared signal
+0x8c1		int16	ir_command_3 learned_signal_1		Infrared command 3 learned signal part 1/3
+0x8c3		int16	ir_command_3 learned_signal_2		Infrared command 3 learned signal part 2/3
+0x8c5		int16	ir_command_3 learned_signal_3		Infrared command 3 learned signal part 3/3
+
+0x8c7		int8	ir_command_4 config			Infrared command 4 configuration
+0x8c8		int8	ir_command_4 ?				Infrared command 4 ?
+0x8c9		int16	ir_command_4 action			Infrared command 4 action to be performed
+0x8cb		int16	ir_command_4 refresh_rate		Infrared command 4 refresh rate for infrared signal
+0x8cd		int16	ir_command_4 learned_signal_1		Infrared command 4 learned signal part 1/3
+0x8cf		int16	ir_command_4 learned_signal_2		Infrared command 4 learned signal part 2/3
+0x8d1		int16	ir_command_4 learned_signal_3		Infrared command 4 learned signal part 3/3
+
+0x8d3		int8	ir_command_5 config			Infrared command 5 configuration
+0x8d4		int8	ir_command_5 ?				Infrared command 5 ?
+0x8d5		int16	ir_command_5 action			Infrared command 5 action to be performed
+0x8d7		int16	ir_command_5 refresh_rate		Infrared command 5 refresh rate for infrared signal
+0x8d9		int16	ir_command_5 learned_signal_1		Infrared command 5 learned signal part 1/3
+0x8db		int16	ir_command_5 learned_signal_2		Infrared command 5 learned signal part 2/3
+0x8dd		int16	ir_command_5 learned_signal_3		Infrared command 5 learned signal part 3/3
+
+0x8df		int8	ir_command_6 config			Infrared command 6 configuration
+0x8e0		int8	ir_command_6 ?				Infrared command 6 ?
+0x8e1		int16	ir_command_6 action			Infrared command 6 action to be performed
+0x8e3		int16	ir_command_6 refresh_rate		Infrared command 6 refresh rate for infrared signal
+0x8e5		int16	ir_command_6 learned_signal_1		Infrared command 6 learned signal part 1/3
+0x8e7		int16	ir_command_6 learned_signal_2		Infrared command 6 learned signal part 2/3
+0x8e9		int16	ir_command_6 learned_signal_3		Infrared command 6 learned signal part 3/3
+
+0x8eb		int8	ir_command_7 config			Infrared command 7 configuration
+0x8ec		int8	ir_command_7 ?				Infrared command 7 ?
+0x8ed		int16	ir_command_7 action			Infrared command 7 action to be performed
+0x8ef		int16	ir_command_7 refresh_rate		Infrared command 7 refresh rate for infrared signal
+0x8f1		int16	ir_command_7 learned_signal_1		Infrared command 7 learned signal part 1/3
+0x8f3		int16	ir_command_7 learned_signal_2		Infrared command 7 learned signal part 2/3
+0x8f5		int16	ir_command_7 learned_signal_3		Infrared command 7 learned signal part 3/3
+
+0x8f7		int8	ir_command_8 config			Infrared command 8 configuration
+0x8f8		int8	ir_command_8 ?				Infrared command 8 ?
+0x8f9		int16	ir_command_8 action			Infrared command 8 action to be performed
+0x8fb		int16	ir_command_8 refresh_rate		Infrared command 8 refresh rate for infrared signal
+0x8fd		int16	ir_command_8 learned_signal_1		Infrared command 8 learned signal part 1/3
+0x8ff		int16	ir_command_8 learned_signal_2		Infrared command 8 learned signal part 2/3
+0x901		int16	ir_command_8 learned_signal_3		Infrared command 8 learned signal part 3/3
+
+0x903		int8	ir_command_9 config			Infrared command 9 configuration
+0x904		int8	ir_command_9 ?				Infrared command 9 ?
+0x905		int16	ir_command_9 action			Infrared command 9 action to be performed
+0x907		int16	ir_command_9 refresh_rate		Infrared command 9 refresh rate for infrared signal
+0x909		int16	ir_command_9 learned_signal_1		Infrared command 9 learned signal part 1/3
+0x90b		int16	ir_command_9 learned_signal_2		Infrared command 9 learned signal part 2/3
+0x90d		int16	ir_command_9 learned_signal_3		Infrared command 9 learned signal part 3/3
+
+0x90f		int8	ir_command_10 config			Infrared command 10 configuration
+0x910		int8	ir_command_10 ?				Infrared command 10 ?
+0x911		int16	ir_command_10 action			Infrared command 10 action to be performed
+0x913		int16	ir_command_10 refresh_rate		Infrared command 10 refresh rate for infrared signal
+0x915		int16	ir_command_10 learned_signal_1		Infrared command 10 learned signal part 1/3
+0x917		int16	ir_command_10 learned_signal_2		Infrared command 10 learned signal part 2/3
+0x919		int16	ir_command_10 learned_signal_3		Infrared command 10 learned signal part 3/3
+
+0x91b		int8	ir_command_11 config			Infrared command 11 configuration
+0x91c		int8	ir_command_11 ?				Infrared command 11 ?
+0x91d		int16	ir_command_11 action			Infrared command 11 action to be performed
+0x91f		int16	ir_command_11 refresh_rate		Infrared command 11 refresh rate for infrared signal
+0x921		int16	ir_command_11 learned_signal_1		Infrared command 11 learned signal part 1/3
+0x923		int16	ir_command_11 learned_signal_2		Infrared command 11 learned signal part 2/3
+0x925		int16	ir_command_11 learned_signal_3		Infrared command 11 learned signal part 3/3
+
+0x927		int8	ir_command_12 config			Infrared command 12 configuration
+0x928		int8	ir_command_12 ?				Infrared command 12 ?
+0x929		int16	ir_command_12 action			Infrared command 12 action to be performed
+0x92b		int16	ir_command_12 refresh_rate		Infrared command 12 refresh rate for infrared signal
+0x92d		int16	ir_command_12 learned_signal_1		Infrared command 12 learned signal part 1/3
+0x92f		int16	ir_command_12 learned_signal_2		Infrared command 12 learned signal part 2/3
+0x931		int16	ir_command_12 learned_signal_3		Infrared command 12 learned signal part 3/3
+
+0x933		int8	ir_command_13 config			Infrared command 13 configuration
+0x934		int8	ir_command_13 ?				Infrared command 13 ?
+0x935		int16	ir_command_13 action			Infrared command 13 action to be performed
+0x937		int16	ir_command_13 refresh_rate		Infrared command 13 refresh rate for infrared signal
+0x939		int16	ir_command_13 learned_signal_1		Infrared command 13 learned signal part 1/3
+0x93b		int16	ir_command_13 learned_signal_2		Infrared command 13 learned signal part 2/3
+0x93d		int16	ir_command_13 learned_signal_3		Infrared command 13 learned signal part 3/3
+
+0x93f		int8	ir_command_14 config			Infrared command 14 configuration
+0x940		int8	ir_command_14 ?				Infrared command 14 ?
+0x941		int16	ir_command_14 action			Infrared command 14 action to be performed
+0x943		int16	ir_command_14 refresh_rate		Infrared command 14 refresh rate for infrared signal
+0x945		int16	ir_command_14 learned_signal_1		Infrared command 14 learned signal part 1/3
+0x947		int16	ir_command_14 learned_signal_2		Infrared command 14 learned signal part 2/3
+0x949		int16	ir_command_14 learned_signal_3		Infrared command 14 learned signal part 3/3
+
+0x94b		int8	ir_command_15 config			Infrared command 15 configuration
+0x94c		int8	ir_command_15 ?				Infrared command 15 ?
+0x94d		int16	ir_command_15 action			Infrared command 15 action to be performed
+0x94f		int16	ir_command_15 refresh_rate		Infrared command 15 refresh rate for infrared signal
+0x951		int16	ir_command_15 learned_signal_1		Infrared command 15 learned signal part 1/3
+0x953		int16	ir_command_15 learned_signal_2		Infrared command 15 learned signal part 2/3
+0x955		int16	ir_command_15 learned_signal_3		Infrared command 15 learned signal part 3/3
+
+0x957		int8	ir_command_16 config			Infrared command 16 configuration
+0x958		int8	ir_command_16 ?				Infrared command 16 ?
+0x959		int16	ir_command_16 action			Infrared command 16 action to be performed
+0x95b		int16	ir_command_16 refresh_rate		Infrared command 16 refresh rate for infrared signal
+0x95d		int16	ir_command_16 learned_signal_1		Infrared command 16 learned signal part 1/3
+0x95f		int16	ir_command_16 learned_signal_2		Infrared command 16 learned signal part 2/3
+0x961		int16	ir_command_16 learned_signal_3		Infrared command 16 learned signal part 3/3
+
+0x963		int8	ir_command_pc config			Infrared command pc on/off configuration
+0x964		int8	ir_command_pc ?				Infrared command pc on/off ?
+0x965		int16	ir_command_pc ?				Infrared command pc on/off ?
+0x967		int16	ir_command_pc refresh_rate		Infrared command pc on/off refresh rate for infrared signal
+0x969		int16	ir_command_pc learned_signal_1		Infrared command pc on/off learned signal part 1/3
+0x96b		int16	ir_command_pc learned_signal_2		Infrared command pc on/off learned signal part 2/3
+0x96d		int16	ir_command_pc learned_signal_3		Infrared command pc on/off learned signal part 3/3
+0x96f		int16	ir_command_pc action_on			Infrared command pc on/off action to switch off the pc
+0x971		int16	ir_command_pc action_off		Infrared command pc on/off action to switch on the pc
+
 0x972		int8			Allow output override
