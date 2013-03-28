@@ -428,6 +428,8 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "failed to poll: %s (%s)\n", err_msg, strerror(errno));
 		exit(EXIT_FAILURE);
 	}
+	if (err_msg != NULL)
+		fprintf(stderr, "WARNING: %s\n", err_msg);
 
 	if (libaquaero5_getsettings(NULL, &aquaero_settings, &err_msg) < 0) {
 		fprintf(stderr, "failed to get settings: %s (%s)\n", err_msg,

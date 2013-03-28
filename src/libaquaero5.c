@@ -32,6 +32,9 @@
 #include <linux/hiddev.h>
 #include <dirent.h>
 
+/* highest firmware version supported */
+#define AQ5_FW_MAX				1027
+
 /* usb communication related constants */
 #define AQ5_USB_VID				0x0c70
 #define AQ5_USB_PID				0xf001
@@ -638,6 +641,10 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg)
 	for (int i=0; i<AQ5_NUM_LEVEL; i++) {
 		data_dest->level[i] = (double)aq5_get_int16(aq5_buf_data, AQ5_LEVEL_OFFS + i * AQ5_LEVEL_DIST) / 100.0;
 	}
+
+	/* firmware compatibility check */
+	if (data_dest->firmware_version > AQ5_FW_MAX)
+		*err_msg = "unsupported firmware version";
 
 	return 0;
 }
