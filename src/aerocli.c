@@ -413,6 +413,24 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("DATA_LOG%d_INTERVAL='%s'\n", n+1, libaquaero5_get_string(aq_sett->data_log_config[n].interval, DATA_LOG_INTERVAL));
 			printf("DATA_LOG%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->data_log_config[n].data_source, SENSOR_DATA_SOURCE));
 		}
+		for (int n=0; n<AQ5_NUM_ALARM_AND_WARNING_LVLS; n++) {
+			for (int m=0; m<3; m++) {
+				switch (n) {
+					case 0:
+						printf("ALARM_NORMAL_ACTION%d='%s'\n", m+1, libaquaero5_get_string(aq_sett->alarm_and_warning_level[n].action[m], EVENT_ACTION));
+						break;
+					case 1:
+						printf("ALARM_WARNING_ACTION%d='%s'\n", m+1, libaquaero5_get_string(aq_sett->alarm_and_warning_level[n].action[m], EVENT_ACTION));
+						break;
+					case 2:
+						printf("ALARM_ALARM_ACTION%d='%s'\n", m+1, libaquaero5_get_string(aq_sett->alarm_and_warning_level[n].action[m], EVENT_ACTION));
+						break;
+					default:
+						printf("ALARM_WARNING%d_ACTION%d='%s'\n", n+1, m+1, libaquaero5_get_string(aq_sett->alarm_and_warning_level[n].action[m], EVENT_ACTION));
+				}
+			}
+		}
+		printf("ALARM_SUPPRESS_AT_POWERON=%d\n", aq_sett->suppress_alarm_at_poweron);
 	}
 }
 

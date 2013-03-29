@@ -39,6 +39,7 @@
 #define AQ5_NUM_TWO_POINT_CONTROLLERS	16
 #define AQ5_NUM_PRESET_VAL_CONTROLLERS	32
 #define AQ5_NUM_DATA_LOG		16
+#define AQ5_NUM_ALARM_AND_WARNING_LVLS	8
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -626,6 +627,12 @@ typedef struct {
 } data_log_config_t;
 
 typedef struct {
+	event_action_t	action[3];
+} alarm_and_warning_level_t;
+
+typedef struct {
+	uint16_t		suppress_alarm_at_poweron;
+	alarm_and_warning_level_t	alarm_and_warning_level[AQ5_NUM_ALARM_AND_WARNING_LVLS];
 	data_log_config_t	data_log_config[AQ5_NUM_DATA_LOG];
 	power_output_config_t	power_output_1_config;
 	power_output_config_t	power_output_2_config;

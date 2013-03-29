@@ -125,6 +125,9 @@
 #define AQ5_SETTINGS_POWER_OUTPUT_OFFS		0x30c
 #define AQ5_SETTINGS_DATA_LOG_OFFS		0x623
 #define AQ5_SETTINGS_DATA_LOG_DIST		3
+#define AQ5_SETTINGS_SUPP_ALRM_AT_PWRON_OFFS	0x683
+#define AQ5_SETTINGS_ALARM_WARN_OFFS		0x653
+#define AQ5_SETTINGS_ALARM_WARN_DIST		6	
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -573,6 +576,14 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->data_log_config[i].interval = aq5_buf_settings[AQ5_SETTINGS_DATA_LOG_OFFS + i * AQ5_SETTINGS_DATA_LOG_DIST];
 		settings_dest->data_log_config[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_DATA_LOG_OFFS + 1 + i * AQ5_SETTINGS_DATA_LOG_DIST);
 	}
+
+	/* Alarm and warning settings */
+	for (int i=0; i<AQ5_NUM_ALARM_AND_WARNING_LVLS; i++) {
+		for (int j=0; j<3; j++) {
+			settings_dest->alarm_and_warning_level[i].action[j] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_ALARM_WARN_OFFS + (j * 2) + i * AQ5_SETTINGS_ALARM_WARN_DIST);
+		}
+	}
+	settings_dest->suppress_alarm_at_poweron = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_SUPP_ALRM_AT_PWRON_OFFS);
 
 	return 0;
 }
