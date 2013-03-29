@@ -286,8 +286,8 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		printf("SYS_DATE_FMT='%s'\n", libaquaero5_get_string(aq_sett->date_format, DATE_FORMAT));
 		printf("SYS_TIME_ADST='%s'\n", libaquaero5_get_string(aq_sett->auto_dst, AUTO_DST));
 		printf("SYS_TIME_ZONE=%d\n", aq_sett->time_zone);
-		printf("SYS_STBY_ACT_OFF='%s'\n", libaquaero5_get_string(aq_sett->standby_action_at_power_down, STANDBY_ACTION));
-		printf("SYS_STBY_ACT_ON='%s'\n", libaquaero5_get_string(aq_sett->standby_action_at_power_up, STANDBY_ACTION));
+		printf("SYS_STBY_ACT_OFF='%s'\n", libaquaero5_get_string(aq_sett->standby_action_at_power_down, EVENT_ACTION));
+		printf("SYS_STBY_ACT_ON='%s'\n", libaquaero5_get_string(aq_sett->standby_action_at_power_up, EVENT_ACTION));
 		printf("KEYS_DISABLE='%s'\n", libaquaero5_get_string(aq_sett->disable_keys, DISABLE_KEYS));
 		printf("KEYS_BEEP='%s'\n", libaquaero5_get_string(aq_sett->key_tone, KEY_TONE));
 		printf("KEYS_BRIGHT_STBY=%d\n", aq_sett->standby_key_backlight_brightness);

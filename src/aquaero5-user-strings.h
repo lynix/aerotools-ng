@@ -300,25 +300,29 @@ val_str_t display_mode_strings[] = {
 };
 
 /* Standby action strings */
-val_str_t standby_action_strings[] = {
-	{ (standby_action_t)NO_ACTION,			"No action" },
-	{ (standby_action_t)SPEED_SIG_GEN_ON,		"Speed signal generator on" },
-	{ (standby_action_t)SPEED_SIG_GEN_OFF,		"Speed signal generator off" },
-	{ (standby_action_t)ALARM_BUZZER_ON,		"Alarm buzzer on" },
-	{ (standby_action_t)ALARM_BUZZER_OFF,		"Alarm buzzer off" },
-	{ (standby_action_t)ALARM_BUZZER_CYCLE_ON_OFF,	"Alarm buzzer cycle on-off" },
-	{ (standby_action_t)ALARM_BUZZER_SINGLE_TONE,	"Alarm buzzer single tone" },
-	{ (standby_action_t)RELAY_ON,			"Relay on" },
-	{ (standby_action_t)RELAY_OFF,			"Relay off" },
-	{ (standby_action_t)SWITCH_RELAY_2_SEC,		"Switch relay for 2 s" },
-	{ (standby_action_t)SWITCH_RELAY_10_SEC,	"Switch relay for 10 s" },
-	{ (standby_action_t)LOAD_PROFILE_1,		"Load profile 1" },
-	{ (standby_action_t)LOAD_PROFILE_2,		"Load profile 2" },
-	{ (standby_action_t)LOAD_PROFILE_3,		"Load profile 3" },
-	{ (standby_action_t)LOAD_PROFILE_4,		"Load profile 4" },
-	{ (standby_action_t)USB_KEYBD_POWER_KEY,	"USB keyboard: power key" },
-	{ (standby_action_t)USB_KEYBD_SLEEP_KEY,	"USB keyboard: sleep key" },
-	{ (standby_action_t)USB_KEYBD_WAKEUP_KEY,	"USB keyboard: wakeup key" },
+val_str_t event_action_strings[] = {
+	{ (event_action_t)NO_ACTION,			"No action" },
+	{ (event_action_t)SPEED_SIG_GEN_ON,		"Speed signal generator on" },
+	{ (event_action_t)SPEED_SIG_GEN_OFF,		"Speed signal generator off" },
+	{ (event_action_t)ALARM_BUZZER_ON,		"Alarm buzzer on" },
+	{ (event_action_t)ALARM_BUZZER_OFF,		"Alarm buzzer off" },
+	{ (event_action_t)ALARM_BUZZER_CYCLE_ON_OFF,	"Alarm buzzer cycle on-off" },
+	{ (event_action_t)ALARM_BUZZER_SINGLE_TONE,	"Alarm buzzer single tone" },
+	{ (event_action_t)RELAY_ON,			"Relay on" },
+	{ (event_action_t)RELAY_OFF,			"Relay off" },
+	{ (event_action_t)SWITCH_RELAY_2_SEC,		"Switch relay for 2 s" },
+	{ (event_action_t)SWITCH_RELAY_10_SEC,		"Switch relay for 10 s" },
+	{ (event_action_t)LOAD_PROFILE_1,		"Load profile 1" },
+	{ (event_action_t)LOAD_PROFILE_2,		"Load profile 2" },
+	{ (event_action_t)LOAD_PROFILE_3,		"Load profile 3" },
+	{ (event_action_t)LOAD_PROFILE_4,		"Load profile 4" },
+	{ (event_action_t)USB_KEYBD_POWER_KEY,		"USB keyboard: power key" },
+	{ (event_action_t)USB_KEYBD_SLEEP_KEY,		"USB keyboard: sleep key" },
+	{ (event_action_t)USB_KEYBD_WAKEUP_KEY,		"USB keyboard: wakeup key" },
+	{ (event_action_t)USB_MEDIA_KEYBD_PLAY_KEY,	"USB media keyboard: play" },
+	{ (event_action_t)USB_MEDIA_KEYBD_VOL_UP_KEY,	"USB media keyboard: volume up" },
+	{ (event_action_t)USB_MEDIA_KEYBD_VOL_DOWN_KEY,	"USB media keyboard: volume down" },
+	{ (event_action_t)USB_MEDIA_KEYBD_MUTE_KEY,	"USB media keyboard: mute" },
 	{ -1,						"Unknown standby action" }
 };
 

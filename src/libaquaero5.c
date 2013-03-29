@@ -712,8 +712,8 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 		case VIRT_SENSOR_MODE:
 			val_str = virt_sensor_mode_strings;
 			break;
-		case STANDBY_ACTION:
-			val_str = standby_action_strings;
+		case EVENT_ACTION:
+			val_str = event_action_strings;
 			break;
 		case DATE_FORMAT:
 			val_str = date_format_strings;

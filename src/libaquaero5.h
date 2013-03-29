@@ -296,7 +296,7 @@ typedef enum {
 	SOFT_SENSOR_STATE,
 	SENSOR_DATA_SOURCE,
 	VIRT_SENSOR_MODE,
-	STANDBY_ACTION,
+	EVENT_ACTION,
 	DATE_FORMAT,
 	TIME_FORMAT,
 	AUTO_DST,
@@ -391,8 +391,12 @@ typedef enum {
 	LOAD_PROFILE_4		= 0x000d,
 	USB_KEYBD_POWER_KEY	= 0x000e,
 	USB_KEYBD_SLEEP_KEY	= 0x000f,
-	USB_KEYBD_WAKEUP_KEY	= 0x0010
-} standby_action_t;
+	USB_KEYBD_WAKEUP_KEY	= 0x0010,
+	USB_MEDIA_KEYBD_PLAY_KEY	= 0x0011,
+	USB_MEDIA_KEYBD_VOL_UP_KEY	= 0x0012,
+	USB_MEDIA_KEYBD_VOL_DOWN_KEY	= 0x0013,
+	USB_MEDIA_KEYBD_MUTE_KEY	= 0x0014
+} event_action_t;
 
 typedef enum {
 	NO_DATA_SOURCE		= 0xffff,
@@ -645,8 +649,8 @@ typedef struct {
 	uint8_t			standby_lcd_backlight_brightness;
 	uint8_t			standby_key_backlight_brightness;
 	uint16_t		standby_timeout_key_and_display_brightness;
-	standby_action_t	standby_action_at_power_down;
-	standby_action_t	standby_action_at_power_up;
+	event_action_t		standby_action_at_power_down;
+	event_action_t		standby_action_at_power_up;
 	time_format_t		time_format;
 	date_format_t		date_format;
 	auto_dst_t		auto_dst;
