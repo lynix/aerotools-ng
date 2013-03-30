@@ -130,6 +130,8 @@
 #define AQ5_SETTINGS_ALARM_WARN_DIST		6	
 #define AQ5_SETTINGS_TEMP_ALARM_OFFS		0x685
 #define AQ5_SETTINGS_TEMP_ALARM_DIST		9
+#define AQ5_SETTINGS_FAN_ALARM_OFFS		0x715
+#define AQ5_SETTINGS_FAN_ALARM_DIST		4
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -597,6 +599,14 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->temp_alarm[i].set_alarm_level = aq5_buf_settings[AQ5_SETTINGS_TEMP_ALARM_OFFS + 8 + i * AQ5_SETTINGS_TEMP_ALARM_DIST];
 	}
 
+	/* Fan alarm settings */
+	for (int i=0; i<AQ5_NUM_FAN; i++) {
+		settings_dest->fan_alarm[i].limit_for_warning = aq5_buf_settings[AQ5_SETTINGS_FAN_ALARM_OFFS + i * AQ5_SETTINGS_FAN_ALARM_DIST];
+		settings_dest->fan_alarm[i].set_warning_level = aq5_buf_settings[AQ5_SETTINGS_FAN_ALARM_OFFS + 1 + i * AQ5_SETTINGS_FAN_ALARM_DIST];
+		settings_dest->fan_alarm[i].limit_for_alarm = aq5_buf_settings[AQ5_SETTINGS_FAN_ALARM_OFFS + 2 + i * AQ5_SETTINGS_FAN_ALARM_DIST];
+		settings_dest->fan_alarm[i].set_alarm_level = aq5_buf_settings[AQ5_SETTINGS_FAN_ALARM_OFFS + 3 + i * AQ5_SETTINGS_FAN_ALARM_DIST];
+	}
+
 	return 0;
 }
 
@@ -711,6 +721,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case FAN_LIMITS:
+			val_str = fan_limit_strings;
+			break;
 		case TEMP_ALARM_CONFIG:
 			val_str = temp_alarm_config_strings;
 			break;

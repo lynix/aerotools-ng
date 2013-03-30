@@ -510,7 +510,7 @@ val_str_t temp_alarm_config_strings[] = {
 	{ -1,						"Unknown" }
 };
 
-/* Alarm and warning levels */
+/* Alarm and warning level strings */
 val_str_t alarm_warning_levels_strings[] = {
 	{ (alarm_warning_levels_t)NORMAL_OPERATION,	"Normal operation" },
 	{ (alarm_warning_levels_t)WARNING, 		"Warning" },
@@ -521,6 +521,15 @@ val_str_t alarm_warning_levels_strings[] = {
 	{ (alarm_warning_levels_t)ALARM_WARNING_7,	"Alarm/warning 7" },
 	{ (alarm_warning_levels_t)ALARM_WARNING_8,	"Alarm/warning 8" },
 	{ -1, 						"Unknown" }
+};
+
+/* Fan limit strings */
+val_str_t fan_limit_strings[] = {
+	{ (fan_limit_t)NO_RPM_SIG_AFTER_6S,		"No RPM signal after 6 seconds" },
+	{ (fan_limit_t)NO_RPM_SIG_AFTER_12S,		"No RPM signal after 12 seconds" },
+	{ (fan_limit_t)NO_RPM_SIG_AFTER_24S,		"No RPM signal after 24 seconds" },
+	{ (fan_limit_t)RPM_OFF,				"Off" },
+	{ -1,						"Unknown" }
 };
 
 #endif /* AQUAERO5_USER_STRINGS_H_ */

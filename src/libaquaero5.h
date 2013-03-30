@@ -290,6 +290,7 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	FAN_LIMITS,
 	ALARM_WARNING_LEVELS,
 	TEMP_ALARM_CONFIG,
 	DATA_LOG_INTERVAL,
@@ -659,7 +660,22 @@ typedef struct {
 	alarm_warning_levels_t	set_alarm_level;
 } temp_alarm_t;
 
+typedef enum {
+	NO_RPM_SIG_AFTER_6S		= 0x00,
+	NO_RPM_SIG_AFTER_12S		= 0x01,
+	NO_RPM_SIG_AFTER_24S		= 0x02,
+	RPM_OFF				= 0x03
+} fan_limit_t;
+
 typedef struct {
+	fan_limit_t		limit_for_warning;
+	alarm_warning_levels_t	set_warning_level;
+	fan_limit_t		limit_for_alarm;
+	alarm_warning_levels_t	set_alarm_level;
+} fan_alarm_t;
+
+typedef struct {
+	fan_alarm_t		fan_alarm[AQ5_NUM_FAN];
 	temp_alarm_t		temp_alarm[AQ5_NUM_TEMP_ALARMS];
 	uint16_t		suppress_alarm_at_poweron;
 	alarm_and_warning_level_t	alarm_and_warning_level[AQ5_NUM_ALARM_AND_WARNING_LVLS];

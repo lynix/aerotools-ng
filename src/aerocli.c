@@ -439,6 +439,12 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("TEMP_ALARM%d_LIMIT_FOR_ALARM=%.2f\n", n+1, aq_sett->temp_alarm[n].limit_for_alarm);
 			printf("TEMP_ALARM%d_SET_ALARM_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->temp_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
 		}
+		for (int n=0; n<AQ5_NUM_FAN; n++) {
+			printf("FAN%d_ALARM_LIMIT_FOR_WARNING='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].limit_for_warning, FAN_LIMITS));
+			printf("FAN%d_SET_WARNING_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].set_warning_level, ALARM_WARNING_LEVELS));
+			printf("FAN%d_ALARM_LIMIT_FOR_ALARM='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].limit_for_alarm, FAN_LIMITS));
+			printf("FAN%d_SET_ALARM_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
+		}
 	}
 }
 
