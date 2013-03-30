@@ -502,4 +502,25 @@ val_str_t data_log_interval_strings[] = {
 	{ -1,						"Unknown"}
 };
 
+/* temperature alarm configuration user strings */
+val_str_t temp_alarm_config_strings[] = {
+	{ (temp_alarm_config_t)TEMP_EXCEEDS_LIMIT,	"Temperature exceeds limit" },
+	{ (temp_alarm_config_t)TEMP_DROPS_BELOW_LIMIT,	"Temperature drops below limit" },
+	{ (temp_alarm_config_t)TEMP_ALARM_OFF,		"Alarm off" },
+	{ -1,						"Unknown" }
+};
+
+/* Alarm and warning levels */
+val_str_t alarm_warning_levels_strings[] = {
+	{ (alarm_warning_levels_t)NORMAL_OPERATION,	"Normal operation" },
+	{ (alarm_warning_levels_t)WARNING, 		"Warning" },
+	{ (alarm_warning_levels_t)ALARM, 		"Alarm" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_4,	"Alarm/warning 4" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_5,	"Alarm/warning 5" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_6,	"Alarm/warning 6" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_7,	"Alarm/warning 7" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_8,	"Alarm/warning 8" },
+	{ -1, 						"Unknown" }
+};
+
 #endif /* AQUAERO5_USER_STRINGS_H_ */

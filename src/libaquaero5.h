@@ -40,6 +40,7 @@
 #define AQ5_NUM_PRESET_VAL_CONTROLLERS	32
 #define AQ5_NUM_DATA_LOG		16
 #define AQ5_NUM_ALARM_AND_WARNING_LVLS	8
+#define AQ5_NUM_TEMP_ALARMS		16
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -289,6 +290,8 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	ALARM_WARNING_LEVELS,
+	TEMP_ALARM_CONFIG,
 	DATA_LOG_INTERVAL,
 	POWER_OUTPUT_MODE,
 	AQ_RELAY_CONFIG,
@@ -630,7 +633,34 @@ typedef struct {
 	event_action_t	action[3];
 } alarm_and_warning_level_t;
 
+typedef enum {
+	TEMP_EXCEEDS_LIMIT		= 0x00,
+	TEMP_DROPS_BELOW_LIMIT		= 0x01,
+	TEMP_ALARM_OFF			= 0x02
+} temp_alarm_config_t;
+
+typedef enum {
+	NORMAL_OPERATION		= 0x00,
+	WARNING				= 0x01,
+	ALARM				= 0x02,
+	ALARM_WARNING_4			= 0x03,
+	ALARM_WARNING_5			= 0x04,
+	ALARM_WARNING_6			= 0x05,
+	ALARM_WARNING_7			= 0x06,
+	ALARM_WARNING_8			= 0x07
+} alarm_warning_levels_t;
+
 typedef struct {
+	sensor_data_source_t	data_source;
+	temp_alarm_config_t	config;
+	double			limit_for_warning;
+	alarm_warning_levels_t	set_warning_level;
+	double			limit_for_alarm;
+	alarm_warning_levels_t	set_alarm_level;
+} temp_alarm_t;
+
+typedef struct {
+	temp_alarm_t		temp_alarm[AQ5_NUM_TEMP_ALARMS];
 	uint16_t		suppress_alarm_at_poweron;
 	alarm_and_warning_level_t	alarm_and_warning_level[AQ5_NUM_ALARM_AND_WARNING_LVLS];
 	data_log_config_t	data_log_config[AQ5_NUM_DATA_LOG];

@@ -128,6 +128,8 @@
 #define AQ5_SETTINGS_SUPP_ALRM_AT_PWRON_OFFS	0x683
 #define AQ5_SETTINGS_ALARM_WARN_OFFS		0x653
 #define AQ5_SETTINGS_ALARM_WARN_DIST		6	
+#define AQ5_SETTINGS_TEMP_ALARM_OFFS		0x685
+#define AQ5_SETTINGS_TEMP_ALARM_DIST		9
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -585,6 +587,16 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	}
 	settings_dest->suppress_alarm_at_poweron = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_SUPP_ALRM_AT_PWRON_OFFS);
 
+	/* Temperature alarm settings */
+	for (int i=0; i<AQ5_NUM_TEMP_ALARMS; i++) {
+		settings_dest->temp_alarm[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TEMP_ALARM_OFFS + i * AQ5_SETTINGS_TEMP_ALARM_DIST);
+		settings_dest->temp_alarm[i].config = aq5_buf_settings[AQ5_SETTINGS_TEMP_ALARM_OFFS + 2 + i * AQ5_SETTINGS_TEMP_ALARM_DIST];
+		settings_dest->temp_alarm[i].limit_for_warning = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TEMP_ALARM_OFFS + 3 + i * AQ5_SETTINGS_TEMP_ALARM_DIST) /100.0;
+		settings_dest->temp_alarm[i].set_warning_level = aq5_buf_settings[AQ5_SETTINGS_TEMP_ALARM_OFFS + 5 + i * AQ5_SETTINGS_TEMP_ALARM_DIST];
+		settings_dest->temp_alarm[i].limit_for_alarm = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TEMP_ALARM_OFFS + 6 + i * AQ5_SETTINGS_TEMP_ALARM_DIST) /100.0;
+		settings_dest->temp_alarm[i].set_alarm_level = aq5_buf_settings[AQ5_SETTINGS_TEMP_ALARM_OFFS + 8 + i * AQ5_SETTINGS_TEMP_ALARM_DIST];
+	}
+
 	return 0;
 }
 
@@ -699,6 +711,12 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case TEMP_ALARM_CONFIG:
+			val_str = temp_alarm_config_strings;
+			break;
+		case ALARM_WARNING_LEVELS:
+			val_str = alarm_warning_levels_strings;
+			break;
 		case DATA_LOG_INTERVAL:
 			val_str = data_log_interval_strings;
 			break;
