@@ -532,4 +532,12 @@ val_str_t fan_limit_strings[] = {
 	{ -1,						"Unknown" }
 };
 
+/* Flow sensor configuration strings */
+val_str_t flow_config_strings[] = {
+	{ (flow_config_t)FLOW_FALLS_BELOW_LIMIT,	"Flow falls below limit" },
+	{ (flow_config_t)FLOW_EXCEEDS_LIMIT,		"Flow exceeds limit" },
+	{ (flow_config_t)FLOW_OFF,			"Off" },
+	{ -1,						"Unknown" }
+};
+
 #endif /* AQUAERO5_USER_STRINGS_H_ */
