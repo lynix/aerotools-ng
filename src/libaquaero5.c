@@ -134,6 +134,9 @@
 #define AQ5_SETTINGS_FAN_ALARM_DIST		4
 #define AQ5_SETTINGS_FLOW_ALARM_OFFS		0x745
 #define AQ5_SETTINGS_FLOW_ALARM_DIST		9
+#define AQ5_SETTINGS_PUMP_ALARM_OFFS		0x769
+#define AQ5_SETTINGS_PUMP_ALARM_DIST		4
+
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -618,7 +621,14 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->flow_alarm[i].limit_for_alarm = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FLOW_ALARM_OFFS + 6 + i * AQ5_SETTINGS_FLOW_ALARM_DIST) /10.0;
 		settings_dest->flow_alarm[i].set_alarm_level = aq5_buf_settings[AQ5_SETTINGS_FLOW_ALARM_OFFS + 8 + i * AQ5_SETTINGS_FLOW_ALARM_DIST];
 	}
-
+	
+	/* Pump alarm settings */
+	for (int i=0; i<AQ5_NUM_PUMP_ALARMS; i++) {
+		settings_dest->pump_alarm[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_PUMP_ALARM_OFFS + i * AQ5_SETTINGS_PUMP_ALARM_DIST);
+		settings_dest->pump_alarm[i].config = aq5_buf_settings[AQ5_SETTINGS_PUMP_ALARM_OFFS + 2 + i * AQ5_SETTINGS_PUMP_ALARM_DIST];
+		settings_dest->pump_alarm[i].set_alarm_level = aq5_buf_settings[AQ5_SETTINGS_PUMP_ALARM_OFFS + 3 + i * AQ5_SETTINGS_PUMP_ALARM_DIST];
+	}
+	
 	return 0;
 }
 
@@ -774,6 +784,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 			break;
 		case STATE_ENABLE_DISABLE:
 			val_str = state_enable_disable_strings;
+			break;
+		case STATE_ENABLE_DISABLE_INV:
+			val_str = state_enable_disable_inv_strings;
 			break;
 		case DISPLAY_MODE:
 			val_str = display_mode_strings;

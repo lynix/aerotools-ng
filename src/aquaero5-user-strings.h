@@ -292,6 +292,13 @@ val_str_t state_enable_disable_strings[] = {
 	{ -1,						"Unknown" }
 };
 
+/* State enable/disable strings (inverted) */
+val_str_t state_enable_disable_inv_strings[] = {
+	{ (state_enable_disable_inv_t)STATE_DISABLED_INV,	"Disabled" },
+	{ (state_enable_disable_inv_t)STATE_ENABLED_INV,	"Enabled" },
+	{ -1,							"Unknown" }
+};
+
 /* Display mode strings */
 val_str_t display_mode_strings[] = {
 	{ (display_mode_t)DISP_NORMAL,		"Normal" },

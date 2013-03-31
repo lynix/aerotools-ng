@@ -42,6 +42,7 @@
 #define AQ5_NUM_ALARM_AND_WARNING_LVLS	8
 #define AQ5_NUM_TEMP_ALARMS		16
 #define AQ5_NUM_FLOW_ALARMS		4
+#define AQ5_NUM_PUMP_ALARMS		4
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -292,6 +293,7 @@ typedef enum {
 
 typedef enum {
 	STATE_ENABLE_DISABLE,
+	STATE_ENABLE_DISABLE_INV,
 	FLOW_CONFIG,
 	FAN_LIMITS,
 	ALARM_WARNING_LEVELS,
@@ -372,6 +374,12 @@ typedef enum {
 	STATE_DISABLED	= 0x00,
 	STATE_ENABLED	= 0x01
 } state_enable_disable_t;
+
+typedef enum {
+	STATE_ENABLED_INV	= 0x00,
+	STATE_DISABLED_INV	= 0x01
+} state_enable_disable_inv_t;
+
 
 typedef enum {
 	DISP_NORMAL	= 0x00,
@@ -680,6 +688,13 @@ typedef struct {
 } flow_alarm_t;
 
 typedef struct {
+	sensor_data_source_t	data_source;
+	state_enable_disable_inv_t	config;
+	alarm_warning_levels_t	set_alarm_level;
+} pump_alarm_t;
+
+typedef struct {
+	pump_alarm_t		pump_alarm[AQ5_NUM_PUMP_ALARMS];
 	flow_alarm_t		flow_alarm[AQ5_NUM_FLOW_ALARMS];
 	fan_alarm_t		fan_alarm[AQ5_NUM_FAN];
 	temp_alarm_t		temp_alarm[AQ5_NUM_TEMP_ALARMS];
