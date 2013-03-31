@@ -285,11 +285,11 @@ val_str_t time_format_strings[] = {
 	{ -1,					"Unknown time format" }
 };
 
-/* Auto DST format strings */
-val_str_t auto_dst_strings[] = {
-	{ (auto_dst_t)DISABLED,	"Disabled" },
-	{ (auto_dst_t)ENABLED,	"Enabled" },
-	{ -1,			"Unknown DST mode" }
+/* State enable/disable strings */
+val_str_t state_enable_disable_strings[] = {
+	{ (state_enable_disable_t)STATE_DISABLED,	"Disabled" },
+	{ (state_enable_disable_t)STATE_ENABLED,	"Enabled" },
+	{ -1,						"Unknown" }
 };
 
 /* Display mode strings */
@@ -445,13 +445,6 @@ val_str_t virt_sensor_mode_strings[] = {
 	{ -1,					"Unknown mode" }
 };
 
-/* Software sensor configuration strings */
-val_str_t soft_sensor_state_strings[] = {
-	{ (soft_sensor_state_t)SENSOR_DISABLED,	"Disabled" },
-	{ (soft_sensor_state_t)SENSOR_ENABLED,	"Enabled" },
-	{ -1,					"Unknown configuration" }
-};
-
 /* Flow sensor data source strings */
 val_str_t flow_sensor_data_source_strings[] = {
 	{ (flow_sensor_data_source_t)NO_FLOW_SOURCE,	"No flow data source selected" },
@@ -470,13 +463,6 @@ val_str_t rgb_led_pulsating_brightness_strings[] = {
 	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_2,	"Variant 2" },
 	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_3,	"Variant 3" },
 	{ -1,						"Unknown mode" }
-};
-
-/* Hold powre output minimum power user strings */
-val_str_t power_output_mode_strings[] = {
-	{ (power_output_mode_t)HMP_DISABLED,		"Disabled" },
-	{ (power_output_mode_t)HMP_ENABLED,		"Enabled" },
-	{ -1,						"Unknown" }
 };
 
 /* aquaero relay configuration user strings */

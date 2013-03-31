@@ -284,7 +284,7 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		printf("SYS_DEC_SEP='%s'\n", libaquaero5_get_string(aq_sett->decimal_separator, DECIMAL_SEPARATOR));
 		printf("SYS_TIME_FMT='%s'\n", libaquaero5_get_string(aq_sett->time_format, TIME_FORMAT));
 		printf("SYS_DATE_FMT='%s'\n", libaquaero5_get_string(aq_sett->date_format, DATE_FORMAT));
-		printf("SYS_TIME_ADST='%s'\n", libaquaero5_get_string(aq_sett->auto_dst, AUTO_DST));
+		printf("SYS_TIME_ADST='%s'\n", libaquaero5_get_string(aq_sett->auto_dst, STATE_ENABLE_DISABLE));
 		printf("SYS_TIME_ZONE=%d\n", aq_sett->time_zone);
 		printf("SYS_STBY_ACT_OFF='%s'\n", libaquaero5_get_string(aq_sett->standby_action_at_power_down, EVENT_ACTION));
 		printf("SYS_STBY_ACT_ON='%s'\n", libaquaero5_get_string(aq_sett->standby_action_at_power_up, EVENT_ACTION));
@@ -324,7 +324,7 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("VIRT_SENSOR%d_MODE='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].mode, VIRT_SENSOR_MODE));
 		}
 		for (int n=0; n<AQ5_NUM_SOFT_SENSORS; n++) {
-			printf("SOFT_SENSOR%d_STATE='%s'\n", n+1, libaquaero5_get_string(aq_sett->soft_sensor_state[n], SOFT_SENSOR_STATE));
+			printf("SOFT_SENSOR%d_STATE='%s'\n", n+1, libaquaero5_get_string(aq_sett->soft_sensor_state[n], STATE_ENABLE_DISABLE));
 			printf("SOFT_SENSOR%d_FALLBACK_VALUE=%.2f\n", n+1, aq_sett->soft_sensor_fallback_value[n]);
 			printf("SOFT_SENSOR%d_TIMEOUT=%d\n", n+1, aq_sett->soft_sensor_timeout[n]);
 		}
@@ -360,11 +360,11 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		printf("POWER_OUTPUT1_MIN_POWER=%d\n", aq_sett->power_output_1_config.min_power);
 		printf("POWER_OUTPUT1_MAX_POWER=%d\n", aq_sett->power_output_1_config.max_power);
 		printf("POWER_OUTPUT1_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->power_output_1_config.data_source, CONTROLLER_DATA_SRC));
-		printf("POWER_OUTPUT1_HOLD_MINIMUM_POWER='%s'\n", libaquaero5_get_string(aq_sett->power_output_1_config.mode, POWER_OUTPUT_MODE));
+		printf("POWER_OUTPUT1_HOLD_MINIMUM_POWER='%s'\n", libaquaero5_get_string(aq_sett->power_output_1_config.mode, STATE_ENABLE_DISABLE));
 		printf("POWER_OUTPUT2_MIN_POWER=%d\n", aq_sett->power_output_2_config.min_power);
 		printf("POWER_OUTPUT2_MAX_POWER=%d\n", aq_sett->power_output_2_config.max_power);
 		printf("POWER_OUTPUT2_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->power_output_2_config.data_source, CONTROLLER_DATA_SRC));
-		printf("POWER_OUTPUT2_HOLD_MINIMUM_POWER='%s'\n", libaquaero5_get_string(aq_sett->power_output_2_config.mode, POWER_OUTPUT_MODE));
+		printf("POWER_OUTPUT2_HOLD_MINIMUM_POWER='%s'\n", libaquaero5_get_string(aq_sett->power_output_2_config.mode, STATE_ENABLE_DISABLE));
 		printf("AQUAERO_RELAY_DATA_SOURCE='%s'\n", libaquaero5_get_string(aq_sett->aquaero_relay_data_source, CONTROLLER_DATA_SRC));
 		printf("AQUAERO_RELAY_CONFIG='%s'\n", libaquaero5_get_string(aq_sett->aquaero_relay_configuration, AQ_RELAY_CONFIG));
 		printf("AQUAERO_RELAY_SWITCH_THRESHOLD=%d\n", aq_sett->aquaero_relay_switch_threshold);

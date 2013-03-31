@@ -421,10 +421,10 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->time_format = TWELVE_HOUR;
 	}
 
-	if ((m & (auto_dst_t)DST_ENABLED) == (auto_dst_t)DST_ENABLED) {
-		settings_dest->auto_dst = DST_ENABLED;
+	if ((m & (state_enable_disable_t)STATE_ENABLED) == (state_enable_disable_t)STATE_ENABLED) {
+		settings_dest->auto_dst = STATE_ENABLED;
 	} else {
-		settings_dest->auto_dst = DST_DISABLED;
+		settings_dest->auto_dst = STATE_DISABLED;
 	}
 
 	/* System - standby config */
@@ -748,9 +748,6 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 		case DATA_LOG_INTERVAL:
 			val_str = data_log_interval_strings;
 			break;
-		case POWER_OUTPUT_MODE:
-			val_str = power_output_mode_strings;
-			break;
 		case AQ_RELAY_CONFIG:
 			val_str = aquaero_relay_configuration_strings;
 			break;
@@ -759,9 +756,6 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 			break;
 		case FLOW_DATA_SOURCE:
 			val_str = flow_sensor_data_source_strings;
-			break;
-		case SOFT_SENSOR_STATE:
-			val_str = soft_sensor_state_strings;
 			break;
 		case SENSOR_DATA_SOURCE:
 			val_str = sensor_data_source_strings;
@@ -778,8 +772,8 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 		case TIME_FORMAT:
 			val_str = time_format_strings;
 			break;
-		case AUTO_DST:
-			val_str = auto_dst_strings;
+		case STATE_ENABLE_DISABLE:
+			val_str = state_enable_disable_strings;
 			break;
 		case DISPLAY_MODE:
 			val_str = display_mode_strings;

@@ -291,22 +291,20 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	STATE_ENABLE_DISABLE,
 	FLOW_CONFIG,
 	FAN_LIMITS,
 	ALARM_WARNING_LEVELS,
 	TEMP_ALARM_CONFIG,
 	DATA_LOG_INTERVAL,
-	POWER_OUTPUT_MODE,
 	AQ_RELAY_CONFIG,
 	LED_PB_MODE,
 	FLOW_DATA_SOURCE,
-	SOFT_SENSOR_STATE,
 	SENSOR_DATA_SOURCE,
 	VIRT_SENSOR_MODE,
 	EVENT_ACTION,
 	DATE_FORMAT,
 	TIME_FORMAT,
-	AUTO_DST,
 	DISPLAY_MODE,
 	CONTROLLER_DATA_SRC, 
 	LANGUAGE, 
@@ -371,9 +369,9 @@ typedef enum {
 } time_format_t;
 
 typedef enum {
-	DST_DISABLED	= 0x00,
-	DST_ENABLED	= 0x01
-} auto_dst_t;
+	STATE_DISABLED	= 0x00,
+	STATE_ENABLED	= 0x01
+} state_enable_disable_t;
 
 typedef enum {
 	DISP_NORMAL	= 0x00,
@@ -528,11 +526,6 @@ typedef struct {
 } virt_sensor_config_t;
 
 typedef enum {
-	SENSOR_DISABLED		= 0x00,
-	SENSOR_ENABLED		= 0x01
-} soft_sensor_state_t;
-
-typedef enum {
 	NO_FLOW_SOURCE		= 0xffff,
 	FLOW_1_SOURCE		= 0x0080,	
 	FLOW_2_SOURCE		= 0x0081,	
@@ -596,16 +589,11 @@ typedef struct {
 	led_config_t	high_temp;
 } rgb_led_controller_config_t;
 
-typedef enum {
-	HMP_DISABLED	= 0x00,
-	HMP_ENABLED	= 0x01
-} power_output_mode_t;
-
 typedef struct {
 	uint8_t		min_power;
 	uint8_t		max_power;
 	controller_data_source_t	data_source;
-	power_output_mode_t	mode;
+	state_enable_disable_t	mode;
 } power_output_config_t;
 
 typedef enum {
@@ -709,7 +697,7 @@ typedef struct {
 	target_value_controller_config_t	target_value_controller_config[AQ5_NUM_TARGET_VAL_CONTROLLERS];
 	curve_controller_config_t	curve_controller_config[AQ5_NUM_CURVE_CONTROLLERS];
 	power_consumption_config_t	power_consumption_config[AQ5_NUM_POWER_SENSORS];
-	soft_sensor_state_t	soft_sensor_state[AQ5_NUM_SOFT_SENSORS];
+	state_enable_disable_t	soft_sensor_state[AQ5_NUM_SOFT_SENSORS];
 	double			soft_sensor_fallback_value[AQ5_NUM_SOFT_SENSORS];
 	uint16_t		soft_sensor_timeout[AQ5_NUM_SOFT_SENSORS];
 	uint16_t		flow_sensor_calibration_value[AQ5_NUM_FLOW];
@@ -724,7 +712,7 @@ typedef struct {
 	event_action_t		standby_action_at_power_up;
 	time_format_t		time_format;
 	date_format_t		date_format;
-	auto_dst_t		auto_dst;
+	state_enable_disable_t	auto_dst;
 	int8_t			time_zone;
 	uint8_t			display_contrast;
 	uint8_t			display_brightness_while_in_use;
