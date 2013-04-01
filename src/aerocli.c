@@ -495,6 +495,7 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		printf("SWITCH_PC_VIA_IR_ACTION_OFF='%s'\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.action_off, EVENT_ACTION));
 		printf("SWITCH_PC_VIA_IR_REFRESH_RATE=%d\n", aq_sett->switch_pc_via_ir.refresh_rate);
 		printf("SWITCH_PC_VIA_IR_LEARNED_IR_SIGNAL=%05d-%05d-%05d\n", aq_sett->switch_pc_via_ir.learned_ir_signal[0], aq_sett->switch_pc_via_ir.learned_ir_signal[1], aq_sett->switch_pc_via_ir.learned_ir_signal[2]);
+		printf("ALLOW_OUTPUT_OVERRIDE='%s'\n", libaquaero5_get_string(aq_sett->allow_output_override, DISABLE_KEYS));
 	}
 }
 

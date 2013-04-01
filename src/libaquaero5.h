@@ -734,6 +734,7 @@ typedef struct {
 } switch_pc_via_ir_t;
 
 typedef struct {
+	disable_keys_t		allow_output_override;
 	infrared_functions_t	infrared_functions;
 	language_t		infrared_keyboard_layout;
 	trained_ir_commands_t	trained_ir_commands[AQ5_NUM_IR_COMMANDS];

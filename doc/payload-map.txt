@@ -1613,4 +1613,4 @@ offset		type	value		description
 0x96f		int16	ir_command_pc action_on			Infrared command pc on/off action to switch off the pc
 0x971		int16	ir_command_pc action_off		Infrared command pc on/off action to switch on the pc
 
-0x972		int8			Allow output override
+0x973		int8			Allow output override

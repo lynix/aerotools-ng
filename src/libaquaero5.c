@@ -142,6 +142,7 @@
 #define AQ5_SETTINGS_TIMER_DIST			7
 #define AQ5_SETTINGS_INFRARED_OFFS		0x8a1
 #define AQ5_SETTINGS_INFRARED_DIST		12
+#define AQ5_SETTINGS_ALLOW_OUTPUT_OVERRIDE_OFFS	0x973
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -742,6 +743,9 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 	}
 	settings_dest->switch_pc_via_ir.action_on = aq5_get_int16(aq5_buf_settings,  AQ5_SETTINGS_INFRARED_OFFS + 206);
 	settings_dest->switch_pc_via_ir.action_off = aq5_get_int16(aq5_buf_settings,  AQ5_SETTINGS_INFRARED_OFFS + 208);
+
+	/* Output override setting */
+	settings_dest->allow_output_override = aq5_buf_settings[AQ5_SETTINGS_ALLOW_OUTPUT_OVERRIDE_OFFS];
 
 	return 0;
 }
