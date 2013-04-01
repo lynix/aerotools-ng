@@ -479,6 +479,22 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("TIMER%d_SWITCHING_TIME='%s'\n", n+1, timer_time_str);
 			printf("TIMER%d_ACTION='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].action, EVENT_ACTION));
 		}
+		printf("IR_FUNCTION_AQUAERO_CONTROL_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.aquaero_control, BOOLEAN));
+		printf("IR_FUNCTION_PC_MOUSE_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.pc_mouse, BOOLEAN));
+		printf("IR_FUNCTION_PC_KEYBOARD_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.pc_keyboard, BOOLEAN));
+		printf("IR_FUNCTION_SB_FWDING_OF_UNKNOWN_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.usb_forwarding_of_unknown, BOOLEAN));
+		printf("IR_KEYBOARD_LAYOUT='%s'\n", libaquaero5_get_string(aq_sett->infrared_keyboard_layout, LANGUAGE));
+		for (int n=0; n<AQ5_NUM_IR_COMMANDS; n++) {
+			printf("IR_COMMAND%d_CONFIG='%s'\n", n+1, libaquaero5_get_string(aq_sett->trained_ir_commands[n].config, STATE_ENABLE_DISABLE));
+			printf("IR_COMMAND%d_ACTION='%s'\n", n+1, libaquaero5_get_string(aq_sett->trained_ir_commands[n].action, EVENT_ACTION));
+			printf("IR_COMMAND%d_REFRESH_RATE=%d\n", n+1, aq_sett->trained_ir_commands[n].refresh_rate);
+			printf("IR_COMMAND%d_LEARNED_IR_SIGNAL=%05d-%05d-%05d\n", n+1, aq_sett->trained_ir_commands[n].learned_ir_signal[0], aq_sett->trained_ir_commands[n].learned_ir_signal[1], aq_sett->trained_ir_commands[n].learned_ir_signal[2]);
+		}
+		printf("SWITCH_PC_VIA_IR_CONFIG='%s'\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.config, STATE_ENABLE_DISABLE));
+		printf("SWITCH_PC_VIA_IR_ACTION_ON='%s'\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.action_on, EVENT_ACTION));
+		printf("SWITCH_PC_VIA_IR_ACTION_OFF='%s'\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.action_off, EVENT_ACTION));
+		printf("SWITCH_PC_VIA_IR_REFRESH_RATE=%d\n", aq_sett->switch_pc_via_ir.refresh_rate);
+		printf("SWITCH_PC_VIA_IR_LEARNED_IR_SIGNAL=%05d-%05d-%05d\n", aq_sett->switch_pc_via_ir.learned_ir_signal[0], aq_sett->switch_pc_via_ir.learned_ir_signal[1], aq_sett->switch_pc_via_ir.learned_ir_signal[2]);
 	}
 }
 

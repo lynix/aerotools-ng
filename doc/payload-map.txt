@@ -1472,7 +1472,7 @@ offset		type	value		description
 0x89b		int32	timer_32 switching_time			Timer 32 switching time
 0x89f		int16	timer_32 action				Timer 32 action to be performed
 
-0x9a1		int8	infrared_functions			Infrared function control
+0x8a1		int8	infrared_functions			Infrared function control
 0x8a2		int8	infrared_keyboard_layout		Infrared keyboard layout
 
 0x8a3		int8	ir_command_1 config			Infrared command 1 configuration

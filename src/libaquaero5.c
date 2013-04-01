@@ -140,7 +140,8 @@
 #define AQ5_SETTINGS_FILL_ALARM_DIST		9
 #define AQ5_SETTINGS_TIMER_OFFS			0x7c1
 #define AQ5_SETTINGS_TIMER_DIST			7
-
+#define AQ5_SETTINGS_INFRARED_OFFS		0x8a1
+#define AQ5_SETTINGS_INFRARED_DIST		12
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -157,6 +158,12 @@
 #define AQ5_SETTINGS_TIMER_DAY_THURSDAY		0x10
 #define AQ5_SETTINGS_TIMER_DAY_FRIDAY		0x20
 #define AQ5_SETTINGS_TIMER_DAY_SATURDAY		0x40
+
+/* IR function setting masks */
+#define AQ5_SETTINGS_IR_AQUAERO_CONTROL		0x01
+#define AQ5_SETTINGS_IR_PC_MOUSE		0x02
+#define AQ5_SETTINGS_IR_PC_KEYBOARD		0x04
+#define AQ5_SETTINGS_IR_USB_FWDING_OF_UNKNOWN	0x08
 
 /* device-specific globals */
 /* TODO: vectorize to handle more than one device */
@@ -694,6 +701,47 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		aq5_get_uptime(aq5_get_int32(aq5_buf_settings, AQ5_SETTINGS_TIMER_OFFS + 1 + i * AQ5_SETTINGS_TIMER_DIST), &settings_dest->timer[i].switching_time);
 		settings_dest->timer[i].action = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TIMER_OFFS + 5 + i * AQ5_SETTINGS_TIMER_DIST);
 	}
+
+	/* IR function settings */
+	int j;
+	j = aq5_buf_settings[AQ5_SETTINGS_INFRARED_OFFS];
+	if ((j & AQ5_SETTINGS_IR_AQUAERO_CONTROL) == AQ5_SETTINGS_IR_AQUAERO_CONTROL) {
+		settings_dest->infrared_functions.aquaero_control = TRUE;
+	} else {
+		settings_dest->infrared_functions.aquaero_control = FALSE;
+	}
+	if ((j & AQ5_SETTINGS_IR_PC_MOUSE) == AQ5_SETTINGS_IR_PC_MOUSE) {
+		settings_dest->infrared_functions.pc_mouse = TRUE;
+	} else {
+		settings_dest->infrared_functions.pc_mouse = FALSE;
+	}
+	if ((j & AQ5_SETTINGS_IR_PC_KEYBOARD) == AQ5_SETTINGS_IR_PC_KEYBOARD) {
+		settings_dest->infrared_functions.pc_keyboard = TRUE;
+	} else {
+		settings_dest->infrared_functions.pc_keyboard = FALSE;
+	}
+	if ((j & AQ5_SETTINGS_IR_USB_FWDING_OF_UNKNOWN) == AQ5_SETTINGS_IR_USB_FWDING_OF_UNKNOWN) {
+		settings_dest->infrared_functions.usb_forwarding_of_unknown = TRUE;
+	} else {
+		settings_dest->infrared_functions.usb_forwarding_of_unknown = FALSE;
+	}
+	settings_dest->infrared_keyboard_layout = aq5_buf_settings[AQ5_SETTINGS_INFRARED_OFFS + 1];
+
+	for (int i=0; i<AQ5_NUM_IR_COMMANDS; i++) {
+		settings_dest->trained_ir_commands[i].config = aq5_buf_settings[AQ5_SETTINGS_INFRARED_OFFS + 2 + i * AQ5_SETTINGS_INFRARED_DIST];
+		settings_dest->trained_ir_commands[i].action = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_INFRARED_OFFS + 4 + i * AQ5_SETTINGS_INFRARED_DIST);
+		settings_dest->trained_ir_commands[i].refresh_rate = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_INFRARED_OFFS + 6 + i * AQ5_SETTINGS_INFRARED_DIST);
+		for (int r=0; r<3; r++) {
+			settings_dest->trained_ir_commands[i].learned_ir_signal[r] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_INFRARED_OFFS + 8 + (r * 2) + i * AQ5_SETTINGS_INFRARED_DIST);
+		}
+	}
+	settings_dest->switch_pc_via_ir.config = aq5_buf_settings[AQ5_SETTINGS_INFRARED_OFFS + 195];
+	settings_dest->switch_pc_via_ir.refresh_rate = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_INFRARED_OFFS + 198);
+	for (int r=0; r<3; r++) {
+		settings_dest->switch_pc_via_ir.learned_ir_signal[r] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_INFRARED_OFFS + 200 + (r * 2));
+	}
+	settings_dest->switch_pc_via_ir.action_on = aq5_get_int16(aq5_buf_settings,  AQ5_SETTINGS_INFRARED_OFFS + 206);
+	settings_dest->switch_pc_via_ir.action_off = aq5_get_int16(aq5_buf_settings,  AQ5_SETTINGS_INFRARED_OFFS + 208);
 
 	return 0;
 }

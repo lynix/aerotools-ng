@@ -45,6 +45,7 @@
 #define AQ5_NUM_PUMP_ALARMS		4
 #define AQ5_NUM_FILL_ALARMS		4
 #define AQ5_NUM_TIMERS			32
+#define AQ5_NUM_IR_COMMANDS		16
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -711,6 +712,32 @@ typedef struct {
 } aq_timer_t;
 
 typedef struct {
+	boolean_t	aquaero_control;
+	boolean_t	pc_mouse;
+	boolean_t	pc_keyboard;
+	boolean_t	usb_forwarding_of_unknown;
+} infrared_functions_t;
+
+typedef struct {
+	state_enable_disable_t	config;
+	event_action_t		action;
+	uint16_t		refresh_rate;
+	uint16_t		learned_ir_signal[3];
+} trained_ir_commands_t;
+
+typedef struct {
+	state_enable_disable_t	config;
+	event_action_t		action_on;
+	event_action_t		action_off;
+	uint16_t		refresh_rate;
+	uint16_t		learned_ir_signal[3];
+} switch_pc_via_ir_t;
+
+typedef struct {
+	infrared_functions_t	infrared_functions;
+	language_t		infrared_keyboard_layout;
+	trained_ir_commands_t	trained_ir_commands[AQ5_NUM_IR_COMMANDS];
+	switch_pc_via_ir_t	switch_pc_via_ir;
 	aq_timer_t		timer[AQ5_NUM_TIMERS];
 	fill_alarm_t		fill_alarm[AQ5_NUM_FILL_ALARMS];
 	pump_alarm_t		pump_alarm[AQ5_NUM_PUMP_ALARMS];
