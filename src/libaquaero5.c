@@ -136,6 +136,8 @@
 #define AQ5_SETTINGS_FLOW_ALARM_DIST		9
 #define AQ5_SETTINGS_PUMP_ALARM_OFFS		0x769
 #define AQ5_SETTINGS_PUMP_ALARM_DIST		4
+#define AQ5_SETTINGS_FILL_ALARM_OFFS		0x779
+#define AQ5_SETTINGS_FILL_ALARM_DIST		9
 
 
 /* Fan settings control mode masks */
@@ -627,6 +629,16 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->pump_alarm[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_PUMP_ALARM_OFFS + i * AQ5_SETTINGS_PUMP_ALARM_DIST);
 		settings_dest->pump_alarm[i].config = aq5_buf_settings[AQ5_SETTINGS_PUMP_ALARM_OFFS + 2 + i * AQ5_SETTINGS_PUMP_ALARM_DIST];
 		settings_dest->pump_alarm[i].set_alarm_level = aq5_buf_settings[AQ5_SETTINGS_PUMP_ALARM_OFFS + 3 + i * AQ5_SETTINGS_PUMP_ALARM_DIST];
+	}
+
+	/* Fill level alarm settings */
+	for (int i=0; i<AQ5_NUM_FILL_ALARMS; i++) {
+		settings_dest->fill_alarm[i].data_source = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FILL_ALARM_OFFS + i * AQ5_SETTINGS_FILL_ALARM_DIST);
+		settings_dest->fill_alarm[i].config = aq5_buf_settings[AQ5_SETTINGS_FILL_ALARM_OFFS + 2 + i * AQ5_SETTINGS_FILL_ALARM_DIST];
+		settings_dest->fill_alarm[i].limit_for_warning = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FILL_ALARM_OFFS + 3 + i * AQ5_SETTINGS_FILL_ALARM_DIST) /100;
+		settings_dest->fill_alarm[i].set_warning_level = aq5_buf_settings[AQ5_SETTINGS_FILL_ALARM_OFFS + 5 + i * AQ5_SETTINGS_FILL_ALARM_DIST];
+		settings_dest->fill_alarm[i].limit_for_alarm = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FILL_ALARM_OFFS + 6 + i * AQ5_SETTINGS_FILL_ALARM_DIST) /100;
+		settings_dest->fill_alarm[i].set_alarm_level = aq5_buf_settings[AQ5_SETTINGS_FILL_ALARM_OFFS + 8 + i * AQ5_SETTINGS_FILL_ALARM_DIST];
 	}
 	
 	return 0;
