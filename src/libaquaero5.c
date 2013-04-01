@@ -650,7 +650,51 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->fill_alarm[i].limit_for_alarm = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FILL_ALARM_OFFS + 6 + i * AQ5_SETTINGS_FILL_ALARM_DIST) /100;
 		settings_dest->fill_alarm[i].set_alarm_level = aq5_buf_settings[AQ5_SETTINGS_FILL_ALARM_OFFS + 8 + i * AQ5_SETTINGS_FILL_ALARM_DIST];
 	}
-	
+
+	/* Timer settings */
+	for (int i=0; i<AQ5_NUM_TIMERS; i++) {
+		int j;
+		j = aq5_buf_settings[AQ5_SETTINGS_TIMER_OFFS + i * AQ5_SETTINGS_TIMER_DIST];
+		if ((j & AQ5_SETTINGS_TIMER_DAY_SUNDAY) == AQ5_SETTINGS_TIMER_DAY_SUNDAY) {
+			settings_dest->timer[i].active_days.sunday = TRUE;
+		} else {
+			settings_dest->timer[i].active_days.sunday = FALSE;
+		}
+		if ((j & AQ5_SETTINGS_TIMER_DAY_MONDAY) == AQ5_SETTINGS_TIMER_DAY_MONDAY) {
+			settings_dest->timer[i].active_days.monday = TRUE;
+		} else {
+			settings_dest->timer[i].active_days.monday = FALSE;
+		}
+		if ((j & AQ5_SETTINGS_TIMER_DAY_TUESDAY) == AQ5_SETTINGS_TIMER_DAY_TUESDAY) {
+			settings_dest->timer[i].active_days.tuesday = TRUE;
+		} else {
+			settings_dest->timer[i].active_days.tuesday = FALSE;
+		}
+		if ((j & AQ5_SETTINGS_TIMER_DAY_WEDNESDAY) == AQ5_SETTINGS_TIMER_DAY_WEDNESDAY) {
+			settings_dest->timer[i].active_days.wednesday = TRUE;
+		} else {
+			settings_dest->timer[i].active_days.wednesday = FALSE;
+		}
+		if ((j & AQ5_SETTINGS_TIMER_DAY_THURSDAY) == AQ5_SETTINGS_TIMER_DAY_THURSDAY) {
+			settings_dest->timer[i].active_days.thursday = TRUE;
+		} else {
+			settings_dest->timer[i].active_days.thursday = FALSE;
+		}
+		if ((j & AQ5_SETTINGS_TIMER_DAY_FRIDAY) == AQ5_SETTINGS_TIMER_DAY_FRIDAY) {
+			settings_dest->timer[i].active_days.friday = TRUE;
+		} else {
+			settings_dest->timer[i].active_days.friday = FALSE;
+		}
+		if ((j & AQ5_SETTINGS_TIMER_DAY_SATURDAY) == AQ5_SETTINGS_TIMER_DAY_SATURDAY) {
+			settings_dest->timer[i].active_days.saturday = TRUE;
+		} else {
+			settings_dest->timer[i].active_days.saturday = FALSE;
+		}
+
+		aq5_get_uptime(aq5_get_int32(aq5_buf_settings, AQ5_SETTINGS_TIMER_OFFS + 1 + i * AQ5_SETTINGS_TIMER_DIST), &settings_dest->timer[i].switching_time);
+		settings_dest->timer[i].action = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TIMER_OFFS + 5 + i * AQ5_SETTINGS_TIMER_DIST);
+	}
+
 	return 0;
 }
 
@@ -765,6 +809,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case BOOLEAN:
+			val_str = boolean_strings;
+			break;
 		case FLOW_CONFIG:
 			val_str = flow_config_strings;
 			break;

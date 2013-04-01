@@ -522,4 +522,11 @@ val_str_t flow_config_strings[] = {
 	{ -1,						"Unknown" }
 };
 
+/* Boolean strings */
+val_str_t boolean_strings[] = {
+	{ (boolean_t)FALSE,				"False" }, 
+	{ (boolean_t)TRUE,				"True" },
+	{ -1,						"Unknown" }
+};
+
 #endif /* AQUAERO5_USER_STRINGS_H_ */

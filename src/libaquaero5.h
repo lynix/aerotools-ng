@@ -294,6 +294,7 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	BOOLEAN,
 	STATE_ENABLE_DISABLE,
 	STATE_ENABLE_DISABLE_INV,
 	FLOW_CONFIG,
@@ -694,6 +695,23 @@ typedef struct {
 } fill_alarm_t;
 
 typedef struct {
+	boolean_t	sunday;
+	boolean_t	monday;
+	boolean_t	tuesday;
+	boolean_t	wednesday;
+	boolean_t	thursday;
+	boolean_t	friday;
+	boolean_t	saturday;
+} active_days_t;
+
+typedef struct {
+	active_days_t	active_days;
+	aq5_time_t	switching_time;
+	event_action_t	action;
+} aq_timer_t;
+
+typedef struct {
+	aq_timer_t		timer[AQ5_NUM_TIMERS];
 	fill_alarm_t		fill_alarm[AQ5_NUM_FILL_ALARMS];
 	pump_alarm_t		pump_alarm[AQ5_NUM_PUMP_ALARMS];
 	flow_alarm_t		flow_alarm[AQ5_NUM_FLOW_ALARMS];

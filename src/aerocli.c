@@ -466,6 +466,19 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("FILL_ALARM%d_LIMIT_FOR_ALARM=%d\n", n+1, aq_sett->fill_alarm[n].limit_for_alarm);
 			printf("FILL_ALARM%d_SET_ALARM_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->fill_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
 		}
+		for (int n=0; n<AQ5_NUM_TIMERS; n++) {
+			char timer_time_str[21];
+			printf("TIMER%d_ACTIVE_SUNDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.sunday, BOOLEAN));
+			printf("TIMER%d_ACTIVE_MONDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.monday, BOOLEAN));
+			printf("TIMER%d_ACTIVE_TUESDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.tuesday, BOOLEAN));
+			printf("TIMER%d_ACTIVE_WEDNESDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.wednesday, BOOLEAN));
+			printf("TIMER%d_ACTIVE_THURSDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.thursday, BOOLEAN));
+			printf("TIMER%d_ACTIVE_FRIDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.friday, BOOLEAN));
+			printf("TIMER%d_ACTIVE_SATURDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.saturday, BOOLEAN));
+			strftime(timer_time_str, 20, "%H:%M:%S", &aq_sett->timer[n].switching_time);
+			printf("TIMER%d_SWITCHING_TIME='%s'\n", n+1, timer_time_str);
+			printf("TIMER%d_ACTION='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].action, EVENT_ACTION));
+		}
 	}
 }
 
