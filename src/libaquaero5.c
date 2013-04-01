@@ -138,6 +138,8 @@
 #define AQ5_SETTINGS_PUMP_ALARM_DIST		4
 #define AQ5_SETTINGS_FILL_ALARM_OFFS		0x779
 #define AQ5_SETTINGS_FILL_ALARM_DIST		9
+#define AQ5_SETTINGS_TIMER_OFFS			0x7c1
+#define AQ5_SETTINGS_TIMER_DIST			7
 
 
 /* Fan settings control mode masks */
@@ -147,6 +149,14 @@
 #define AQ5_SETTINGS_CTRL_MODE_STARTBOOST	0x0400
 #define AQ5_SETTINGS_CTRL_MODE_HOLD_MIN_POWER	0x0100
 
+/* Timer settings day of week masks */
+#define AQ5_SETTINGS_TIMER_DAY_SUNDAY		0x01
+#define AQ5_SETTINGS_TIMER_DAY_MONDAY		0x02
+#define AQ5_SETTINGS_TIMER_DAY_TUESDAY		0x04
+#define AQ5_SETTINGS_TIMER_DAY_WEDNESDAY	0x08
+#define AQ5_SETTINGS_TIMER_DAY_THURSDAY		0x10
+#define AQ5_SETTINGS_TIMER_DAY_FRIDAY		0x20
+#define AQ5_SETTINGS_TIMER_DAY_SATURDAY		0x40
 
 /* device-specific globals */
 /* TODO: vectorize to handle more than one device */
@@ -775,9 +785,6 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 			break;
 		case LED_PB_MODE:
 			val_str = rgb_led_pulsating_brightness_strings;
-			break;
-		case FLOW_DATA_SOURCE:
-			val_str = flow_sensor_data_source_strings;
 			break;
 		case SENSOR_DATA_SOURCE:
 			val_str = sensor_data_source_strings;

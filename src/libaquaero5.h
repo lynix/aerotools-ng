@@ -44,6 +44,7 @@
 #define AQ5_NUM_FLOW_ALARMS		4
 #define AQ5_NUM_PUMP_ALARMS		4
 #define AQ5_NUM_FILL_ALARMS		4
+#define AQ5_NUM_TIMERS			32
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -302,7 +303,6 @@ typedef enum {
 	DATA_LOG_INTERVAL,
 	AQ_RELAY_CONFIG,
 	LED_PB_MODE,
-	FLOW_DATA_SOURCE,
 	SENSOR_DATA_SOURCE,
 	VIRT_SENSOR_MODE,
 	EVENT_ACTION,
@@ -533,17 +533,8 @@ typedef struct {
 	virt_sensor_mode_t		mode;
 } virt_sensor_config_t;
 
-typedef enum {
-	NO_FLOW_SOURCE		= 0xffff,
-	FLOW_1_SOURCE		= 0x0080,	
-	FLOW_2_SOURCE		= 0x0081,	
-	FLOW_3_SOURCE		= 0x0082,	
-	FLOW_4_SOURCE		= 0x0083,	
-	FLOW_5_SOURCE		= 0x0084,	
-} flow_sensor_data_source_t;
-
 typedef struct {
-	flow_sensor_data_source_t	flow_sensor_data_source;
+	sensor_data_source_t		flow_sensor_data_source;
 	sensor_data_source_t		temp_sensor_1;
 	sensor_data_source_t		temp_sensor_2;
 } power_consumption_config_t;

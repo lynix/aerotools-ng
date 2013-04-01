@@ -452,17 +452,6 @@ val_str_t virt_sensor_mode_strings[] = {
 	{ -1,					"Unknown mode" }
 };
 
-/* Flow sensor data source strings */
-val_str_t flow_sensor_data_source_strings[] = {
-	{ (flow_sensor_data_source_t)NO_FLOW_SOURCE,	"No flow data source selected" },
-	{ (flow_sensor_data_source_t)FLOW_1_SOURCE,	"Flow 1" },
-	{ (flow_sensor_data_source_t)FLOW_2_SOURCE,	"Flow 2" },
-	{ (flow_sensor_data_source_t)FLOW_3_SOURCE,	"Flow 3" },
-	{ (flow_sensor_data_source_t)FLOW_4_SOURCE,	"Flow 4" },
-	{ (flow_sensor_data_source_t)FLOW_5_SOURCE,	"Flow 5" },
-	{ -1,						"Unknown flow sensor" }
-};
-
 /* RGB LED pulsating brightness strings */
 val_str_t rgb_led_pulsating_brightness_strings[] = {
 	{ (rgb_led_pulsating_brightness_t)PB_OFF,	"Off" },

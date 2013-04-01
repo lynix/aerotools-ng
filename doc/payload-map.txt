@@ -1342,7 +1342,7 @@ offset		type	value		description
 0x79a		int16	alarm_fill_4 limit_for_alarm		Fill alarm 4 limit for alarm
 0x79c		int8	alarm_fill_4 set_alrm_level		Fill alarm 4 set alarm level
 
-0x79d-0x7c0	unknown, but looks like fill level sensors
+0x79d-0x7c0	unknown, but looks like 4 more fill level sensors
 
 0x7c1		int8	timer_1 active_days			Timer 1 active on these days
 0x7c2		int32	timer_1 switching_time			Timer 1 switching time

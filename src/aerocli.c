@@ -334,7 +334,7 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("FLOW_SENSOR%d_UPPER_LIMIT=%.1f\n", n+1, aq_sett->flow_sensor_upper_limit[n]);
 		}
 		for (int n=0; n<AQ5_NUM_POWER_SENSORS; n++) {
-			printf("POWER_SENSOR%d_FLOW_SENSOR=%s\n", n+1, libaquaero5_get_string(aq_sett->power_consumption_config[n].flow_sensor_data_source, FLOW_DATA_SOURCE));
+			printf("POWER_SENSOR%d_FLOW_SENSOR=%s\n", n+1, libaquaero5_get_string(aq_sett->power_consumption_config[n].flow_sensor_data_source, SENSOR_DATA_SOURCE));
 			printf("POWER_SENSOR%d_TEMP_SENSOR_1=%s\n", n+1, libaquaero5_get_string(aq_sett->power_consumption_config[n].temp_sensor_1, SENSOR_DATA_SOURCE));
 			printf("POWER_SENSOR%d_TEMP_SENSOR_2=%s\n", n+1, libaquaero5_get_string(aq_sett->power_consumption_config[n].temp_sensor_2, SENSOR_DATA_SOURCE));
 		}
