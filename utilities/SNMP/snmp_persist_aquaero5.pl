@@ -132,7 +132,7 @@ use strict;
 
 
 #------------------------------------------------------------#
-my $aeroclicmd = "/usr/local/sbin/aerocli -o export";
+my $aeroclicmd = "/usr/local/sbin/aerocli -a -o export";
 
 #my $debug = 1;
 my $debug = 0;
@@ -210,51 +210,53 @@ sub create_mib {
 		chomp($line);
 	
 		# Sensor readings
-		if ($line =~ /^TEMP/) {
+		if ($line =~ /^TEMP\d+=/) {
 			my ($tempnum,$tempval) = $line =~ /^TEMP(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
+			$tempval = 0 if ($tempval < 0);
 			print "Temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
 			$tmpmib{"1.1.2.1.0.$tempnum"} = [ "string", "Temp$tempnum" ];
 			$tmpmib{"1.1.2.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
-		} elsif ($line =~ /^FAN\d+_VRM_TEMP/) {
-			my ($fannum,$tempval) = $line =~ /^FAN(\d+)_VRM_TEMP=(\d+\.\d+)/i;
+		} elsif ($line =~ /^FAN\d+_VRM_TEMP=/) {
+			my ($fannum,$tempval) = $line =~ /^FAN(\d+)_VRM_TEMP=(-?\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
+			$tempval = 0 if ($tempval < 0);
 			print "Fan $fannum VRM temp = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
 			$tmpmib{"1.1.3.1.0.$fannum"} = [ "string", "Fan$fannum" ];
 			$tmpmib{"1.1.3.2.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
-		} elsif ($line =~ /^FAN\d+_CURRENT/) {
+		} elsif ($line =~ /^FAN\d+_CURRENT=/) {
 			my ($fannum,$currentval) = $line =~ /^FAN(\d+)_CURRENT=(\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum current = $currentval\n" if $debug;
 			$tmpmib{"1.1.3.3.0.$fannum"} = [ "gauge", adjust_to_32bit($currentval) ];
-		} elsif ($line =~ /^FAN\d+_RPM/) {
+		} elsif ($line =~ /^FAN\d+_RPM=/) {
 			my ($fannum,$rpmval) = $line =~ /^FAN(\d+)_RPM=(\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum RPM = $rpmval\n" if $debug;
 			$tmpmib{"1.1.3.4.0.$fannum"} = [ "gauge", adjust_to_32bit($rpmval) ];
-		} elsif ($line =~ /^FAN\d+_DUTY_CYCLE/) {
+		} elsif ($line =~ /^FAN\d+_DUTY_CYCLE=/) {
 			my ($fannum,$dutycycleval) = $line =~ /^FAN(\d+)_DUTY_CYCLE=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum duty cycle = $dutycycleval (" . strip_decimal($dutycycleval) . ")\n" if $debug;
 			$tmpmib{"1.1.3.5.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($dutycycleval)) ];
-		} elsif ($line =~ /^FAN\d+_VOLTAGE/) {
+		} elsif ($line =~ /^FAN\d+_VOLTAGE=/) {
 			my ($fannum,$voltageval) = $line =~ /^FAN(\d+)_VOLTAGE=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum duty cycle = $voltageval (" . strip_decimal($voltageval) . ")\n" if $debug;
 			$tmpmib{"1.1.3.6.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($voltageval)) ];
-		} elsif ($line =~ /^FLOW/) {
+		} elsif ($line =~ /^FLOW\d+=/) {
 			my ($flownum,$flowval) = $line =~ /^FLOW(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Flow sensor $flownum = $flowval (" . strip_decimal($flowval) . ")\n" if $debug;
 			$tmpmib{"1.1.4.1.0.$flownum"} = [ "string", "Flow$flownum" ];
 			$tmpmib{"1.1.4.2.0.$flownum"} = [ "gauge", adjust_to_32bit(strip_decimal($flowval)) ];
-		} elsif ($line =~ /^CPU\d+_TEMP/) {
-			my ($cpunum,$tempval) = $line =~ /^CPU(\d+)_TEMP=(\d+\.\d+)/i;
+		} elsif ($line =~ /^SYS_TEMP_CPU\d+=/) {
+			my ($cpunum,$tempval) = $line =~ /^SYS_TEMP_CPU(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "CPU $cpunum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
 			$tmpmib{"1.1.5.1.0.$cpunum"} = [ "string", "CPUTemp$cpunum" ];
 			$tmpmib{"1.1.5.2.0.$cpunum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
-		} elsif ($line =~ /^LEVEL/) {
+		} elsif ($line =~ /^LEVEL\d+=/) {
 			my ($levelnum,$levelval) = $line =~ /^LEVEL(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Level sensor $levelnum = $levelval (" . strip_decimal($levelval) . ")\n" if $debug;
