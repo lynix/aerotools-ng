@@ -211,7 +211,7 @@ sub create_mib {
 	
 		# Sensor readings
 		if ($line =~ /^TEMP\d+=/) {
-			my ($tempnum,$tempval) = $line =~ /^TEMP(\d+)=(\d+\.\d+)/i;
+			my ($tempnum,$tempval) = $line =~ /^TEMP(\d+)=(-?\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			$tempval = 0 if ($tempval < 0);
 			print "Temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
