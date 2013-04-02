@@ -66,7 +66,7 @@ typedef struct {
 	double		temp[AQ5_NUM_TEMP];
 	uint16_t	fan_current[AQ5_NUM_FAN];
 	uint16_t	fan_rpm[AQ5_NUM_FAN];
-	uint8_t		fan_duty[AQ5_NUM_FAN];
+	double		fan_duty[AQ5_NUM_FAN];
 	double		fan_voltage[AQ5_NUM_FAN];
 	double		fan_vrm_temp[AQ5_NUM_FAN];
 	double		flow[AQ5_NUM_FLOW];
