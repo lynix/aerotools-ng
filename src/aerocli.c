@@ -179,7 +179,7 @@ void print_fans(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 	printf("------------ Fans ------------\n");
 	if (!out_all) {
 		for (int n=0; n<AQ5_NUM_FAN; n++) {
-			if (aq_data->fan_current[n]>0) {
+			if ((aq_sett->fan_data_source[n] != NONE) && (aq_data->fan_vrm_temp[n] != AQ5_FLOAT_UNDEF)) {
 				printf("Fan %2d:   %4drpm @ %.2f%% %2.0f %s\n", n+1,
 						aq_data->fan_rpm[n], aq_data->fan_duty[n],
 						aq_data->fan_vrm_temp[n], temp_unit);
