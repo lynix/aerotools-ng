@@ -31,7 +31,8 @@ bin/aerocli: obj/aerocli.o obj/libaquaero5.o
 obj/aerocli.o: src/aerocli.c src/libaquaero5.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
-obj/libaquaero5.o: src/libaquaero5.c src/libaquaero5.h
+obj/libaquaero5.o: src/libaquaero5.c src/libaquaero5.h \
+		src/aquaero5-user-strings.h src/aquaero5-offsets.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
 

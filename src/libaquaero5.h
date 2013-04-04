@@ -24,28 +24,28 @@
 #include <time.h>
 
 /* sensor quantity */
-#define AQ5_NUM_TEMP			44
-#define AQ5_NUM_FAN			12
-#define AQ5_NUM_FLOW			14
-#define AQ5_NUM_CPU			8
-#define AQ5_NUM_LEVEL			4
-#define AQ5_NUM_INFO_PAGE		32
-#define AQ5_NUM_VIRT_SENSORS		4
-#define AQ5_NUM_SOFT_SENSORS		8
-#define AQ5_NUM_POWER_SENSORS		4
-#define AQ5_NUM_CURVE_POINTS		16
-#define AQ5_NUM_CURVE_CONTROLLERS	4
+#define AQ5_NUM_TEMP					24
+#define AQ5_NUM_FAN						12
+#define AQ5_NUM_FLOW					14
+#define AQ5_NUM_CPU						8
+#define AQ5_NUM_LEVEL					4
+#define AQ5_NUM_INFO_PAGE				32
+#define AQ5_NUM_VIRT_SENSORS			4
+#define AQ5_NUM_SOFT_SENSORS			8
+#define AQ5_NUM_POWER_SENSORS			4
+#define AQ5_NUM_CURVE_POINTS			16
+#define AQ5_NUM_CURVE_CONTROLLERS		4
 #define AQ5_NUM_TARGET_VAL_CONTROLLERS	8
 #define AQ5_NUM_TWO_POINT_CONTROLLERS	16
 #define AQ5_NUM_PRESET_VAL_CONTROLLERS	32
-#define AQ5_NUM_DATA_LOG		16
+#define AQ5_NUM_DATA_LOG				16
 #define AQ5_NUM_ALARM_AND_WARNING_LVLS	8
-#define AQ5_NUM_TEMP_ALARMS		16
-#define AQ5_NUM_FLOW_ALARMS		4
-#define AQ5_NUM_PUMP_ALARMS		4
-#define AQ5_NUM_FILL_ALARMS		4
-#define AQ5_NUM_TIMERS			32
-#define AQ5_NUM_IR_COMMANDS		16
+#define AQ5_NUM_TEMP_ALARMS				16
+#define AQ5_NUM_FLOW_ALARMS				4
+#define AQ5_NUM_PUMP_ALARMS				4
+#define AQ5_NUM_FILL_ALARMS				4
+#define AQ5_NUM_TIMERS					32
+#define AQ5_NUM_IR_COMMANDS				16
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -64,6 +64,8 @@ typedef struct {
 	aq5_time_t	uptime;
 	aq5_time_t	total_time;
 	double		temp[AQ5_NUM_TEMP];
+	double		vtemp[AQ5_NUM_VIRT_SENSORS];
+	double		stemp[AQ5_NUM_SOFT_SENSORS];
 	uint16_t	fan_current[AQ5_NUM_FAN];
 	uint16_t	fan_rpm[AQ5_NUM_FAN];
 	double		fan_duty[AQ5_NUM_FAN];

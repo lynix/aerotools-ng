@@ -168,8 +168,18 @@ void print_sensors(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
 			print_with_offset(aq_data->temp[n], aq_sett->temp_offset[n], temp_unit);
 		else
-			printf("   not connected");
+			printf("not connected");
 		putchar('\n');
+	}
+
+	printf("---- Virtual Sensors -----\n");
+	for (int n=0; n<AQ5_NUM_VIRT_SENSORS; n++) {
+		printf("Sensor %2d     = %.2f %s\n", n+1, aq_data->vtemp[n], temp_unit);
+	}
+
+	printf("---- Software Sensors -----\n");
+	for (int n=0; n<AQ5_NUM_SOFT_SENSORS; n++) {
+		printf("Sensor %2d     = %.2f %s\n", n+1, aq_data->stemp[n], temp_unit);
 	}
 }
 
