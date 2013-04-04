@@ -312,6 +312,11 @@ int aq5_open(char *device, char **err_msg)
 		return -1;
 	}
 
+	if (ioctl(aq5_fd, HIDIOCINITREPORT, 0) < 0) {
+		*err_msg = "failed to init HID reports with HIDIOCINITREPORT";
+		return -1;
+	}
+
 #ifdef DEBUG
 	struct hiddev_string_descriptor hStr;
 	hStr.index = 2; /* Vendor = 1, Product = 2 */
