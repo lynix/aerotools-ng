@@ -47,7 +47,7 @@
 	#define AQ5_FLOW_OFFS				0x0fb
 	#define AQ5_LEVEL_OFFS				0x147
 	#define AQ5_FAN_OFFS				0x169
-#elif ((AQ5_FW_TARGET == 1030) || (AQ5_FW_TARGET == 1028))
+#elif ((AQ5_FW_TARGET <= 1030) && (AQ5_FW_TARGET >= 1028))
 	#define AQ5_CURRENT_TIME_OFFS		0x001
 	#define AQ5_SERIAL_MAJ_OFFS			0x007
 	#define AQ5_SERIAL_MIN_OFFS			0x009
