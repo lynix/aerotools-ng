@@ -190,7 +190,7 @@ void print_fans(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 	if (!out_all) {
 		for (int n=0; n<AQ5_NUM_FAN; n++) {
 			if ((aq_sett->fan_data_source[n] != NONE) && (aq_data->fan_vrm_temp[n] != AQ5_FLOAT_UNDEF)) {
-				printf("Fan %2d:   %4drpm @ %.2f%% %2.0f %s\n", n+1,
+				printf("Fan %2d:   %4drpm @ %3.0f%% %2.0f %s\n", n+1,
 						aq_data->fan_rpm[n], aq_data->fan_duty[n],
 						aq_data->fan_vrm_temp[n], temp_unit);
 			}
@@ -198,7 +198,7 @@ void print_fans(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 	} else {
 		for (int n=0; n<AQ5_NUM_FAN; n++) {
 			if (aq_data->fan_vrm_temp[n] != AQ5_FLOAT_UNDEF) {
-				printf("Fan %2d:   %4drpm @ %.2f%% %5.2f V\n", n+1,
+				printf("Fan %2d:   %4drpm @ %3.0f%% %5.2f V\n", n+1,
 					aq_data->fan_rpm[n], aq_data->fan_duty[n],
 					aq_data->fan_voltage[n]);
 				printf("               %4d mA  %5.2f %s\n", aq_data->fan_current[n],
