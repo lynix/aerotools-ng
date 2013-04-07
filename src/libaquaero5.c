@@ -234,6 +234,7 @@ int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *r
 
 	rinfo.report_type = report_type;
 	rinfo.report_id = report_id;
+	rinfo.num_fields = 1;
 	if (ioctl(fd, HIDIOCGREPORTINFO, &rinfo) != 0) {
 		fprintf(stderr, "failed to fetch input report id %d\n", report_id);
 		return -1;
@@ -250,6 +251,11 @@ int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *r
 	/* Put the report ID into the first byte to be consistant with hidraw */
 	report_data[0] = report_id;
 	/* printf("Max usage is %d\n", finfo.maxusage); */
+	/* request feature reports only */
+	if(ioctl(fd, HIDIOCGREPORT, &rinfo) != 0) {
+		fprintf(stderr, "Failed to HIDIOCGREPORT for report %d\n", finfo.report_id);
+		return -1;
+	}
 	for (j = 0; j < finfo.maxusage; j++) {
 		uref.report_type = finfo.report_type;
 		uref.report_id   = finfo.report_id;
