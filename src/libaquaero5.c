@@ -30,7 +30,6 @@
 #include <sys/utsname.h>
 #include <sys/ioctl.h>
 #include <linux/hiddev.h>
-#include <linux/version.h>
 #include <dirent.h>
 
 /* usb communication related constants */
@@ -231,7 +230,7 @@ int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *r
 	struct hiddev_report_info rinfo;
 	struct hiddev_field_info finfo;
 	struct hiddev_usage_ref uref;
-	int j, report_length;
+	int j;
 
 	rinfo.report_type = report_type;
 	rinfo.report_id = report_id;
@@ -252,13 +251,10 @@ int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *r
 	/* Put the report ID into the first byte to be consistant with hidraw */
 	report_data[0] = report_id;
 	/* printf("Max usage is %d\n", finfo.maxusage); */
-	report_length = finfo.maxusage;
-	if ((LINUX_VERSION_CODE > KERNEL_VERSION(3,0,0)) && (report_type == HID_REPORT_TYPE_FEATURE)) {
-		/* request feature reports only */
-		if(ioctl(fd, HIDIOCGREPORT, &rinfo) != 0) {
-			fprintf(stderr, "Failed to HIDIOCGREPORT for report %d\n", finfo.report_id);
-			return -1;
-		}
+	/* request feature reports only */
+	if(ioctl(fd, HIDIOCGREPORT, &rinfo) != 0) {
+		fprintf(stderr, "Failed to HIDIOCGREPORT for report %d\n", finfo.report_id);
+		return -1;
 	}
 	for (j = 0; j < finfo.maxusage; j++) {
 		uref.report_type = finfo.report_type;
