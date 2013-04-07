@@ -369,6 +369,21 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->temp_offset[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
 	}
 	
+	/* temperature offset setting */
+	for (int i=0; i<AQ5_NUM_VIRT_SENSORS; i++) {
+		settings_dest->vtemp_offset[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_VTEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
+	}
+	
+	/* temperature offset setting */
+	for (int i=0; i<AQ5_NUM_SOFT_SENSORS; i++) {
+		settings_dest->stemp_offset[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_STEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
+	}
+
+	/* temperature offset setting */
+	for (int i=0; i<AQ5_NUM_OTHER_SENSORS; i++) {
+		settings_dest->otemp_offset[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_OTEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
+	}
+	
 	/* Fan VRM temperature offset setting */
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
 		settings_dest->fan_vrm_temp_offset[i] = (double)aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_VRM_TEMP_OFFS_OFFS + i * AQ5_TEMP_DIST) /100.0;
@@ -705,6 +720,12 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg)
 	for (int i=0; i<AQ5_NUM_SOFT_SENSORS; i++) {
 		n = aq5_get_int16(aq5_buf_data, AQ5_STEMP_OFFS  + i * AQ5_TEMP_DIST);
 		data_dest->stemp[i] = n!=AQ5_TEMP_UNDEF ? (double)n/100.0 : AQ5_FLOAT_UNDEF;
+	}
+
+	/* other temperature sensors */
+	for (int i=0; i<AQ5_NUM_OTHER_SENSORS; i++) {
+		n = aq5_get_int16(aq5_buf_data, AQ5_OTEMP_OFFS  + i * AQ5_TEMP_DIST);
+		data_dest->otemp[i] = n!=AQ5_TEMP_UNDEF ? (double)n/100.0 : AQ5_FLOAT_UNDEF;
 	}
 
 	/* fans */
