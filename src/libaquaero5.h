@@ -52,17 +52,15 @@
 
 
 /* structures holding device data */
-typedef struct tm aq5_time_t;
-
 typedef struct {
-	aq5_time_t	time_utc;
+	struct tm	time_utc;
 	uint16_t	serial_major;
 	uint16_t	serial_minor;
 	uint16_t	firmware_version;
 	uint16_t	bootloader_version;
 	uint16_t	hardware_version;
-	aq5_time_t	uptime;
-	aq5_time_t	total_time;
+	struct tm	uptime;
+	struct tm	total_time;
 	double		temp[AQ5_NUM_TEMP];
 	double		vtemp[AQ5_NUM_VIRT_SENSORS];
 	double		stemp[AQ5_NUM_SOFT_SENSORS];
@@ -709,7 +707,7 @@ typedef struct {
 
 typedef struct {
 	active_days_t	active_days;
-	aq5_time_t	switching_time;
+	struct tm		switching_time;
 	event_action_t	action;
 } aq_timer_t;
 

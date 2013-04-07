@@ -116,6 +116,7 @@ void print_system(aq5_data_t *aq_data, aq5_settings_t *aq_sett) {
 	time(&systime_t);
 	systime = localtime(&systime_t);
 	aq_time_t += systime->tm_gmtoff;
+	aq_time_t -= systime->tm_isdst * 3600;
 	local_aq_time = localtime(&aq_time_t);
 
 	/* pre-convert times to strings */
@@ -246,6 +247,7 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 	time(&systime_t);
 	systime = localtime(&systime_t);
 	aq_time_t += systime->tm_gmtoff;
+	aq_time_t -= systime->tm_isdst * 3600;
 	local_aq_time = localtime(&aq_time_t);
 
 	/* pre-convert times to strings */

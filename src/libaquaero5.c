@@ -83,7 +83,7 @@ inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
 
 
 /* get the uptime for the given value in seconds */
-inline void aq5_get_uptime(uint32_t timeval, aq5_time_t *uptime)
+inline void aq5_get_uptime(uint32_t timeval, struct tm *uptime)
 {
 	uptime->tm_sec = timeval;
 	uptime->tm_min = uptime->tm_sec / 60;
@@ -98,15 +98,15 @@ inline void aq5_get_uptime(uint32_t timeval, aq5_time_t *uptime)
 }
 
 
-inline void aq5_get_time(uint32_t timeval, aq5_time_t *time)
+inline void aq5_get_time(uint32_t timeval, struct tm *time)
 {
 	time->tm_min = 0;
 	time->tm_hour = 0;
 	time->tm_mday = 1;
 	time->tm_mon = 0;
 	time->tm_year = 109;
-	time->tm_gmtoff = 0;
 	time->tm_sec = timeval;
+	time->tm_gmtoff = 0;
 	mktime(time);
 }
 
