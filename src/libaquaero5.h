@@ -24,7 +24,7 @@
 #include <time.h>
 
 /* sensor quantity */
-#define AQ5_NUM_TEMP					24
+#define AQ5_NUM_TEMP					16
 #define AQ5_NUM_FAN						12
 #define AQ5_NUM_FLOW					14
 #define AQ5_NUM_CPU						8
@@ -32,6 +32,7 @@
 #define AQ5_NUM_INFO_PAGE				32
 #define AQ5_NUM_VIRT_SENSORS			4
 #define AQ5_NUM_SOFT_SENSORS			8
+#define AQ5_NUM_OTHER_SENSORS			16
 #define AQ5_NUM_POWER_SENSORS			4
 #define AQ5_NUM_CURVE_POINTS			16
 #define AQ5_NUM_CURVE_CONTROLLERS		4
@@ -64,6 +65,7 @@ typedef struct {
 	double		temp[AQ5_NUM_TEMP];
 	double		vtemp[AQ5_NUM_VIRT_SENSORS];
 	double		stemp[AQ5_NUM_SOFT_SENSORS];
+	double		otemp[AQ5_NUM_OTHER_SENSORS];
 	uint16_t	fan_current[AQ5_NUM_FAN];
 	uint16_t	fan_rpm[AQ5_NUM_FAN];
 	double		fan_duty[AQ5_NUM_FAN];
@@ -797,6 +799,9 @@ typedef struct {
 	language_t		language;
 	info_page_t		info_page[AQ5_NUM_INFO_PAGE];	
 	double			temp_offset[AQ5_NUM_TEMP];
+	double			vtemp_offset[AQ5_NUM_VIRT_SENSORS];
+	double			stemp_offset[AQ5_NUM_SOFT_SENSORS];
+	double			otemp_offset[AQ5_NUM_OTHER_SENSORS];
 	double			fan_vrm_temp_offset[AQ5_NUM_TEMP];
 	double			cpu_temp_offset[AQ5_NUM_TEMP];
 	uint16_t		fan_min_rpm[AQ5_NUM_FAN];
