@@ -41,7 +41,8 @@
 	#define AQ5_TOTAL_TIME_OFFS			0x015
 	#define AQ5_TEMP_OFFS				0x067
 	#define AQ5_VTEMP_OFFS				0x097
-	#define AQ5_STEMP_OFFS				0x09f
+	#define AQ5_STEMP_OFFS				0x087
+	#define AQ5_OTEMP_OFFS				0x09f
 	#define AQ5_FAN_VRM_OFFS			0x0bf
 	#define AQ5_CPU_TEMP_OFFS			0x0d7
 	#define AQ5_FLOW_OFFS				0x0fb
@@ -58,7 +59,8 @@
 	#define AQ5_TOTAL_TIME_OFFS			0x015
 	#define AQ5_TEMP_OFFS				0x069
 	#define AQ5_VTEMP_OFFS				0x099
-	#define AQ5_STEMP_OFFS				0x0a1
+	#define AQ5_STEMP_OFFS				0x089
+	#define AQ5_OTEMP_OFFS				0x0a1
 	#define AQ5_FAN_VRM_OFFS			0x0c1
 	#define AQ5_CPU_TEMP_OFFS			0x0d9
 	#define AQ5_FLOW_OFFS				0x0fd
@@ -78,6 +80,9 @@
 /* data offsets for HID feature report 0xB */
 #define AQ5_SETTINGS_FAN_OFFS					0x20d
 #define AQ5_SETTINGS_TEMP_OFFS_OFFS				0x0dc
+#define AQ5_SETTINGS_VTEMP_OFFS_OFFS				0x10c
+#define AQ5_SETTINGS_STEMP_OFFS_OFFS				0x0fc
+#define AQ5_SETTINGS_OTEMP_OFFS_OFFS				0x114
 #define AQ5_SETTINGS_VRM_TEMP_OFFS_OFFS			0x134
 #define AQ5_SETTINGS_CPU_TEMP_OFFS_OFFS			0x14c
 #define AQ5_SETTINGS_LANGUAGE_OFFS				0x01a
