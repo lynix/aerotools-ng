@@ -799,6 +799,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 	int i;
 	val_str_t *val_str;
 	switch (opt) {
+		case FAN_REGULATION_MODE:
+			val_str = fan_regulation_mode_strings;
+			break;
 		case BOOLEAN:
 			val_str = boolean_strings;
 			break;

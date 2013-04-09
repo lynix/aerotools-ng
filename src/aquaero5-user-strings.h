@@ -25,6 +25,13 @@ typedef struct {
 	char	*str;
 } val_str_t;
 
+/* Fan regulation mode strings */
+val_str_t fan_regulation_mode_strings[] = {
+	{ (fan_regulation_mode_t)M_OUTPUT, 	"Output" },
+	{ (fan_regulation_mode_t)M_RPM, 	"RPM" },
+	{ -1, 					"Unknown" }
+};
+
 /* Language setting strings */
 val_str_t language_strings[] = {
 	{ (language_t)ENGLISH,	"English" },
