@@ -370,24 +370,29 @@ void print_settings(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		printf("RGB LED high temperature setting green LED: %d\n", aq_sett->rgb_led_controller_config.high_temp.green_led);
 		printf("RGB LED high temperature setting blue LED: %d\n", aq_sett->rgb_led_controller_config.high_temp.blue_led);
 	}
-	/*
-		for (int n=0; n<AQ5_NUM_TWO_POINT_CONTROLLERS; n++) {
-			printf("TWO_POINT_CONTROLLER%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->two_point_controller_config[n].data_source, SENSOR_DATA_SOURCE));
-			printf("TWO_POINT_CONTROLLER%d_UPPER_LIMIT=%.2f\n", n+1, aq_sett->two_point_controller_config[n].upper_limit);
-			printf("TWO_POINT_CONTROLLER%d_LOWER_LIMIT=%.2f\n", n+1, aq_sett->two_point_controller_config[n].lower_limit);
+	for (int n=0; n<AQ5_NUM_TWO_POINT_CONTROLLERS; n++) {
+		if (aq_sett->two_point_controller_config[n].data_source != NO_DATA_SOURCE) {
+			printf("Two point controller %d data source: %s\n", n+1, libaquaero5_get_string(aq_sett->two_point_controller_config[n].data_source, SENSOR_DATA_SOURCE));
+			printf("Two point controller %d upper limit: %.2f\n", n+1, aq_sett->two_point_controller_config[n].upper_limit);
+			printf("Two point controller %d lower limit: %.2f\n", n+1, aq_sett->two_point_controller_config[n].lower_limit);
 		}
-		for (int n=0; n<AQ5_NUM_PRESET_VAL_CONTROLLERS; n++)
-			printf("PRESET_VAL_CONTROLLER%d=%d\n", n+1, aq_sett->preset_value_controller[n]);
-		for (int n=0; n<AQ5_NUM_TARGET_VAL_CONTROLLERS; n++) {
-			printf("TARGET_VAL_CONTROLLER%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->target_value_controller_config[n].data_source, SENSOR_DATA_SOURCE));
-			printf("TARGET_VAL_CONTROLLER%d_TARGET_VALUE=%.2f\n", n+1, aq_sett->target_value_controller_config[n].target_val);
-			printf("TARGET_VAL_CONTROLLER%d_FACTOR_P=%d\n", n+1, aq_sett->target_value_controller_config[n].factor_p);
-			printf("TARGET_VAL_CONTROLLER%d_FACTOR_I=%.1f\n", n+1, aq_sett->target_value_controller_config[n].factor_i);
-			printf("TARGET_VAL_CONTROLLER%d_FACTOR_D=%d\n", n+1, aq_sett->target_value_controller_config[n].factor_d);
-			printf("TARGET_VAL_CONTROLLER%d_RESET_TIME=%.1f\n", n+1, aq_sett->target_value_controller_config[n].reset_time);
-			printf("TARGET_VAL_CONTROLLER%d_HYSTERESIS=%.2f\n", n+1, aq_sett->target_value_controller_config[n].hysteresis);
+	}
+	for (int n=0; n<AQ5_NUM_PRESET_VAL_CONTROLLERS; n++) {
+		if (aq_sett->preset_value_controller[n] != 0) 
+			printf("Preset value controller %d: %d\n", n+1, aq_sett->preset_value_controller[n]);
+	}
+	for (int n=0; n<AQ5_NUM_TARGET_VAL_CONTROLLERS; n++) {
+		if (aq_sett->target_value_controller_config[n].data_source != NO_DATA_SOURCE) {
+			printf("Target value controller %d data source: %s\n", n+1, libaquaero5_get_string(aq_sett->target_value_controller_config[n].data_source, SENSOR_DATA_SOURCE));
+			printf("Target value controller %d target value: %.2f\n", n+1, aq_sett->target_value_controller_config[n].target_val);
+			printf("Target value controller %d factor P: %d\n", n+1, aq_sett->target_value_controller_config[n].factor_p);
+			printf("Target value controller %d factor I: %.1f\n", n+1, aq_sett->target_value_controller_config[n].factor_i);
+			printf("Target value controller %d factor D: %d\n", n+1, aq_sett->target_value_controller_config[n].factor_d);
+			printf("Target value controller %d reset time: %.1f\n", n+1, aq_sett->target_value_controller_config[n].reset_time);
+			printf("Target value controller %d hysteresis: %.2f\n", n+1, aq_sett->target_value_controller_config[n].hysteresis);
 		}
-		for (int n=0; n<AQ5_NUM_CURVE_CONTROLLERS; n++) {
+	}
+	/*	for (int n=0; n<AQ5_NUM_CURVE_CONTROLLERS; n++) {
 			printf("CURVE_CONTROLLER%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->curve_controller_config[n].data_source, SENSOR_DATA_SOURCE));
 			printf("CURVE_CONTROLLER%d_STARTUP_TEMP=%.2f\n", n+1, aq_sett->curve_controller_config[n].startup_temp);
 			for (int m=0; m<AQ5_NUM_CURVE_POINTS; m++) {
