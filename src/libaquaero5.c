@@ -251,7 +251,6 @@ int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *r
 	/* Put the report ID into the first byte to be consistant with hidraw */
 	report_data[0] = report_id;
 	/* printf("Max usage is %d\n", finfo.maxusage); */
-	/* request feature reports only */
 	if(ioctl(fd, HIDIOCGREPORT, &rinfo) != 0) {
 		fprintf(stderr, "Failed to HIDIOCGREPORT for report %d\n", finfo.report_id);
 		return -1;
@@ -755,7 +754,7 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg)
 	}
 
 	/* firmware compatibility check */
-	if (data_dest->firmware_version != AQ5_FW_TARGET)
+	if ((data_dest->firmware_version < AQ5_FW_MIN) || (data_dest->firmware_version > AQ5_FW_MAX))
 		*err_msg = "unsupported firmware version";
 
 	return 0;
