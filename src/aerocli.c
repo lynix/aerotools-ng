@@ -427,73 +427,90 @@ void print_settings(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			}
 		}
 	}
-	/*	printf("ALARM_SUPPRESS_AT_POWERON=%d\n", aq_sett->suppress_alarm_at_poweron);
-		for (int n=0; n<AQ5_NUM_TEMP_ALARMS; n++) {
-			printf("TEMP_ALARM%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->temp_alarm[n].data_source, SENSOR_DATA_SOURCE));
-			printf("TEMP_ALARM%d_CONFIG='%s'\n", n+1, libaquaero5_get_string(aq_sett->temp_alarm[n].config, TEMP_ALARM_CONFIG));
-			printf("TEMP_ALARM%d_LIMIT_FOR_WARNING=%.2f\n", n+1, aq_sett->temp_alarm[n].limit_for_warning);
-			printf("TEMP_ALARM%d_SET_WARNING_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->temp_alarm[n].set_warning_level, ALARM_WARNING_LEVELS));
-			printf("TEMP_ALARM%d_LIMIT_FOR_ALARM=%.2f\n", n+1, aq_sett->temp_alarm[n].limit_for_alarm);
-			printf("TEMP_ALARM%d_SET_ALARM_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->temp_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
+	printf("Suppress alarm at power on: %d\n", aq_sett->suppress_alarm_at_poweron);
+	for (int n=0; n<AQ5_NUM_TEMP_ALARMS; n++) {
+		if ((aq_sett->temp_alarm[n].data_source != NO_DATA_SOURCE) && (aq_sett->temp_alarm[n].config != TEMP_ALARM_OFF)) {
+			printf("Temperature alarm %d data source: %s\n", n+1, libaquaero5_get_string(aq_sett->temp_alarm[n].data_source, SENSOR_DATA_SOURCE));
+			printf("Temperature alarm %d config: %s\n", n+1, libaquaero5_get_string(aq_sett->temp_alarm[n].config, TEMP_ALARM_CONFIG));
+			printf("Temperature alarm %d limit for warning: %.2f\n", n+1, aq_sett->temp_alarm[n].limit_for_warning);
+			printf("Temperature alarm %d set warning level: %s\n", n+1, libaquaero5_get_string(aq_sett->temp_alarm[n].set_warning_level, ALARM_WARNING_LEVELS));
+			printf("Temperature alarm %d limit for alarm: %.2f\n", n+1, aq_sett->temp_alarm[n].limit_for_alarm);
+			printf("Temperature alarm %d set alarm level: %s\n", n+1, libaquaero5_get_string(aq_sett->temp_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
 		}
-		for (int n=0; n<AQ5_NUM_FAN; n++) {
-			printf("FAN%d_ALARM_LIMIT_FOR_WARNING='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].limit_for_warning, FAN_LIMITS));
-			printf("FAN%d_SET_WARNING_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].set_warning_level, ALARM_WARNING_LEVELS));
-			printf("FAN%d_ALARM_LIMIT_FOR_ALARM='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].limit_for_alarm, FAN_LIMITS));
-			printf("FAN%d_SET_ALARM_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
+	}
+	for (int n=0; n<AQ5_NUM_FAN; n++) {
+		if ((aq_sett->fan_alarm[n].limit_for_warning != RPM_OFF) || (aq_sett->fan_alarm[n].limit_for_alarm != RPM_OFF)) {
+			printf("Fan %d alarm limit for warning: %s\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].limit_for_warning, FAN_LIMITS));
+			printf("Fan %d set warning level: %s\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].set_warning_level, ALARM_WARNING_LEVELS));
+			printf("Fan %d alarm limit for alarm: %s\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].limit_for_alarm, FAN_LIMITS));
+			printf("Fan %d set alarm level: %s\n", n+1, libaquaero5_get_string(aq_sett->fan_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
 		}
-		for (int n=0; n<AQ5_NUM_FLOW_ALARMS; n++) {
-			printf("FLOW_ALARM%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->flow_alarm[n].data_source, SENSOR_DATA_SOURCE));
-			printf("FLOW_ALARM%d_CONFIG='%s'\n", n+1, libaquaero5_get_string(aq_sett->flow_alarm[n].config, FLOW_CONFIG));
-			printf("FLOW_ALARM%d_LIMIT_FOR_WARNING=%.1f\n", n+1, aq_sett->flow_alarm[n].limit_for_warning);
-			printf("FLOW_ALARM%d_SET_WARNING_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->flow_alarm[n].set_warning_level, ALARM_WARNING_LEVELS));
-			printf("FLOW_ALARM%d_LIMIT_FOR_ALARM=%.1f\n", n+1, aq_sett->flow_alarm[n].limit_for_alarm);
-			printf("FLOW_ALARM%d_SET_ALARM_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->flow_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
+	}
+	for (int n=0; n<AQ5_NUM_FLOW_ALARMS; n++) {
+		if ((aq_sett->flow_alarm[n].data_source != NO_DATA_SOURCE) && (aq_sett->flow_alarm[n].config != FLOW_OFF)) {
+			printf("Flow alarm %d data source: %s\n", n+1, libaquaero5_get_string(aq_sett->flow_alarm[n].data_source, SENSOR_DATA_SOURCE));
+			printf("Flow alarm %d config: %s\n", n+1, libaquaero5_get_string(aq_sett->flow_alarm[n].config, FLOW_CONFIG));
+			printf("Flow alarm %d limit for warning: %.1f\n", n+1, aq_sett->flow_alarm[n].limit_for_warning);
+			printf("Flow alarm %d set warning level: %s\n", n+1, libaquaero5_get_string(aq_sett->flow_alarm[n].set_warning_level, ALARM_WARNING_LEVELS));
+			printf("Flow alarm %d limit for alarm: %.1f\n", n+1, aq_sett->flow_alarm[n].limit_for_alarm);
+			printf("Flow alarm %d set alarm level: %s\n", n+1, libaquaero5_get_string(aq_sett->flow_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
 		}
-		for (int n=0; n<AQ5_NUM_PUMP_ALARMS; n++) {
-			printf("PUMP_ALARM%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->pump_alarm[n].data_source, SENSOR_DATA_SOURCE));
-			printf("PUMP_ALARM%d_CONFIG='%s'\n", n+1, libaquaero5_get_string(aq_sett->pump_alarm[n].config, STATE_ENABLE_DISABLE_INV));
-			printf("PUMP_ALARM%d_SET_ALARM_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->pump_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
+	}
+	for (int n=0; n<AQ5_NUM_PUMP_ALARMS; n++) {
+		if ((aq_sett->pump_alarm[n].data_source != NO_DATA_SOURCE) && (aq_sett->pump_alarm[n].config != STATE_DISABLED_INV)) {
+			printf("Pump alarm %d data source: %s\n", n+1, libaquaero5_get_string(aq_sett->pump_alarm[n].data_source, SENSOR_DATA_SOURCE));
+			printf("Pump alarm %d config: %s\n", n+1, libaquaero5_get_string(aq_sett->pump_alarm[n].config, STATE_ENABLE_DISABLE_INV));
+			printf("Pump alarm %d set alarm level: %s\n", n+1, libaquaero5_get_string(aq_sett->pump_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
 		}
-		for (int n=0; n<AQ5_NUM_FILL_ALARMS; n++) {
-			printf("FILL_ALARM%d_DATA_SOURCE='%s'\n", n+1, libaquaero5_get_string(aq_sett->fill_alarm[n].data_source, SENSOR_DATA_SOURCE));
-			printf("FILL_ALARM%d_CONFIG='%s'\n", n+1, libaquaero5_get_string(aq_sett->fill_alarm[n].config, STATE_ENABLE_DISABLE_INV));
-			printf("FILL_ALARM%d_LIMIT_FOR_WARNING=%d\n", n+1, aq_sett->fill_alarm[n].limit_for_warning);
-			printf("FILL_ALARM%d_SET_WARNING_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->fill_alarm[n].set_warning_level, ALARM_WARNING_LEVELS));
-			printf("FILL_ALARM%d_LIMIT_FOR_ALARM=%d\n", n+1, aq_sett->fill_alarm[n].limit_for_alarm);
-			printf("FILL_ALARM%d_SET_ALARM_LEVEL='%s'\n", n+1, libaquaero5_get_string(aq_sett->fill_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
+	}
+	for (int n=0; n<AQ5_NUM_FILL_ALARMS; n++) {
+		if ((aq_sett->fill_alarm[n].data_source!= NO_DATA_SOURCE) && (aq_sett->fill_alarm[n].config != STATE_DISABLED_INV)) {
+			printf("Fill alarm %d data source: %s\n", n+1, libaquaero5_get_string(aq_sett->fill_alarm[n].data_source, SENSOR_DATA_SOURCE));
+			printf("Fill alarm %d config: %s\n", n+1, libaquaero5_get_string(aq_sett->fill_alarm[n].config, STATE_ENABLE_DISABLE_INV));
+			printf("Fill alarm %d limit for warning: %d\n", n+1, aq_sett->fill_alarm[n].limit_for_warning);
+			printf("Fill alarm %d set warning level: %s\n", n+1, libaquaero5_get_string(aq_sett->fill_alarm[n].set_warning_level, ALARM_WARNING_LEVELS));
+			printf("Fill alarm %d limit for alarm: %d\n", n+1, aq_sett->fill_alarm[n].limit_for_alarm);
+			printf("Fill alarm %d set alarm level: %s\n", n+1, libaquaero5_get_string(aq_sett->fill_alarm[n].set_alarm_level, ALARM_WARNING_LEVELS));
 		}
-		for (int n=0; n<AQ5_NUM_TIMERS; n++) {
+	}
+	for (int n=0; n<AQ5_NUM_TIMERS; n++) {
+		if (( (aq_sett->timer[n].active_days.sunday == TRUE) || (aq_sett->timer[n].active_days.monday == TRUE) || (aq_sett->timer[n].active_days.tuesday == TRUE) || (aq_sett->timer[n].active_days.wednesday == TRUE) || (aq_sett->timer[n].active_days.thursday == TRUE) || (aq_sett->timer[n].active_days.friday == TRUE) || (aq_sett->timer[n].active_days.saturday == TRUE)) && (aq_sett->timer[n].action != NO_ACTION)) {
 			char timer_time_str[21];
-			printf("TIMER%d_ACTIVE_SUNDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.sunday, BOOLEAN));
-			printf("TIMER%d_ACTIVE_MONDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.monday, BOOLEAN));
-			printf("TIMER%d_ACTIVE_TUESDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.tuesday, BOOLEAN));
-			printf("TIMER%d_ACTIVE_WEDNESDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.wednesday, BOOLEAN));
-			printf("TIMER%d_ACTIVE_THURSDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.thursday, BOOLEAN));
-			printf("TIMER%d_ACTIVE_FRIDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.friday, BOOLEAN));
-			printf("TIMER%d_ACTIVE_SATURDAY='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.saturday, BOOLEAN));
+			printf("Timer %d active Sunday: %s\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.sunday, BOOLEAN));
+			printf("Timer %d active Monday: %s\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.monday, BOOLEAN));
+			printf("Timer %d active Tuesday: %s\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.tuesday, BOOLEAN));
+			printf("Timer %d active Wednesday: %s\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.wednesday, BOOLEAN));
+			printf("Timer %d active Thursday: %s\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.thursday, BOOLEAN));
+			printf("Timer %d active Friday: %s\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.friday, BOOLEAN));
+			printf("Timer %d active Saturday: %s\n", n+1, libaquaero5_get_string(aq_sett->timer[n].active_days.saturday, BOOLEAN));
 			strftime(timer_time_str, 20, "%H:%M:%S", &aq_sett->timer[n].switching_time);
-			printf("TIMER%d_SWITCHING_TIME='%s'\n", n+1, timer_time_str);
-			printf("TIMER%d_ACTION='%s'\n", n+1, libaquaero5_get_string(aq_sett->timer[n].action, EVENT_ACTION));
+			printf("Timer %d switching time: %s\n", n+1, timer_time_str);
+			printf("Timer %d action: %s\n", n+1, libaquaero5_get_string(aq_sett->timer[n].action, EVENT_ACTION));
 		}
-		printf("IR_FUNCTION_AQUAERO_CONTROL_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.aquaero_control, BOOLEAN));
-		printf("IR_FUNCTION_PC_MOUSE_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.pc_mouse, BOOLEAN));
-		printf("IR_FUNCTION_PC_KEYBOARD_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.pc_keyboard, BOOLEAN));
-		printf("IR_FUNCTION_SB_FWDING_OF_UNKNOWN_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.usb_forwarding_of_unknown, BOOLEAN));
-		printf("IR_KEYBOARD_LAYOUT='%s'\n", libaquaero5_get_string(aq_sett->infrared_keyboard_layout, LANGUAGE));
+	}
+	if (aq_sett->infrared_functions.aquaero_control == TRUE) {
+		printf("Aquaero IR control active: %s\n", libaquaero5_get_string(aq_sett->infrared_functions.aquaero_control, BOOLEAN));
+		printf("IR functions: PC mouse active: %s\n", libaquaero5_get_string(aq_sett->infrared_functions.pc_mouse, BOOLEAN));
+		printf("IR functions: PC keyboard active: %s\n", libaquaero5_get_string(aq_sett->infrared_functions.pc_keyboard, BOOLEAN));
+		printf("IR functions: USB forwarding of unknown: %s\n", libaquaero5_get_string(aq_sett->infrared_functions.usb_forwarding_of_unknown, BOOLEAN));
+		printf("IR keyboard layout: %s\n", libaquaero5_get_string(aq_sett->infrared_keyboard_layout, LANGUAGE));
 		for (int n=0; n<AQ5_NUM_IR_COMMANDS; n++) {
-			printf("IR_COMMAND%d_CONFIG='%s'\n", n+1, libaquaero5_get_string(aq_sett->trained_ir_commands[n].config, STATE_ENABLE_DISABLE));
-			printf("IR_COMMAND%d_ACTION='%s'\n", n+1, libaquaero5_get_string(aq_sett->trained_ir_commands[n].action, EVENT_ACTION));
-			printf("IR_COMMAND%d_REFRESH_RATE=%d\n", n+1, aq_sett->trained_ir_commands[n].refresh_rate);
-			printf("IR_COMMAND%d_LEARNED_IR_SIGNAL=%05d-%05d-%05d\n", n+1, aq_sett->trained_ir_commands[n].learned_ir_signal[0], aq_sett->trained_ir_commands[n].learned_ir_signal[1], aq_sett->trained_ir_commands[n].learned_ir_signal[2]);
+			if (aq_sett->trained_ir_commands[n].config == STATE_ENABLED) {
+				printf("IR command %d config: %s\n", n+1, libaquaero5_get_string(aq_sett->trained_ir_commands[n].config, STATE_ENABLE_DISABLE));
+				printf("IR command %d action: %s\n", n+1, libaquaero5_get_string(aq_sett->trained_ir_commands[n].action, EVENT_ACTION));
+				printf("IR command %d refresh rate: %d\n", n+1, aq_sett->trained_ir_commands[n].refresh_rate);
+				printf("IR command %d learned IR signal: %05d-%05d-%05d\n", n+1, aq_sett->trained_ir_commands[n].learned_ir_signal[0], aq_sett->trained_ir_commands[n].learned_ir_signal[1], aq_sett->trained_ir_commands[n].learned_ir_signal[2]);
+			}
 		}
-		printf("SWITCH_PC_VIA_IR_CONFIG='%s'\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.config, STATE_ENABLE_DISABLE));
-		printf("SWITCH_PC_VIA_IR_ACTION_ON='%s'\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.action_on, EVENT_ACTION));
-		printf("SWITCH_PC_VIA_IR_ACTION_OFF='%s'\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.action_off, EVENT_ACTION));
-		printf("SWITCH_PC_VIA_IR_REFRESH_RATE=%d\n", aq_sett->switch_pc_via_ir.refresh_rate);
-		printf("SWITCH_PC_VIA_IR_LEARNED_IR_SIGNAL=%05d-%05d-%05d\n", aq_sett->switch_pc_via_ir.learned_ir_signal[0], aq_sett->switch_pc_via_ir.learned_ir_signal[1], aq_sett->switch_pc_via_ir.learned_ir_signal[2]);
-		printf("ALLOW_OUTPUT_OVERRIDE='%s'\n", libaquaero5_get_string(aq_sett->allow_output_override, DISABLE_KEYS));
-	*/
+		if (aq_sett->switch_pc_via_ir.config == STATE_ENABLED) {
+			printf("Switch PC via IR config: %s\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.config, STATE_ENABLE_DISABLE));
+			printf("Switch PC via IR action on: %s\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.action_on, EVENT_ACTION));
+			printf("Switch PC via IR action off: %s\n", libaquaero5_get_string(aq_sett->switch_pc_via_ir.action_off, EVENT_ACTION));
+			printf("Switch PC via IR refresh rate: %d\n", aq_sett->switch_pc_via_ir.refresh_rate);
+			printf("Switch PC via IR learned IR signal: %05d-%05d-%05d\n", aq_sett->switch_pc_via_ir.learned_ir_signal[0], aq_sett->switch_pc_via_ir.learned_ir_signal[1], aq_sett->switch_pc_via_ir.learned_ir_signal[2]);
+		}
+	}
+	printf("Allow output override: %s\n", libaquaero5_get_string(aq_sett->allow_output_override, DISABLE_KEYS));
 }
 
 
@@ -762,7 +779,7 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		printf("IR_FUNCTION_AQUAERO_CONTROL_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.aquaero_control, BOOLEAN));
 		printf("IR_FUNCTION_PC_MOUSE_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.pc_mouse, BOOLEAN));
 		printf("IR_FUNCTION_PC_KEYBOARD_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.pc_keyboard, BOOLEAN));
-		printf("IR_FUNCTION_SB_FWDING_OF_UNKNOWN_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.usb_forwarding_of_unknown, BOOLEAN));
+		printf("IR_FUNCTION_USB_FWDING_OF_UNKNOWN_ACTIVE='%s'\n", libaquaero5_get_string(aq_sett->infrared_functions.usb_forwarding_of_unknown, BOOLEAN));
 		printf("IR_KEYBOARD_LAYOUT='%s'\n", libaquaero5_get_string(aq_sett->infrared_keyboard_layout, LANGUAGE));
 		for (int n=0; n<AQ5_NUM_IR_COMMANDS; n++) {
 			printf("IR_COMMAND%d_CONFIG='%s'\n", n+1, libaquaero5_get_string(aq_sett->trained_ir_commands[n].config, STATE_ENABLE_DISABLE));
