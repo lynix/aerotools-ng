@@ -46,6 +46,9 @@
 # Revision history
 ####
 #
+# v0.02 4/13/2013 JinTu <JinTu@praecogito.com>
+# 	Adding support for virtual, software and other sensors.
+#
 # v0.01 1/29/2013 JinTu <JinTu@praecogito.com>
 # 	First working version. Only supports sensor readings, not settings.
 #
@@ -102,6 +105,27 @@
 #   Level value
 #   .1.3.6.1.4.1.2021.255.65.67.1.1.6
 #
+# Virtual sensors
+# .1.3.6.1.4.1.2021.255.65.67.1.1.7
+#   Name
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.7.1
+#   Virtual sensor value
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.7.2
+#
+# Software sensors
+# .1.3.6.1.4.1.2021.255.65.67.1.1.8
+#   Name
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.8.1
+#   Software sensor value
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.8.2
+#
+# Other sensors
+# .1.3.6.1.4.1.2021.255.65.67.1.1.9
+#   Name
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.9.1
+#   Other sensor value
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.9.2
+
 ###
 #
 # Settings
@@ -132,7 +156,8 @@ use strict;
 
 
 #------------------------------------------------------------#
-my $aeroclicmd = "/usr/local/sbin/aerocli -a -o export";
+my $aeroclipath = "/usr/local/sbin/";
+my $aeroclicmd = $aeroclipath . "aerocli -a -o export";
 
 #my $debug = 1;
 my $debug = 0;
@@ -262,6 +287,27 @@ sub create_mib {
 			print "Level sensor $levelnum = $levelval (" . strip_decimal($levelval) . ")\n" if $debug;
 			$tmpmib{"1.1.6.1.0.$levelnum"} = [ "string", "Level$levelnum" ];
 			$tmpmib{"1.1.6.2.0.$levelnum"} = [ "gauge", adjust_to_32bit(strip_decimal($levelval)) ];
+		} elsif ($line =~ /^VIRT_TEMP\d+=/) {
+			my ($tempnum,$tempval) = $line =~ /^VIRT_TEMP(\d+)=(-?\d+\.\d+)/i;
+			print "Line->$line<-\n" if $debug;
+			$tempval = 0 if ($tempval < 0);
+			print "Virtual sensor temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
+			$tmpmib{"1.1.7.1.0.$tempnum"} = [ "string", "VirtualTemp$tempnum" ];
+			$tmpmib{"1.1.7.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
+		} elsif ($line =~ /^SOFT_TEMP\d+=/) {
+			my ($tempnum,$tempval) = $line =~ /^SOFT_TEMP(\d+)=(-?\d+\.\d+)/i;
+			print "Line->$line<-\n" if $debug;
+			$tempval = 0 if ($tempval < 0);
+			print "Software sensor temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
+			$tmpmib{"1.1.8.1.0.$tempnum"} = [ "string", "SoftwareTemp$tempnum" ];
+			$tmpmib{"1.1.8.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
+		} elsif ($line =~ /^OTHER_TEMP\d+=/) {
+			my ($tempnum,$tempval) = $line =~ /^OTHER_TEMP(\d+)=(-?\d+\.\d+)/i;
+			print "Line->$line<-\n" if $debug;
+			$tempval = 0 if ($tempval < 0);
+			print "Other sensor temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
+			$tmpmib{"1.1.9.1.0.$tempnum"} = [ "string", "OtherTemp$tempnum" ];
+			$tmpmib{"1.1.9.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
 		}
 	}
 	$mib = \%tmpmib;
