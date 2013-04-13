@@ -297,6 +297,7 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
+	FAN_REGULATION_MODE,
 	BOOLEAN,
 	STATE_ENABLE_DISABLE,
 	STATE_ENABLE_DISABLE_INV,
@@ -585,7 +586,7 @@ typedef enum {
 } rgb_led_pulsating_brightness_t;
 
 typedef struct {
-	controller_data_source_t	data_source;
+	sensor_data_source_t	data_source;
 	rgb_led_pulsating_brightness_t	pulsating_brightness;
 	led_config_t	low_temp;
 	led_config_t	optimum_temp;
