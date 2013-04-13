@@ -71,6 +71,7 @@ To get a more script-friendly output in the form of 'KEY=VALUE' pairs just add
 For more comprehensive output in both default and export modes, use `-a`,
 e.g. `-a -o default` or `-a -o export`.
 
+
 BUGS / CONTACT
 ----------------
 Feel free to report any bugs you find using the 'issues' function on GitHub. If
