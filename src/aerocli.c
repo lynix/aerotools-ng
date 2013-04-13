@@ -572,9 +572,30 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("SYS_TEMP_CPU%d_OFFS=%.2f\n", n+1,
 					aq_sett->cpu_temp_offset[n]);
 	}
-	for (int n=0; n<AQ5_NUM_TEMP; n++)
-		if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
+	for (int n=0; n<AQ5_NUM_TEMP; n++) {
+		if (aq_data->temp[n] != AQ5_FLOAT_UNDEF) {
 			printf("TEMP%d=%.2f\n", n+1, aq_data->temp[n]);
+			printf("TEMP%d_OFFS=%.2f\n", n+1, aq_sett->temp_offset[n]);
+		}
+	}
+	for (int n=0; n<AQ5_NUM_VIRT_SENSORS; n++) {
+		if (aq_data->vtemp[n] != AQ5_FLOAT_UNDEF) {
+			printf("VIRT_TEMP%d=%.2f\n", n+1, aq_data->vtemp[n]);
+			printf("VIRT_TEMP%d_OFFS=%.2f\n", n+1, aq_sett->vtemp_offset[n]);
+		}
+	}
+	for (int n=0; n<AQ5_NUM_SOFT_SENSORS; n++) {
+		if (aq_data->stemp[n] != AQ5_FLOAT_UNDEF) {
+			printf("SOFT_TEMP%d=%.2f\n", n+1, aq_data->stemp[n]);
+			printf("SOFT_TEMP%d_OFFS=%.2f\n", n+1, aq_sett->stemp_offset[n]);
+		}
+	}
+	for (int n=0; n<AQ5_NUM_OTHER_SENSORS; n++) {
+		if (aq_data->otemp[n] != AQ5_FLOAT_UNDEF) {
+			printf("OTHER_TEMP%d=%.2f\n", n+1, aq_data->otemp[n]);
+			printf("OTHER_TEMP%d_OFFS=%.2f\n", n+1, aq_sett->otemp_offset[n]);
+		}
+	}
 	for (int n=0; n<AQ5_NUM_FAN; n++)
 		if (aq_data->fan_vrm_temp[n] != AQ5_FLOAT_UNDEF) {
 			printf("FAN%d_RPM=%d\n", n+1, aq_data->fan_rpm[n]);
@@ -635,18 +656,6 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("PAGE%d_TIME=%d\n", n+1, aq_sett->info_page[n].display_time);
 			printf("PAGE%d_TYPE='%s'\n", n+1, libaquaero5_get_string(aq_sett->info_page[n].info_page_type, INFO_SCREEN));
 		}
-		for (int n=0; n<AQ5_NUM_TEMP; n++)
-			if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
-				printf("TEMP%d_OFFS=%.2f\n", n+1, aq_sett->temp_offset[n]);
-		for (int n=0; n<AQ5_NUM_VIRT_SENSORS; n++)
-			if (aq_data->vtemp[n] != AQ5_FLOAT_UNDEF)
-				printf("VIRT_TEMP%d_OFFS=%.2f\n", n+1, aq_sett->vtemp_offset[n]);
-		for (int n=0; n<AQ5_NUM_SOFT_SENSORS; n++)
-			if (aq_data->stemp[n] != AQ5_FLOAT_UNDEF)
-				printf("SOFT_TEMP%d_OFFS=%.2f\n", n+1, aq_sett->stemp_offset[n]);
-		for (int n=0; n<AQ5_NUM_OTHER_SENSORS; n++)
-			if (aq_data->otemp[n] != AQ5_FLOAT_UNDEF)
-				printf("OTHER_TEMP%d_OFFS=%.2f\n", n+1, aq_sett->otemp_offset[n]);
 		for (int n=0; n<AQ5_NUM_VIRT_SENSORS; n++) {
 			printf("VIRT_SENSOR%d_DATA_SOURCE_1='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_1, SENSOR_DATA_SOURCE));
 			printf("VIRT_SENSOR%d_DATA_SOURCE_2='%s'\n", n+1, libaquaero5_get_string(aq_sett->virt_sensor_config[n].data_source_2, SENSOR_DATA_SOURCE));
