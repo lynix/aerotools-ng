@@ -21,15 +21,32 @@
 #define LIBAQUAERO5_H_
 
 #include <stdint.h>
+#include <time.h>
 
 /* sensor quantity */
-#define AQ5_NUM_TEMP			44
-#define AQ5_NUM_FAN			12
-#define AQ5_NUM_FLOW			14
-#define AQ5_NUM_CPU			8
-#define AQ5_NUM_LEVEL			4
-#define AQ5_NUM_INFO_PAGE		32
-
+#define AQ5_NUM_TEMP					16
+#define AQ5_NUM_FAN						12
+#define AQ5_NUM_FLOW					14
+#define AQ5_NUM_CPU						8
+#define AQ5_NUM_LEVEL					4
+#define AQ5_NUM_INFO_PAGE				32
+#define AQ5_NUM_VIRT_SENSORS			4
+#define AQ5_NUM_SOFT_SENSORS			8
+#define AQ5_NUM_OTHER_SENSORS			16
+#define AQ5_NUM_POWER_SENSORS			4
+#define AQ5_NUM_CURVE_POINTS			16
+#define AQ5_NUM_CURVE_CONTROLLERS		4
+#define AQ5_NUM_TARGET_VAL_CONTROLLERS	8
+#define AQ5_NUM_TWO_POINT_CONTROLLERS	16
+#define AQ5_NUM_PRESET_VAL_CONTROLLERS	32
+#define AQ5_NUM_DATA_LOG				16
+#define AQ5_NUM_ALARM_AND_WARNING_LVLS	8
+#define AQ5_NUM_TEMP_ALARMS				16
+#define AQ5_NUM_FLOW_ALARMS				4
+#define AQ5_NUM_PUMP_ALARMS				4
+#define AQ5_NUM_FILL_ALARMS				4
+#define AQ5_NUM_TIMERS					32
+#define AQ5_NUM_IR_COMMANDS				16
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
@@ -37,18 +54,21 @@
 
 /* structures holding device data */
 typedef struct {
-	uint32_t	current_time;
+	struct tm	time_utc;
 	uint16_t	serial_major;
 	uint16_t	serial_minor;
 	uint16_t	firmware_version;
 	uint16_t	bootloader_version;
 	uint16_t	hardware_version;
-	uint32_t	uptime;
-	uint32_t	total_time;
+	struct tm	uptime;
+	struct tm	total_time;
 	double		temp[AQ5_NUM_TEMP];
+	double		vtemp[AQ5_NUM_VIRT_SENSORS];
+	double		stemp[AQ5_NUM_SOFT_SENSORS];
+	double		otemp[AQ5_NUM_OTHER_SENSORS];
 	uint16_t	fan_current[AQ5_NUM_FAN];
 	uint16_t	fan_rpm[AQ5_NUM_FAN];
-	double		fan_duty_cycle[AQ5_NUM_FAN];
+	double		fan_duty[AQ5_NUM_FAN];
 	double		fan_voltage[AQ5_NUM_FAN];
 	double		fan_vrm_temp[AQ5_NUM_FAN];
 	double		flow[AQ5_NUM_FLOW];
@@ -133,7 +153,7 @@ typedef enum {
 	PRESET_VAL_30	=	0x007d,
 	PRESET_VAL_31	=	0x007e,
 	PRESET_VAL_32	=	0x007f
-} fan_data_source_t;
+} controller_data_source_t;
 
 typedef struct {
 	fan_regulation_mode_t	fan_regulation_mode;
@@ -277,12 +297,24 @@ typedef enum {
 } info_page_type_t;
 
 typedef enum {
-	STANDBY_ACTION,
+	FAN_REGULATION_MODE,
+	BOOLEAN,
+	STATE_ENABLE_DISABLE,
+	STATE_ENABLE_DISABLE_INV,
+	FLOW_CONFIG,
+	FAN_LIMITS,
+	ALARM_WARNING_LEVELS,
+	TEMP_ALARM_CONFIG,
+	DATA_LOG_INTERVAL,
+	AQ_RELAY_CONFIG,
+	LED_PB_MODE,
+	SENSOR_DATA_SOURCE,
+	VIRT_SENSOR_MODE,
+	EVENT_ACTION,
 	DATE_FORMAT,
 	TIME_FORMAT,
-	AUTO_DST,
 	DISPLAY_MODE,
-	FAN_DATA_SRC, 
+	CONTROLLER_DATA_SRC, 
 	LANGUAGE, 
 	TEMP_UNITS, 
 	FLOW_UNITS, 
@@ -345,9 +377,14 @@ typedef enum {
 } time_format_t;
 
 typedef enum {
-	DST_DISABLED	= 0x00,
-	DST_ENABLED	= 0x01
-} auto_dst_t;
+	STATE_DISABLED	= 0x00,
+	STATE_ENABLED	= 0x01
+} state_enable_disable_t;
+
+typedef enum {
+	STATE_ENABLED_INV	= 0x00,
+	STATE_DISABLED_INV	= 0x01
+} state_enable_disable_inv_t;
 
 typedef enum {
 	DISP_NORMAL	= 0x00,
@@ -372,31 +409,387 @@ typedef enum {
 	LOAD_PROFILE_4		= 0x000d,
 	USB_KEYBD_POWER_KEY	= 0x000e,
 	USB_KEYBD_SLEEP_KEY	= 0x000f,
-	USB_KEYBD_WAKEUP_KEY	= 0x0010
-} standby_action_t;
+	USB_KEYBD_WAKEUP_KEY	= 0x0010,
+	USB_MEDIA_KEYBD_PLAY_KEY	= 0x0011,
+	USB_MEDIA_KEYBD_VOL_UP_KEY	= 0x0012,
+	USB_MEDIA_KEYBD_VOL_DOWN_KEY	= 0x0013,
+	USB_MEDIA_KEYBD_MUTE_KEY	= 0x0014
+} event_action_t;
+
+typedef enum {
+	NO_DATA_SOURCE		= 0xffff,
+	SENSOR_1		= 0x0000,
+	SENSOR_2		= 0x0001,
+	SENSOR_3		= 0x0002,
+	SENSOR_4		= 0x0003,
+	SENSOR_5		= 0x0004,
+	SENSOR_6		= 0x0005,
+	SENSOR_7		= 0x0006,
+	SENSOR_8		= 0x0007,
+	SENSOR_9		= 0x0008,
+	SENSOR_10		= 0x0009,
+	SENSOR_11		= 0x000a,
+	SENSOR_12		= 0x000b,
+	SENSOR_13		= 0x000c,
+	SENSOR_14		= 0x000d,
+	SENSOR_15		= 0x000e,
+	SENSOR_16		= 0x000f,
+	SOFT_SENSOR_1		= 0x0010,
+	SOFT_SENSOR_2		= 0x0011,
+	SOFT_SENSOR_3		= 0x0012,
+	SOFT_SENSOR_4		= 0x0013,
+	SOFT_SENSOR_5		= 0x0014,
+	SOFT_SENSOR_6		= 0x0015,
+	SOFT_SENSOR_7		= 0x0016,
+	SOFT_SENSOR_8		= 0x0017,
+	VIRT_SENSOR_1		= 0x0018,
+	VIRT_SENSOR_2		= 0x0019,
+	VIRT_SENSOR_3		= 0x001a,
+	VIRT_SENSOR_4		= 0x001b,
+	/* Unknown */
+	FAN_AMP_1		= 0x002c,
+	FAN_AMP_2		= 0x002d,
+	FAN_AMP_3		= 0x002e,
+	FAN_AMP_4		= 0x002f,
+	FAN_AMP_5		= 0x0030,
+	FAN_AMP_6		= 0x0031,
+	FAN_AMP_7		= 0x0032,
+	FAN_AMP_8		= 0x0033,
+	FAN_AMP_9		= 0x0034,
+	FAN_AMP_10		= 0x0035,
+	FAN_AMP_11		= 0x0036,
+	FAN_AMP_12		= 0x0037,
+	AQUAERO_CPU		= 0x0038,
+	/* Unknown */
+	FLOW_SENSOR_1		= 0x0080,
+	FLOW_SENSOR_2		= 0x0081,
+	FLOW_SENSOR_3		= 0x0082,
+	FLOW_SENSOR_4		= 0x0083,
+	FLOW_SENSOR_5		= 0x0084,
+	FLOW_SENSOR_6		= 0x0085,
+	FLOW_SENSOR_7		= 0x0086,
+	FLOW_SENSOR_8		= 0x0087,
+	FLOW_SENSOR_9		= 0x0088,
+	FLOW_SENSOR_10		= 0x0089,
+	FLOW_SENSOR_11		= 0x008a,
+	FLOW_SENSOR_12		= 0x008b,
+	FLOW_SENSOR_13		= 0x008c,
+	FLOW_SENSOR_14		= 0x008d,
+	FAN_RPM_1		= 0x008e,
+	FAN_RPM_2		= 0x008f,
+	FAN_RPM_3		= 0x0090,
+	FAN_RPM_4		= 0x0091,
+	FAN_RPM_5		= 0x0092,
+	FAN_RPM_6		= 0x0093,
+	FAN_RPM_7		= 0x0094,
+	FAN_RPM_8		= 0x0095,
+	FAN_RPM_9		= 0x0096,
+	FAN_RPM_10		= 0x0097,
+	FAN_RPM_11		= 0x0098,
+	FAN_RPM_12		= 0x0099,
+	/* Unknown */
+	FAN_VOLTAGE_1		= 0x00a6,
+	FAN_VOLTAGE_2		= 0x00a7,
+	FAN_VOLTAGE_3		= 0x00a8,
+	FAN_VOLTAGE_4		= 0x00a9,
+	FAN_VOLTAGE_5		= 0x00aa,
+	FAN_VOLTAGE_6		= 0x00ab,
+	FAN_VOLTAGE_7		= 0x00ac,
+	FAN_VOLTAGE_8		= 0x00ad,
+	FAN_VOLTAGE_9		= 0x00ae,
+	FAN_VOLTAGE_10		= 0x00af,
+	FAN_VOLTAGE_11		= 0x00b0,
+	FAN_VOLTAGE_12		= 0x00b1,
+	FAN_CURRENT_1		= 0x00b2,
+	FAN_CURRENT_2		= 0x00b3,
+	FAN_CURRENT_3		= 0x00b4,
+	FAN_CURRENT_4		= 0x00b5,
+	FAN_CURRENT_5		= 0x00b6,
+	FAN_CURRENT_6		= 0x00b7,
+	FAN_CURRENT_7		= 0x00b8,
+	FAN_CURRENT_8		= 0x00b9,
+	FAN_CURRENT_9		= 0x00ba,
+	FAN_CURRENT_10		= 0x00bb,
+	FAN_CURRENT_11		= 0x00bc,
+	FAN_CURRENT_12		= 0x00bd,
+	/* Unknown */
+	SENS_FILL_LEVEL_1	= 0x00c6,
+	SENS_FILL_LEVEL_2	= 0x00c7,
+	SENS_FILL_LEVEL_3	= 0x00c8,
+	SENS_FILL_LEVEL_4	= 0x00c9,
+	POWER_CONSUMPTION_1	= 0x00ca,
+	POWER_CONSUMPTION_2	= 0x00cb,
+	POWER_CONSUMPTION_3	= 0x00cc,
+	POWER_CONSUMPTION_4	= 0x00cd
+} sensor_data_source_t;
+
+typedef enum {
+	HIGHEST_TEMP		= 0x00,
+	LOWEST_TEMP		= 0x01,
+	AVERAGE_TEMP		= 0x02,
+	DIFFERENCE		= 0x03,
+	DIFFERENCE_ABS		= 0x04
+} virt_sensor_mode_t;
 
 typedef struct {
-	double			standby_display_contrast;
-	double			standby_lcd_backlight_brightness;
-	double			standby_key_backlight_brightness;
+	sensor_data_source_t		data_source_1;
+	sensor_data_source_t		data_source_2;
+	sensor_data_source_t		data_source_3;
+	virt_sensor_mode_t		mode;
+} virt_sensor_config_t;
+
+typedef struct {
+	sensor_data_source_t		flow_sensor_data_source;
+	sensor_data_source_t		temp_sensor_1;
+	sensor_data_source_t		temp_sensor_2;
+} power_consumption_config_t;
+
+typedef struct {
+	double		temp;
+	uint8_t		percent;
+} curve_point_t;
+
+typedef struct {
+	uint16_t	data_source;
+	double		startup_temp;
+	curve_point_t	curve_point[AQ5_NUM_CURVE_POINTS];
+} curve_controller_config_t;
+
+typedef struct {
+	uint16_t	data_source;
+	double		target_val;
+	uint16_t	factor_p;
+	double		factor_i;
+	uint16_t	factor_d;
+	double		reset_time;
+	double		hysteresis;
+} target_value_controller_config_t;
+
+typedef struct {
+	uint16_t	data_source;
+	double		upper_limit;
+	double		lower_limit;
+} two_point_controller_config_t;
+
+typedef struct {
+	double		temp;
+	uint8_t		red_led;
+	uint8_t		green_led;
+	uint8_t		blue_led;
+} led_config_t;
+
+typedef enum {
+	PB_OFF		= 0x00,
+	PB_VARIANT_1	= 0x01,
+	PB_VARIANT_2	= 0x02,
+	PB_VARIANT_3	= 0x03,
+} rgb_led_pulsating_brightness_t;
+
+typedef struct {
+	sensor_data_source_t	data_source;
+	rgb_led_pulsating_brightness_t	pulsating_brightness;
+	led_config_t	low_temp;
+	led_config_t	optimum_temp;
+	led_config_t	high_temp;
+} rgb_led_controller_config_t;
+
+typedef struct {
+	uint8_t		min_power;
+	uint8_t		max_power;
+	controller_data_source_t	data_source;
+	state_enable_disable_t	mode;
+} power_output_config_t;
+
+typedef enum {
+	CONTROLLED_FROM_DS		= 0x00,
+	AQ_RELAY_ON			= 0x01,
+	AQ_RELAY_OFF			= 0x02,
+	CONTROLLED_FROM_EVENT_SYS	= 0x03
+} aquaero_relay_configuration_t;
+
+typedef enum {
+	INT_OFF				= 0x00,
+	INT_EVERY_2_SEC			= 0x01,
+	INT_EVERY_10_SEC		= 0x02,
+	INT_EVERY_30_SEC		= 0x03,
+	INT_EVERY_MIN			= 0x04,
+	INT_EVERY_5_MIN			= 0x05,
+	INT_EVERY_10_MIN		= 0x06,
+	INT_EVERY_30_MIN		= 0x07,
+	INT_EVERY_HOUR			= 0x08
+} data_log_interval_t;
+
+typedef struct {
+	data_log_interval_t	interval;
+	sensor_data_source_t	data_source;
+} data_log_config_t;
+
+typedef struct {
+	event_action_t	action[3];
+} alarm_and_warning_level_t;
+
+typedef enum {
+	TEMP_EXCEEDS_LIMIT		= 0x00,
+	TEMP_DROPS_BELOW_LIMIT		= 0x01,
+	TEMP_ALARM_OFF			= 0x02
+} temp_alarm_config_t;
+
+typedef enum {
+	NORMAL_OPERATION		= 0x00,
+	WARNING				= 0x01,
+	ALARM				= 0x02,
+	ALARM_WARNING_4			= 0x03,
+	ALARM_WARNING_5			= 0x04,
+	ALARM_WARNING_6			= 0x05,
+	ALARM_WARNING_7			= 0x06,
+	ALARM_WARNING_8			= 0x07
+} alarm_warning_levels_t;
+
+typedef struct {
+	sensor_data_source_t	data_source;
+	temp_alarm_config_t	config;
+	double			limit_for_warning;
+	alarm_warning_levels_t	set_warning_level;
+	double			limit_for_alarm;
+	alarm_warning_levels_t	set_alarm_level;
+} temp_alarm_t;
+
+typedef enum {
+	NO_RPM_SIG_AFTER_6S		= 0x00,
+	NO_RPM_SIG_AFTER_12S		= 0x01,
+	NO_RPM_SIG_AFTER_24S		= 0x02,
+	RPM_OFF				= 0x03
+} fan_limit_t;
+
+typedef struct {
+	fan_limit_t		limit_for_warning;
+	alarm_warning_levels_t	set_warning_level;
+	fan_limit_t		limit_for_alarm;
+	alarm_warning_levels_t	set_alarm_level;
+} fan_alarm_t;
+
+typedef enum {
+	FLOW_FALLS_BELOW_LIMIT		= 0x00,
+	FLOW_EXCEEDS_LIMIT		= 0x01,
+	FLOW_OFF			= 0x02
+} flow_config_t;
+
+typedef struct {
+	sensor_data_source_t	data_source;
+	flow_config_t		config;
+	double			limit_for_warning;
+	alarm_warning_levels_t	set_warning_level;
+	double			limit_for_alarm;
+	alarm_warning_levels_t	set_alarm_level;
+} flow_alarm_t;
+
+typedef struct {
+	sensor_data_source_t	data_source;
+	state_enable_disable_inv_t	config;
+	alarm_warning_levels_t	set_alarm_level;
+} pump_alarm_t;
+
+typedef struct {
+	sensor_data_source_t		data_source;
+	state_enable_disable_inv_t	config;
+	uint8_t				limit_for_warning;
+	alarm_warning_levels_t		set_warning_level;
+	uint8_t				limit_for_alarm;
+	alarm_warning_levels_t		set_alarm_level;
+} fill_alarm_t;
+
+typedef struct {
+	boolean_t	sunday;
+	boolean_t	monday;
+	boolean_t	tuesday;
+	boolean_t	wednesday;
+	boolean_t	thursday;
+	boolean_t	friday;
+	boolean_t	saturday;
+} active_days_t;
+
+typedef struct {
+	active_days_t	active_days;
+	struct tm		switching_time;
+	event_action_t	action;
+} aq_timer_t;
+
+typedef struct {
+	boolean_t	aquaero_control;
+	boolean_t	pc_mouse;
+	boolean_t	pc_keyboard;
+	boolean_t	usb_forwarding_of_unknown;
+} infrared_functions_t;
+
+typedef struct {
+	state_enable_disable_t	config;
+	event_action_t		action;
+	uint16_t		refresh_rate;
+	uint16_t		learned_ir_signal[3];
+} trained_ir_commands_t;
+
+typedef struct {
+	state_enable_disable_t	config;
+	event_action_t		action_on;
+	event_action_t		action_off;
+	uint16_t		refresh_rate;
+	uint16_t		learned_ir_signal[3];
+} switch_pc_via_ir_t;
+
+typedef struct {
+	disable_keys_t		allow_output_override;
+	infrared_functions_t	infrared_functions;
+	language_t		infrared_keyboard_layout;
+	trained_ir_commands_t	trained_ir_commands[AQ5_NUM_IR_COMMANDS];
+	switch_pc_via_ir_t	switch_pc_via_ir;
+	aq_timer_t		timer[AQ5_NUM_TIMERS];
+	fill_alarm_t		fill_alarm[AQ5_NUM_FILL_ALARMS];
+	pump_alarm_t		pump_alarm[AQ5_NUM_PUMP_ALARMS];
+	flow_alarm_t		flow_alarm[AQ5_NUM_FLOW_ALARMS];
+	fan_alarm_t		fan_alarm[AQ5_NUM_FAN];
+	temp_alarm_t		temp_alarm[AQ5_NUM_TEMP_ALARMS];
+	uint16_t		suppress_alarm_at_poweron;
+	alarm_and_warning_level_t	alarm_and_warning_level[AQ5_NUM_ALARM_AND_WARNING_LVLS];
+	data_log_config_t	data_log_config[AQ5_NUM_DATA_LOG];
+	power_output_config_t	power_output_1_config;
+	power_output_config_t	power_output_2_config;
+	aquaero_relay_configuration_t	aquaero_relay_configuration;
+	controller_data_source_t	aquaero_relay_data_source;
+	uint8_t			aquaero_relay_switch_threshold;
+	rgb_led_controller_config_t	rgb_led_controller_config;
+	uint8_t			preset_value_controller[AQ5_NUM_PRESET_VAL_CONTROLLERS];
+	two_point_controller_config_t	two_point_controller_config[AQ5_NUM_TWO_POINT_CONTROLLERS];
+	target_value_controller_config_t	target_value_controller_config[AQ5_NUM_TARGET_VAL_CONTROLLERS];
+	curve_controller_config_t	curve_controller_config[AQ5_NUM_CURVE_CONTROLLERS];
+	power_consumption_config_t	power_consumption_config[AQ5_NUM_POWER_SENSORS];
+	state_enable_disable_t	soft_sensor_state[AQ5_NUM_SOFT_SENSORS];
+	double			soft_sensor_fallback_value[AQ5_NUM_SOFT_SENSORS];
+	uint16_t		soft_sensor_timeout[AQ5_NUM_SOFT_SENSORS];
+	uint16_t		flow_sensor_calibration_value[AQ5_NUM_FLOW];
+	double			flow_sensor_lower_limit[AQ5_NUM_FLOW];
+	double			flow_sensor_upper_limit[AQ5_NUM_FLOW];
+	virt_sensor_config_t	virt_sensor_config[AQ5_NUM_VIRT_SENSORS];
+	uint8_t			standby_display_contrast;
+	uint8_t			standby_lcd_backlight_brightness;
+	uint8_t			standby_key_backlight_brightness;
 	uint16_t		standby_timeout_key_and_display_brightness;
-	standby_action_t	standby_action_at_power_down;
-	standby_action_t	standby_action_at_power_up;
+	event_action_t		standby_action_at_power_down;
+	event_action_t		standby_action_at_power_up;
 	time_format_t		time_format;
 	date_format_t		date_format;
-	auto_dst_t		auto_dst;
+	state_enable_disable_t	auto_dst;
 	int8_t			time_zone;
-	double			display_contrast;
-	double			display_brightness_while_in_use;
-	double			display_brightness_while_idle;
+	uint8_t			display_contrast;
+	uint8_t			display_brightness_while_in_use;
+	uint8_t			display_brightness_while_idle;
 	uint16_t		display_illumination_time;
 	illumination_mode_t	display_illumination_mode;
 	display_mode_t		display_mode;
 	uint16_t		menu_display_duration;
 	uint16_t		display_duration_after_page_selection;
 	disable_keys_t		disable_keys;
-	double			brightness_while_in_use;
-	double			brightness_while_idle;
+	uint8_t			brightness_while_in_use;
+	uint8_t			brightness_while_idle;
 	illumination_mode_t	illumination_mode;
 	key_tone_t		key_tone;
 	key_sensitivity_t	key_sensitivity;
@@ -407,17 +800,20 @@ typedef struct {
 	language_t		language;
 	info_page_t		info_page[AQ5_NUM_INFO_PAGE];	
 	double			temp_offset[AQ5_NUM_TEMP];
+	double			vtemp_offset[AQ5_NUM_VIRT_SENSORS];
+	double			stemp_offset[AQ5_NUM_SOFT_SENSORS];
+	double			otemp_offset[AQ5_NUM_OTHER_SENSORS];
 	double			fan_vrm_temp_offset[AQ5_NUM_TEMP];
 	double			cpu_temp_offset[AQ5_NUM_TEMP];
 	uint16_t		fan_min_rpm[AQ5_NUM_FAN];
 	uint16_t		fan_max_rpm[AQ5_NUM_FAN];
-	double			fan_max_duty_cycle[AQ5_NUM_FAN];
-	double			fan_min_duty_cycle[AQ5_NUM_FAN];
-	double			fan_startboost_duty_cycle[AQ5_NUM_FAN];
+	uint8_t			fan_max_duty[AQ5_NUM_FAN];
+	uint8_t			fan_min_duty[AQ5_NUM_FAN];
+	uint8_t			fan_startboost_duty[AQ5_NUM_FAN];
 	uint16_t		fan_startboost_duration[AQ5_NUM_FAN];
 	uint16_t		fan_pulses_per_revolution[AQ5_NUM_FAN];
 	aq5_fan_control_mode_t	fan_control_mode[AQ5_NUM_FAN];
-	fan_data_source_t	fan_data_source[AQ5_NUM_FAN];
+	controller_data_source_t	fan_data_source[AQ5_NUM_FAN];
 	uint16_t		fan_programmable_fuse[AQ5_NUM_FAN];
 } aq5_settings_t;
 

@@ -18,6 +18,9 @@
 CC = gcc
 CFLAGS = -Wall -ansi -std=gnu99 -pedantic -I /usr/include -O2
 
+# Uncomment the following line if using firmware 1027.
+# CFLAGS += -D'AQ5_FW_TARGET=1027'
+
 ifdef DEBUG  
 	CFLAGS += -g
 endif
@@ -31,7 +34,8 @@ bin/aerocli: obj/aerocli.o obj/libaquaero5.o
 obj/aerocli.o: src/aerocli.c src/libaquaero5.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
-obj/libaquaero5.o: src/libaquaero5.c src/libaquaero5.h
+obj/libaquaero5.o: src/libaquaero5.c src/libaquaero5.h \
+		src/aquaero5-user-strings.h src/aquaero5-offsets.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
 
