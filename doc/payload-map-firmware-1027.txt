@@ -700,6 +700,8 @@ offset		type	value		description
 0x31c		int8	power_output_aq_relay_config	Power ouput Aquaero relay configuration
 0x31d		int16	power_output_aq_relay_switch_thresh	Power ouput Aquaero relay switch threshold
 
+0x31f-0x3C3 looks like 33 more relays (Ae5 slave + 4 multiswitch?)
+
 0x3e8		int16	two_point_controller_1_ds		Two point controller 1 data source
 0x3ea		int16	two_point_controller_1_upper_limit	Two point controller 1 upper limit
 0x3ec		int16	two_point_controller_1_lower_limit	Two point controller 1 lower limit
