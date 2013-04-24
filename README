@@ -27,7 +27,8 @@ Therefore, there currently are no noteworthy dependencies.
 BUILDING
 ----------------
 To build all components of the project simply issue `make` in the project root.
-Compiled binaries will reside in the 'bin' subdirectory.
+Compiled binaries will reside in the 'bin' subdirectory. If building for 
+firmware version 1027, you must uncomment the appropriate line in the Makefile. 
 
 
 SETUP
@@ -49,7 +50,7 @@ represents the data source.
 
 In my case, there is /dev/usb/hiddev[0-2] which all match the udev rule provided
 above. The correct one for me is /dev/usb/hiddev0, but I don't know whether it is
-always the last one. Just try as stated under USAGE - if you choose the wrong
+always the first one. Just try as stated under USAGE - if you choose the wrong
 one there will simply be no output at all.
 
 
@@ -59,11 +60,16 @@ aerocli, as stated above, is the example implementation of a command-line tool
 that uses the provided query- and format conversion functions provided by 
 aerotools-ng.
 
-To query a device simply issue `aerocli /dev/usb/hiddevX` (see SETUP for the
-meaning of X).
+To query the first device found (via autodiscovery), simply issue `aerocli`.
+
+To query a specific device (if you have more than one attached to your system) 
+simply issue `aerocli -d /dev/usb/hiddevX` (see SETUP for the meaning of X).
 
 To get a more script-friendly output in the form of 'KEY=VALUE' pairs just add
-`--export`.
+`-o export`.
+
+For more comprehensive output in both default and export modes, use `-a`,
+e.g. `-a -o default` or `-a -o export`.
 
 
 BUGS / CONTACT

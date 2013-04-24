@@ -25,6 +25,13 @@ typedef struct {
 	char	*str;
 } val_str_t;
 
+/* Fan regulation mode strings */
+val_str_t fan_regulation_mode_strings[] = {
+	{ (fan_regulation_mode_t)M_OUTPUT, 	"Output" },
+	{ (fan_regulation_mode_t)M_RPM, 	"RPM" },
+	{ -1, 					"Unknown" }
+};
+
 /* Language setting strings */
 val_str_t language_strings[] = {
 	{ (language_t)ENGLISH,	"English" },
@@ -66,71 +73,71 @@ val_str_t decimal_separator_strings[] = {
 };
 
 /* Fan data source strings */
-val_str_t fan_data_source_strings[] = {
-	{ (fan_data_source_t)NONE,		"No data source" },
-	{ (fan_data_source_t)TARGET_VAL_CONT_1,	"Target value controller 1" },
-	{ (fan_data_source_t)TARGET_VAL_CONT_2,	"Target value controller 2" },
-	{ (fan_data_source_t)TARGET_VAL_CONT_3,	"Target value controller 3" },
-	{ (fan_data_source_t)TARGET_VAL_CONT_4,	"Target value controller 4" },
-	{ (fan_data_source_t)TARGET_VAL_CONT_5,	"Target value controller 5" },
-	{ (fan_data_source_t)TARGET_VAL_CONT_6,	"Target value controller 6" },
-	{ (fan_data_source_t)TARGET_VAL_CONT_7,	"Target value controller 7" },
-	{ (fan_data_source_t)TARGET_VAL_CONT_8,	"Target value controller 8" },
-	{ (fan_data_source_t)TWO_POINT_CONT_1,	"Two point controller 1" },
-	{ (fan_data_source_t)TWO_POINT_CONT_2,	"Two point controller 2" },
-	{ (fan_data_source_t)TWO_POINT_CONT_3,	"Two point controller 3" },
-	{ (fan_data_source_t)TWO_POINT_CONT_4,	"Two point controller 4" },
-	{ (fan_data_source_t)TWO_POINT_CONT_5,	"Two point controller 5" },
-	{ (fan_data_source_t)TWO_POINT_CONT_6,	"Two point controller 6" },
-	{ (fan_data_source_t)TWO_POINT_CONT_7,	"Two point controller 7" },
-	{ (fan_data_source_t)TWO_POINT_CONT_8,	"Two point controller 8" },
-	{ (fan_data_source_t)TWO_POINT_CONT_9,	"Two point controller 9" },
-	{ (fan_data_source_t)TWO_POINT_CONT_10,	"Two point controller 10" },
-	{ (fan_data_source_t)TWO_POINT_CONT_11,	"Two point controller 11" },
-	{ (fan_data_source_t)TWO_POINT_CONT_12,	"Two point controller 12" },
-	{ (fan_data_source_t)TWO_POINT_CONT_13,	"Two point controller 13" },
-	{ (fan_data_source_t)TWO_POINT_CONT_14,	"Two point controller 14" },
-	{ (fan_data_source_t)TWO_POINT_CONT_15,	"Two point controller 15" },
-	{ (fan_data_source_t)TWO_POINT_CONT_16,	"Two point controller 16" },
-	{ (fan_data_source_t)CURVE_CTRLR_1,	"Curve controller 1" },
-	{ (fan_data_source_t)CURVE_CTRLR_2,	"Curve controller 2" },
-	{ (fan_data_source_t)CURVE_CTRLR_3,	"Curve controller 3" },
-	{ (fan_data_source_t)CURVE_CTRLR_4,	"Curve controller 4" },
-	{ (fan_data_source_t)RGB_LED_RED,	"RGB LED red" },
-	{ (fan_data_source_t)RGB_LED_BLUE,	"RGB LED blue" },
-	{ (fan_data_source_t)RGB_LED_GREEN,	"RGB LED green" },
-	{ (fan_data_source_t)PRESET_VAL_1,	"Preset value 1" },
-	{ (fan_data_source_t)PRESET_VAL_2,	"Preset value 2" },
-	{ (fan_data_source_t)PRESET_VAL_3,	"Preset value 3" },
-	{ (fan_data_source_t)PRESET_VAL_4,	"Preset value 4" },
-	{ (fan_data_source_t)PRESET_VAL_5,	"Preset value 5" },
-	{ (fan_data_source_t)PRESET_VAL_6,	"Preset value 6" },
-	{ (fan_data_source_t)PRESET_VAL_7,	"Preset value 7" },
-	{ (fan_data_source_t)PRESET_VAL_8,	"Preset value 8" },
-	{ (fan_data_source_t)PRESET_VAL_9,	"Preset value 9" },
-	{ (fan_data_source_t)PRESET_VAL_10,	"Preset value 10" },
-	{ (fan_data_source_t)PRESET_VAL_11,	"Preset value 11" },
-	{ (fan_data_source_t)PRESET_VAL_12,	"Preset value 12" },
-	{ (fan_data_source_t)PRESET_VAL_13,	"Preset value 13" },
-	{ (fan_data_source_t)PRESET_VAL_14,	"Preset value 14" },
-	{ (fan_data_source_t)PRESET_VAL_15,	"Preset value 15" },
-	{ (fan_data_source_t)PRESET_VAL_16,	"Preset value 16" },
-	{ (fan_data_source_t)PRESET_VAL_17,	"Preset value 17" },
-	{ (fan_data_source_t)PRESET_VAL_18,	"Preset value 18" },
-	{ (fan_data_source_t)PRESET_VAL_19,	"Preset value 19" },
-	{ (fan_data_source_t)PRESET_VAL_20,	"Preset value 20" },
-	{ (fan_data_source_t)PRESET_VAL_21,	"Preset value 21" },
-	{ (fan_data_source_t)PRESET_VAL_22,	"Preset value 22" },
-	{ (fan_data_source_t)PRESET_VAL_23,	"Preset value 23" },
-	{ (fan_data_source_t)PRESET_VAL_24,	"Preset value 24" },
-	{ (fan_data_source_t)PRESET_VAL_25,	"Preset value 25" },
-	{ (fan_data_source_t)PRESET_VAL_26,	"Preset value 26" },
-	{ (fan_data_source_t)PRESET_VAL_27,	"Preset value 27" },
-	{ (fan_data_source_t)PRESET_VAL_28,	"Preset value 28" },
-	{ (fan_data_source_t)PRESET_VAL_29,	"Preset value 29" },
-	{ (fan_data_source_t)PRESET_VAL_30,	"Preset value 30" },
-	{ (fan_data_source_t)PRESET_VAL_31,	"Preset value 31" },
-	{ (fan_data_source_t)PRESET_VAL_32,	"Preset value 32" },
+val_str_t controller_data_source_strings[] = {
+	{ (controller_data_source_t)NONE,		"No data source" },
+	{ (controller_data_source_t)TARGET_VAL_CONT_1,	"Target value controller 1" },
+	{ (controller_data_source_t)TARGET_VAL_CONT_2,	"Target value controller 2" },
+	{ (controller_data_source_t)TARGET_VAL_CONT_3,	"Target value controller 3" },
+	{ (controller_data_source_t)TARGET_VAL_CONT_4,	"Target value controller 4" },
+	{ (controller_data_source_t)TARGET_VAL_CONT_5,	"Target value controller 5" },
+	{ (controller_data_source_t)TARGET_VAL_CONT_6,	"Target value controller 6" },
+	{ (controller_data_source_t)TARGET_VAL_CONT_7,	"Target value controller 7" },
+	{ (controller_data_source_t)TARGET_VAL_CONT_8,	"Target value controller 8" },
+	{ (controller_data_source_t)TWO_POINT_CONT_1,	"Two point controller 1" },
+	{ (controller_data_source_t)TWO_POINT_CONT_2,	"Two point controller 2" },
+	{ (controller_data_source_t)TWO_POINT_CONT_3,	"Two point controller 3" },
+	{ (controller_data_source_t)TWO_POINT_CONT_4,	"Two point controller 4" },
+	{ (controller_data_source_t)TWO_POINT_CONT_5,	"Two point controller 5" },
+	{ (controller_data_source_t)TWO_POINT_CONT_6,	"Two point controller 6" },
+	{ (controller_data_source_t)TWO_POINT_CONT_7,	"Two point controller 7" },
+	{ (controller_data_source_t)TWO_POINT_CONT_8,	"Two point controller 8" },
+	{ (controller_data_source_t)TWO_POINT_CONT_9,	"Two point controller 9" },
+	{ (controller_data_source_t)TWO_POINT_CONT_10,	"Two point controller 10" },
+	{ (controller_data_source_t)TWO_POINT_CONT_11,	"Two point controller 11" },
+	{ (controller_data_source_t)TWO_POINT_CONT_12,	"Two point controller 12" },
+	{ (controller_data_source_t)TWO_POINT_CONT_13,	"Two point controller 13" },
+	{ (controller_data_source_t)TWO_POINT_CONT_14,	"Two point controller 14" },
+	{ (controller_data_source_t)TWO_POINT_CONT_15,	"Two point controller 15" },
+	{ (controller_data_source_t)TWO_POINT_CONT_16,	"Two point controller 16" },
+	{ (controller_data_source_t)CURVE_CTRLR_1,	"Curve controller 1" },
+	{ (controller_data_source_t)CURVE_CTRLR_2,	"Curve controller 2" },
+	{ (controller_data_source_t)CURVE_CTRLR_3,	"Curve controller 3" },
+	{ (controller_data_source_t)CURVE_CTRLR_4,	"Curve controller 4" },
+	{ (controller_data_source_t)RGB_LED_RED,	"RGB LED red" },
+	{ (controller_data_source_t)RGB_LED_BLUE,	"RGB LED blue" },
+	{ (controller_data_source_t)RGB_LED_GREEN,	"RGB LED green" },
+	{ (controller_data_source_t)PRESET_VAL_1,	"Preset value 1" },
+	{ (controller_data_source_t)PRESET_VAL_2,	"Preset value 2" },
+	{ (controller_data_source_t)PRESET_VAL_3,	"Preset value 3" },
+	{ (controller_data_source_t)PRESET_VAL_4,	"Preset value 4" },
+	{ (controller_data_source_t)PRESET_VAL_5,	"Preset value 5" },
+	{ (controller_data_source_t)PRESET_VAL_6,	"Preset value 6" },
+	{ (controller_data_source_t)PRESET_VAL_7,	"Preset value 7" },
+	{ (controller_data_source_t)PRESET_VAL_8,	"Preset value 8" },
+	{ (controller_data_source_t)PRESET_VAL_9,	"Preset value 9" },
+	{ (controller_data_source_t)PRESET_VAL_10,	"Preset value 10" },
+	{ (controller_data_source_t)PRESET_VAL_11,	"Preset value 11" },
+	{ (controller_data_source_t)PRESET_VAL_12,	"Preset value 12" },
+	{ (controller_data_source_t)PRESET_VAL_13,	"Preset value 13" },
+	{ (controller_data_source_t)PRESET_VAL_14,	"Preset value 14" },
+	{ (controller_data_source_t)PRESET_VAL_15,	"Preset value 15" },
+	{ (controller_data_source_t)PRESET_VAL_16,	"Preset value 16" },
+	{ (controller_data_source_t)PRESET_VAL_17,	"Preset value 17" },
+	{ (controller_data_source_t)PRESET_VAL_18,	"Preset value 18" },
+	{ (controller_data_source_t)PRESET_VAL_19,	"Preset value 19" },
+	{ (controller_data_source_t)PRESET_VAL_20,	"Preset value 20" },
+	{ (controller_data_source_t)PRESET_VAL_21,	"Preset value 21" },
+	{ (controller_data_source_t)PRESET_VAL_22,	"Preset value 22" },
+	{ (controller_data_source_t)PRESET_VAL_23,	"Preset value 23" },
+	{ (controller_data_source_t)PRESET_VAL_24,	"Preset value 24" },
+	{ (controller_data_source_t)PRESET_VAL_25,	"Preset value 25" },
+	{ (controller_data_source_t)PRESET_VAL_26,	"Preset value 26" },
+	{ (controller_data_source_t)PRESET_VAL_27,	"Preset value 27" },
+	{ (controller_data_source_t)PRESET_VAL_28,	"Preset value 28" },
+	{ (controller_data_source_t)PRESET_VAL_29,	"Preset value 29" },
+	{ (controller_data_source_t)PRESET_VAL_30,	"Preset value 30" },
+	{ (controller_data_source_t)PRESET_VAL_31,	"Preset value 31" },
+	{ (controller_data_source_t)PRESET_VAL_32,	"Preset value 32" },
 	{ -1,					"Unknown data source" }
 };
 
@@ -285,12 +292,18 @@ val_str_t time_format_strings[] = {
 	{ -1,					"Unknown time format" }
 };
 
-/* Auto DST format strings */
-val_str_t auto_dst_strings[] = {
-	{ (auto_dst_t)DISABLED,	"Enabled" },
-	{ (auto_dst_t)ENABLED,	"Disabled" },
-	{ -1,			"Unknown DST mode" },
-	
+/* State enable/disable strings */
+val_str_t state_enable_disable_strings[] = {
+	{ (state_enable_disable_t)STATE_DISABLED,	"Disabled" },
+	{ (state_enable_disable_t)STATE_ENABLED,	"Enabled" },
+	{ -1,						"Unknown" }
+};
+
+/* State enable/disable strings (inverted) */
+val_str_t state_enable_disable_inv_strings[] = {
+	{ (state_enable_disable_inv_t)STATE_DISABLED_INV,	"Disabled" },
+	{ (state_enable_disable_inv_t)STATE_ENABLED_INV,	"Enabled" },
+	{ -1,							"Unknown" }
 };
 
 /* Display mode strings */
@@ -301,27 +314,226 @@ val_str_t display_mode_strings[] = {
 };
 
 /* Standby action strings */
-val_str_t standby_action_strings[] = {
-	{ (standby_action_t)NO_ACTION,			"No action" },
-	{ (standby_action_t)SPEED_SIG_GEN_ON,		"Speed signal generator on" },
-	{ (standby_action_t)SPEED_SIG_GEN_OFF,		"Speed signal generator off" },
-	{ (standby_action_t)ALARM_BUZZER_ON,		"Alarm buzzer on" },
-	{ (standby_action_t)ALARM_BUZZER_OFF,		"Alarm buzzer off" },
-	{ (standby_action_t)ALARM_BUZZER_CYCLE_ON_OFF,	"Alarm buzzer cycle on-off" },
-	{ (standby_action_t)ALARM_BUZZER_SINGLE_TONE,	"Alarm buzzer single tone" },
-	{ (standby_action_t)RELAY_ON,			"Relay on" },
-	{ (standby_action_t)RELAY_OFF,			"Relay off" },
-	{ (standby_action_t)SWITCH_RELAY_2_SEC,		"Switch relay for 2 s" },
-	{ (standby_action_t)SWITCH_RELAY_10_SEC,	"Switch relay for 10 s" },
-	{ (standby_action_t)LOAD_PROFILE_1,		"Load profile 1" },
-	{ (standby_action_t)LOAD_PROFILE_2,		"Load profile 2" },
-	{ (standby_action_t)LOAD_PROFILE_3,		"Load profile 3" },
-	{ (standby_action_t)LOAD_PROFILE_4,		"Load profile 4" },
-	{ (standby_action_t)USB_KEYBD_POWER_KEY,	"USB keyboard: power key" },
-	{ (standby_action_t)USB_KEYBD_SLEEP_KEY,	"USB keyboard: sleep key" },
-	{ (standby_action_t)USB_KEYBD_WAKEUP_KEY,	"USB keyboard: wakeup key" },
-	{ -1,						"Unknown standby action" },
+val_str_t event_action_strings[] = {
+	{ (event_action_t)NO_ACTION,			"No action" },
+	{ (event_action_t)SPEED_SIG_GEN_ON,		"Speed signal generator on" },
+	{ (event_action_t)SPEED_SIG_GEN_OFF,		"Speed signal generator off" },
+	{ (event_action_t)ALARM_BUZZER_ON,		"Alarm buzzer on" },
+	{ (event_action_t)ALARM_BUZZER_OFF,		"Alarm buzzer off" },
+	{ (event_action_t)ALARM_BUZZER_CYCLE_ON_OFF,	"Alarm buzzer cycle on-off" },
+	{ (event_action_t)ALARM_BUZZER_SINGLE_TONE,	"Alarm buzzer single tone" },
+	{ (event_action_t)RELAY_ON,			"Relay on" },
+	{ (event_action_t)RELAY_OFF,			"Relay off" },
+	{ (event_action_t)SWITCH_RELAY_2_SEC,		"Switch relay for 2 s" },
+	{ (event_action_t)SWITCH_RELAY_10_SEC,		"Switch relay for 10 s" },
+	{ (event_action_t)LOAD_PROFILE_1,		"Load profile 1" },
+	{ (event_action_t)LOAD_PROFILE_2,		"Load profile 2" },
+	{ (event_action_t)LOAD_PROFILE_3,		"Load profile 3" },
+	{ (event_action_t)LOAD_PROFILE_4,		"Load profile 4" },
+	{ (event_action_t)USB_KEYBD_POWER_KEY,		"USB keyboard: power key" },
+	{ (event_action_t)USB_KEYBD_SLEEP_KEY,		"USB keyboard: sleep key" },
+	{ (event_action_t)USB_KEYBD_WAKEUP_KEY,		"USB keyboard: wakeup key" },
+	{ (event_action_t)USB_MEDIA_KEYBD_PLAY_KEY,	"USB media keyboard: play" },
+	{ (event_action_t)USB_MEDIA_KEYBD_VOL_UP_KEY,	"USB media keyboard: volume up" },
+	{ (event_action_t)USB_MEDIA_KEYBD_VOL_DOWN_KEY,	"USB media keyboard: volume down" },
+	{ (event_action_t)USB_MEDIA_KEYBD_MUTE_KEY,	"USB media keyboard: mute" },
+	{ -1,						"Unknown standby action" }
 };
 
+/* Data source strings */
+val_str_t sensor_data_source_strings[] = {
+	{ (sensor_data_source_t)NO_DATA_SOURCE,		"No data source selected" },
+	{ (sensor_data_source_t)SENSOR_1,		"Sensor 1" },
+	{ (sensor_data_source_t)SENSOR_2,		"Sensor 2" },
+	{ (sensor_data_source_t)SENSOR_3,		"Sensor 3" },
+	{ (sensor_data_source_t)SENSOR_4,		"Sensor 4" },
+	{ (sensor_data_source_t)SENSOR_5,		"Sensor 5" },
+	{ (sensor_data_source_t)SENSOR_6,		"Sensor 6" },
+	{ (sensor_data_source_t)SENSOR_7,		"Sensor 7" },
+	{ (sensor_data_source_t)SENSOR_8,		"Sensor 8" },
+	{ (sensor_data_source_t)SENSOR_9,		"Sensor 9" },
+	{ (sensor_data_source_t)SENSOR_10,		"Sensor 10" },
+	{ (sensor_data_source_t)SENSOR_11,		"Sensor 11" },
+	{ (sensor_data_source_t)SENSOR_12,		"Sensor 12" },
+	{ (sensor_data_source_t)SENSOR_13,		"Sensor 13" },
+	{ (sensor_data_source_t)SENSOR_14,		"Sensor 14" },
+	{ (sensor_data_source_t)SENSOR_15,		"Sensor 15" },
+	{ (sensor_data_source_t)SENSOR_16,		"Sensor 16" },
+	{ (sensor_data_source_t)SOFT_SENSOR_1,		"Software sensor 1"},
+	{ (sensor_data_source_t)SOFT_SENSOR_2,		"Software sensor 2"},
+	{ (sensor_data_source_t)SOFT_SENSOR_3,		"Software sensor 3"},
+	{ (sensor_data_source_t)SOFT_SENSOR_4,		"Software sensor 4"},
+	{ (sensor_data_source_t)SOFT_SENSOR_5,		"Software sensor 5"},
+	{ (sensor_data_source_t)SOFT_SENSOR_6,		"Software sensor 6"},
+	{ (sensor_data_source_t)SOFT_SENSOR_7,		"Software sensor 7"},
+	{ (sensor_data_source_t)SOFT_SENSOR_8,		"Software sensor 8"},
+	{ (sensor_data_source_t)VIRT_SENSOR_1,		"Virtual sensor 1"},
+	{ (sensor_data_source_t)VIRT_SENSOR_2,		"Virtual sensor 2"},
+	{ (sensor_data_source_t)VIRT_SENSOR_3,		"Virtual sensor 3"},
+	{ (sensor_data_source_t)VIRT_SENSOR_4,		"Virtual sensor 4"},
+	/* Unknown */
+	{ (sensor_data_source_t)FAN_AMP_1,		"Fan amplifier 1" },
+	{ (sensor_data_source_t)FAN_AMP_2,		"Fan amplifier 2" },
+	{ (sensor_data_source_t)FAN_AMP_3,		"Fan amplifier 3" },
+	{ (sensor_data_source_t)FAN_AMP_4,		"Fan amplifier 4" },
+	{ (sensor_data_source_t)FAN_AMP_5,		"Fan amplifier 5" },
+	{ (sensor_data_source_t)FAN_AMP_6,		"Fan amplifier 6" },
+	{ (sensor_data_source_t)FAN_AMP_7,		"Fan amplifier 7" },
+	{ (sensor_data_source_t)FAN_AMP_8,		"Fan amplifier 8" },
+	{ (sensor_data_source_t)FAN_AMP_9,		"Fan amplifier 9" },
+	{ (sensor_data_source_t)FAN_AMP_10,		"Fan amplifier 10" },
+	{ (sensor_data_source_t)FAN_AMP_11,		"Fan amplifier 11" },
+	{ (sensor_data_source_t)FAN_AMP_12,		"Fan amplifier 12" },
+	{ (sensor_data_source_t)AQUAERO_CPU,		"Aquaero CPU" },
+	/* Unknown */
+	{ (sensor_data_source_t)FLOW_SENSOR_1,		"Flow sensor 1" },
+	{ (sensor_data_source_t)FLOW_SENSOR_2,		"Flow sensor 2" },
+	{ (sensor_data_source_t)FLOW_SENSOR_3,		"Flow sensor 3" },
+	{ (sensor_data_source_t)FLOW_SENSOR_4,		"Flow sensor 4" },
+	{ (sensor_data_source_t)FLOW_SENSOR_5,		"Flow sensor 5" },
+	{ (sensor_data_source_t)FLOW_SENSOR_6,		"Flow sensor 6" },
+	{ (sensor_data_source_t)FLOW_SENSOR_7,		"Flow sensor 7" },
+	{ (sensor_data_source_t)FLOW_SENSOR_8,		"Flow sensor 8" },
+	{ (sensor_data_source_t)FLOW_SENSOR_9,		"Flow sensor 9" },
+	{ (sensor_data_source_t)FLOW_SENSOR_10,		"Flow sensor 10" },
+	{ (sensor_data_source_t)FLOW_SENSOR_11,		"Flow sensor 11" },
+	{ (sensor_data_source_t)FLOW_SENSOR_12,		"Flow sensor 12" },
+	{ (sensor_data_source_t)FLOW_SENSOR_13,		"Flow sensor 13" },
+	{ (sensor_data_source_t)FLOW_SENSOR_14,		"Flow sensor 14" },
+	{ (sensor_data_source_t)FAN_RPM_1,		"Fan RPM 1" },
+	{ (sensor_data_source_t)FAN_RPM_2,		"Fan RPM 2" },
+	{ (sensor_data_source_t)FAN_RPM_3,		"Fan RPM 3" },
+	{ (sensor_data_source_t)FAN_RPM_4,		"Fan RPM 4" },
+	{ (sensor_data_source_t)FAN_RPM_5,		"Fan RPM 5" },
+	{ (sensor_data_source_t)FAN_RPM_6,		"Fan RPM 6" },
+	{ (sensor_data_source_t)FAN_RPM_7,		"Fan RPM 7" },
+	{ (sensor_data_source_t)FAN_RPM_8,		"Fan RPM 8" },
+	{ (sensor_data_source_t)FAN_RPM_9,		"Fan RPM 9" },
+	{ (sensor_data_source_t)FAN_RPM_10,		"Fan RPM 10" },
+	{ (sensor_data_source_t)FAN_RPM_11,		"Fan RPM 11" },
+	{ (sensor_data_source_t)FAN_RPM_12,		"Fan RPM 12" },
+	/* Unknown */
+	{ (sensor_data_source_t)FAN_VOLTAGE_1,		"Fan voltage 1" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_2,		"Fan voltage 2" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_3,		"Fan voltage 3" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_4,		"Fan voltage 4" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_5,		"Fan voltage 5" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_6,		"Fan voltage 6" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_7,		"Fan voltage 7" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_8,		"Fan voltage 8" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_9,		"Fan voltage 9" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_10,		"Fan voltage 10" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_11,		"Fan voltage 11" },
+	{ (sensor_data_source_t)FAN_VOLTAGE_12,		"Fan voltage 12" },
+	{ (sensor_data_source_t)FAN_CURRENT_1,		"Fan current 1" },
+	{ (sensor_data_source_t)FAN_CURRENT_2,		"Fan current 2" },
+	{ (sensor_data_source_t)FAN_CURRENT_3,		"Fan current 3" },
+	{ (sensor_data_source_t)FAN_CURRENT_4,		"Fan current 4" },
+	{ (sensor_data_source_t)FAN_CURRENT_5,		"Fan current 5" },
+	{ (sensor_data_source_t)FAN_CURRENT_6,		"Fan current 6" },
+	{ (sensor_data_source_t)FAN_CURRENT_7,		"Fan current 7" },
+	{ (sensor_data_source_t)FAN_CURRENT_8,		"Fan current 8" },
+	{ (sensor_data_source_t)FAN_CURRENT_9,		"Fan current 9" },
+	{ (sensor_data_source_t)FAN_CURRENT_10,		"Fan current 10" },
+	{ (sensor_data_source_t)FAN_CURRENT_11,		"Fan current 11" },
+	{ (sensor_data_source_t)FAN_CURRENT_12,		"Fan current 12" },
+	/* Unknown */
+	{ (sensor_data_source_t)SENS_FILL_LEVEL_1,	"Fill level 1" },
+	{ (sensor_data_source_t)SENS_FILL_LEVEL_2,	"Fill level 2" },
+	{ (sensor_data_source_t)SENS_FILL_LEVEL_3,	"Fill level 3" },
+	{ (sensor_data_source_t)SENS_FILL_LEVEL_4,	"Fill level 4" },
+	{ (sensor_data_source_t)POWER_CONSUMPTION_1,	"Power consumption 1" },
+	{ (sensor_data_source_t)POWER_CONSUMPTION_2,	"Power consumption 2" },
+	{ (sensor_data_source_t)POWER_CONSUMPTION_3,	"Power consumption 3" },
+	{ (sensor_data_source_t)POWER_CONSUMPTION_4,	"Power consumption 4" },
+	{ -1,						"Unknown data source" }
+};
+
+/* Virtual sensor mode strings */
+val_str_t virt_sensor_mode_strings[] = {
+	{ (virt_sensor_mode_t)HIGHEST_TEMP,	"Highest temperature" },
+	{ (virt_sensor_mode_t)LOWEST_TEMP,	"Lowest temperature" },
+	{ (virt_sensor_mode_t)AVERAGE_TEMP,	"Average temperature" },
+	{ (virt_sensor_mode_t)DIFFERENCE,	"Difference (Sensor 1 - Sensor 2)" },
+	{ (virt_sensor_mode_t)DIFFERENCE_ABS,	"Difference absolute (Sen.1 - Sen.2)" },
+	{ -1,					"Unknown mode" }
+};
+
+/* RGB LED pulsating brightness strings */
+val_str_t rgb_led_pulsating_brightness_strings[] = {
+	{ (rgb_led_pulsating_brightness_t)PB_OFF,	"Off" },
+	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_1,	"Variant 1" },
+	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_2,	"Variant 2" },
+	{ (rgb_led_pulsating_brightness_t)PB_VARIANT_3,	"Variant 3" },
+	{ -1,						"Unknown mode" }
+};
+
+/* aquaero relay configuration user strings */
+val_str_t aquaero_relay_configuration_strings[] = {
+	{ (aquaero_relay_configuration_t)CONTROLLED_FROM_DS,	"Controlled from data source" },
+	{ (aquaero_relay_configuration_t)AQ_RELAY_ON,		"Relay on" },	
+	{ (aquaero_relay_configuration_t)AQ_RELAY_OFF,		"Relay off" },	
+	{ (aquaero_relay_configuration_t)CONTROLLED_FROM_EVENT_SYS,	"Controlled from event system" },
+	{ -1,							"Unknown"}	
+};
+
+/* data log interval user strings */
+val_str_t data_log_interval_strings[] = {
+	{ (data_log_interval_t)INT_OFF,			"Off" },
+	{ (data_log_interval_t)INT_EVERY_2_SEC, 	"Every 2 seconds" },
+	{ (data_log_interval_t)INT_EVERY_10_SEC, 	"Every 10 seconds" },
+	{ (data_log_interval_t)INT_EVERY_30_SEC,	"Every 30 seconds" },
+	{ (data_log_interval_t)INT_EVERY_MIN, 		"Every minute" },
+	{ (data_log_interval_t)INT_EVERY_5_MIN, 	"Every 5 minutes" },
+	{ (data_log_interval_t)INT_EVERY_10_MIN,	"Every 10 minutes" },
+	{ (data_log_interval_t)INT_EVERY_30_MIN,	"Every 30 minutes" },
+	{ (data_log_interval_t)INT_EVERY_HOUR, 		"Every hour" },
+	{ -1,						"Unknown"}
+};
+
+/* temperature alarm configuration user strings */
+val_str_t temp_alarm_config_strings[] = {
+	{ (temp_alarm_config_t)TEMP_EXCEEDS_LIMIT,	"Temperature exceeds limit" },
+	{ (temp_alarm_config_t)TEMP_DROPS_BELOW_LIMIT,	"Temperature drops below limit" },
+	{ (temp_alarm_config_t)TEMP_ALARM_OFF,		"Alarm off" },
+	{ -1,						"Unknown" }
+};
+
+/* Alarm and warning level strings */
+val_str_t alarm_warning_levels_strings[] = {
+	{ (alarm_warning_levels_t)NORMAL_OPERATION,	"Normal operation" },
+	{ (alarm_warning_levels_t)WARNING, 		"Warning" },
+	{ (alarm_warning_levels_t)ALARM, 		"Alarm" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_4,	"Alarm/warning 4" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_5,	"Alarm/warning 5" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_6,	"Alarm/warning 6" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_7,	"Alarm/warning 7" },
+	{ (alarm_warning_levels_t)ALARM_WARNING_8,	"Alarm/warning 8" },
+	{ -1, 						"Unknown" }
+};
+
+/* Fan limit strings */
+val_str_t fan_limit_strings[] = {
+	{ (fan_limit_t)NO_RPM_SIG_AFTER_6S,		"No RPM signal after 6 seconds" },
+	{ (fan_limit_t)NO_RPM_SIG_AFTER_12S,		"No RPM signal after 12 seconds" },
+	{ (fan_limit_t)NO_RPM_SIG_AFTER_24S,		"No RPM signal after 24 seconds" },
+	{ (fan_limit_t)RPM_OFF,				"Off" },
+	{ -1,						"Unknown" }
+};
+
+/* Flow sensor configuration strings */
+val_str_t flow_config_strings[] = {
+	{ (flow_config_t)FLOW_FALLS_BELOW_LIMIT,	"Flow falls below limit" },
+	{ (flow_config_t)FLOW_EXCEEDS_LIMIT,		"Flow exceeds limit" },
+	{ (flow_config_t)FLOW_OFF,			"Off" },
+	{ -1,						"Unknown" }
+};
+
+/* Boolean strings */
+val_str_t boolean_strings[] = {
+	{ (boolean_t)FALSE,				"False" }, 
+	{ (boolean_t)TRUE,				"True" },
+	{ -1,						"Unknown" }
+};
 
 #endif /* AQUAERO5_USER_STRINGS_H_ */
