@@ -65,6 +65,7 @@
 /* TODO: vectorize to handle more than one device */
 unsigned char aq5_buf_data[AQ5_DATA_LEN];
 unsigned char aq5_buf_settings[AQ5_SETTINGS_LEN];
+unsigned char aq5_buf_soft_sensors[AQ5_SOFT_SENSORS_LEN];
 int aq5_fd = -1;
 
 /* helper functions */
@@ -81,6 +82,11 @@ inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
 			(buffer[offset + 2] << 8) | buffer[offset + 3];
 }
 
+inline void aq5_set_int16(unsigned char *buffer, short offset, uint16_t val)
+{
+	buffer[offset] = val >> 8;
+	buffer[offset + 1] = val;
+}
 
 /* get the uptime for the given value in seconds */
 inline void aq5_get_uptime(uint32_t timeval, struct tm *uptime)
@@ -265,6 +271,72 @@ int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *r
 		/* fetch the value from report */
 		ioctl(fd, HIDIOCGUSAGE, &uref);
 		report_data[j+1] = uref.value;
+	}
+
+	return 0;
+}
+
+
+/* Send the specified HID report */
+int aq5_send_report(int fd, int report_id, unsigned report_type, unsigned char *report_data)
+{
+	struct hiddev_report_info rinfo;
+	struct hiddev_field_info finfo;
+	struct hiddev_usage_ref uref;
+	int i;
+
+	/* find the requested usage code */
+	uref.report_type = report_type;
+	uref.report_id   = report_id;
+	uref.field_index = 0;
+        uref.usage_index = 0;
+	/* fetch the usage code for given indexes */
+	if (ioctl(fd, HIDIOCGUCODE, &uref) != 0) {
+		fprintf(stderr, "Failed to HIDIOCGUCODE for report %d\n", report_id);
+		return -1;
+	}
+
+	if (ioctl(fd, HIDIOCGUSAGE, &uref) != 0) {
+		fprintf(stderr, "Failed to HIDIOCGUSAGE for report %d\n", report_id);
+		return -1;
+	}
+
+	/* retrieve field info */
+	finfo.report_type = uref.report_type;
+	finfo.report_id   = uref.report_id;
+	finfo.field_index = uref.field_index;
+	if (ioctl(fd, HIDIOCGFIELDINFO, &finfo) != 0) {
+		fprintf(stderr, "Failed to HIDIOCGFIELDINFO for report %d\n", report_id);
+		return -1;
+	}
+
+	/* set values */
+	for(i=0; i<finfo.maxusage; i++) {
+		uref.report_type = finfo.report_type;
+		uref.report_id   = finfo.report_id;
+		uref.field_index = 0;
+		uref.usage_index = i;
+		/* check limits */
+		if ((report_data[i] < finfo.logical_minimum) || (report_data[i] > finfo.logical_maximum)) {
+                        fprintf(stderr, "%d: value %d outside of allowed range (%d-%d)\n",
+				uref.usage_code, report_data[i], finfo.logical_minimum,  finfo.logical_maximum);
+			return -1;
+		}
+		uref.value = (__s32)report_data[i];
+		/* set the value from report */
+		if (ioctl(fd, HIDIOCSUSAGE, &uref) != 0) {
+			fprintf(stderr, "Failed to HIDIOCSUSAGE for report %d\n", report_id);
+			return -1;
+		}
+	}
+
+	/* Now send the populated report */
+	rinfo.report_type = uref.report_type;
+	rinfo.report_id   = uref.report_id;
+	rinfo.num_fields = 1;
+	if (ioctl(fd, HIDIOCSREPORT, &rinfo) != 0) {
+		fprintf(stderr, "Failed to HIDIOCSREPORT for report %d\n", report_id);
+		return -1;
 	}
 
 	return 0;
@@ -891,4 +963,42 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 		}
 	}
 	return (val_str[i].str);
+}
+
+/* Initialize the software sensor array */
+void libaquaero5_init_soft_sensors()
+{
+	for (int i=0; i<AQ5_SOFT_SENSORS_LEN; i+=2) {
+		aq5_set_int16(aq5_buf_soft_sensors, i, 0x7fff);
+	}
+}
+
+/* Set the specified software sensor value into the buffer */
+int libaquaero5_set_soft_sensor(int sensor_id, double value)
+{
+	/* sanity check the values we have been given */
+	if ((sensor_id < 1) || (sensor_id > 8) || (value < 0.0) || (value > 99.0)) {
+		return -1;
+	}
+	/* Convert the value into a uint16 and put it into the buffer */
+	aq5_set_int16(aq5_buf_soft_sensors, (sensor_id - 1) * 2, (uint16_t)(value*100));	
+
+	return 0;
+}
+
+/* Send the software sensor buffer to the Aq5 */
+int libaquaero5_commit_soft_sensors()
+{
+	/*
+	printf("Software sensor buffer:\n");
+	for(int i=0; i < AQ5_SOFT_SENSORS_LEN; i++)
+		printf("%02X ", (int)aq5_buf_soft_sensors[i]);
+	printf("\n");
+	*/
+	if (aq5_send_report(aq5_fd, 0x7, HID_REPORT_TYPE_OUTPUT, aq5_buf_soft_sensors) != 0) {
+		fprintf(stderr, "libaquaero5_commit_soft_sensors() failed!\n");
+		return -1;
+	}
+
+	return 0;
 }

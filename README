@@ -71,6 +71,13 @@ To get a more script-friendly output in the form of 'KEY=VALUE' pairs just add
 For more comprehensive output in both default and export modes, use `-a`,
 e.g. `-a -o default` or `-a -o export`.
 
+To set software sensor values use `-s SENSOR:VALUE` i.e. `-s 1:30.00` or
+`-s 1:11.11 -s 2:22.22 -s 3:33.33`.
+
+Note: Multiple software sensor values must be sent at once. If aerocli is run
+again and any sensor value is set, all other unspecified sensors are set to
+default (disconnected).
+
 
 BUGS / CONTACT
 ----------------
