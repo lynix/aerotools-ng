@@ -46,6 +46,7 @@ void print_help()
 	printf("  -d  DEVICE  use given DEVICE (no auto-discovery)\n");
 	printf("  -o  FORMAT  output format (default, export)\n");
 	printf("  -a          print all available data (default: summary)\n");
+	printf("  -s  SENSOR:VALUE   set the given sofware SENSOR to the specified VALUE\n");
 	printf("  -D  FILE    dump data to FILE\n");
 	printf("  -S  FILE    dump settings to FILE\n");
 	printf("  -h          display this usage information\n");
@@ -59,8 +60,10 @@ void parse_cmdline(int argc, char *argv[])
 {
 	char c;
 	extern int optind, optopt, opterr;
+	char* argstr;
+	int index = 0;
 
-	while ((c = getopt(argc, argv, "d:o:aD:S:h")) != -1) {
+	while ((c = getopt(argc, argv, "d:o:as:D:S:h")) != -1) {
 		switch (c) {
 			case 'h':
 				print_help();
@@ -87,6 +90,26 @@ void parse_cmdline(int argc, char *argv[])
 				break;
 			case 'a':
 				out_all = 1;
+				break;
+			case 's':
+				/* Split the arguments */
+				for (int i=0; i<2; i++) {
+					argstr = strsep(&optarg, ":");
+					/* Sanity check the given arguments */
+					if (argstr == NULL) {
+						fprintf(stderr, "option -s requires SENSOR:VALUE (i.e. -s 1:30.00)\n");
+						exit(EXIT_FAILURE);
+					}
+					if (i == 0) {
+						index = (int)strtol(argstr, (char **) NULL, 10);
+					} 
+					else {
+						if (libaquaero5_set_soft_sensor(index, strtod(argstr, (char **) NULL)) == -1) {
+							fprintf(stderr, "Illegal sensor value. Must be in the range of 1-8 for SENSOR and 0.00-99.00 for VALUE\n");
+							exit(EXIT_FAILURE);
+						}
+					}
+				}
 				break;
 			case '?':
 				if (optopt == 'd'|| optopt == 'o')
@@ -841,6 +864,9 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 
 int main(int argc, char *argv[])
 {
+	/* The array needs to be initialized now so we can set values in the cmdline */
+	libaquaero5_init_soft_sensors();
+	
 	parse_cmdline(argc, argv);
 
 	aq5_data_t aquaero_data;
@@ -900,6 +926,11 @@ int main(int argc, char *argv[])
 	} else if (out_format == F_SCRIPT) {
 		/* Bunch of Bytes, please */
 		print_export(&aquaero_data, &aquaero_settings);
+	}
+
+	/* Send the software sensor settings */
+	if (libaquaero5_commit_soft_sensors() == -1) {
+		exit(EXIT_FAILURE);
 	}
 
 	/* Shut down communications and clean up */
