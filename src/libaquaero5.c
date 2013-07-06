@@ -66,6 +66,7 @@
 unsigned char aq5_buf_data[AQ5_DATA_LEN];
 unsigned char aq5_buf_settings[AQ5_SETTINGS_LEN];
 unsigned char aq5_buf_soft_sensors[AQ5_SOFT_SENSORS_LEN];
+unsigned char aq5_buf_time[AQ5_TIME_LEN];
 int aq5_fd = -1;
 
 /* helper functions */
@@ -86,6 +87,14 @@ inline void aq5_set_int16(unsigned char *buffer, short offset, uint16_t val)
 {
 	buffer[offset] = val >> 8;
 	buffer[offset + 1] = val;
+}
+
+inline void aq5_set_int32(unsigned char *buffer, short offset, uint32_t val)
+{
+	buffer[offset] = val >> 24;
+	buffer[offset + 1] = val >> 16;
+	buffer[offset + 2] = val >> 8;
+	buffer[offset + 3] = val;
 }
 
 /* get the uptime for the given value in seconds */
@@ -987,8 +996,12 @@ int libaquaero5_set_soft_sensor(int sensor_id, double value)
 }
 
 /* Send the software sensor buffer to the Aq5 */
-int libaquaero5_commit_soft_sensors()
+int libaquaero5_commit_soft_sensors(char *device,char **err_msg)
 {
+	/* Allow the device to be disconnected and open only if the fd is undefined */
+	if (aq5_open(device, err_msg) != 0) {
+		return -1;
+	}
 	/*
 	printf("Software sensor buffer:\n");
 	for(int i=0; i < AQ5_SOFT_SENSORS_LEN; i++)
@@ -996,7 +1009,28 @@ int libaquaero5_commit_soft_sensors()
 	printf("\n");
 	*/
 	if (aq5_send_report(aq5_fd, 0x7, HID_REPORT_TYPE_OUTPUT, aq5_buf_soft_sensors) != 0) {
-		fprintf(stderr, "libaquaero5_commit_soft_sensors() failed!\n");
+		*err_msg = "libaquaero5_commit_soft_sensors() failed!";
+		return -1;
+	}
+
+	return 0;
+}
+
+/* Set the aq5 device time */
+int libaquaero5_set_time(char *device, time_t time, char **err_msg)
+{
+	/* Allow the device to be disconnected and open only if the fd is undefined */
+	if (aq5_open(device, err_msg) != 0) {
+		return -1;
+	}
+
+	/* 
+ 	 * Convert the given time into Aq5 format time:
+	 * - the time in seconds since 1/1/2009 00:00:00 UTC 
+	 */
+	aq5_set_int32(aq5_buf_time, 0, (uint32_t)(time - 1230768000));	
+	if (aq5_send_report(aq5_fd, 0x5, HID_REPORT_TYPE_OUTPUT, aq5_buf_time) != 0) {
+		*err_msg = "libaquaero5_set_time() failed!";
 		return -1;
 	}
 

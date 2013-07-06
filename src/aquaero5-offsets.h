@@ -24,11 +24,13 @@
 
 /* report lengths */
 #if AQ5_FW_TARGET == 1027
+	#define AQ5_TIME_LEN			4
 	#define AQ5_SOFT_SENSORS_LEN		16
 	#define AQ5_DATA_LEN			659
 	#define AQ5_FW_MIN			1027
 	#define AQ5_FW_MAX			1027
 #elif ((AQ5_FW_TARGET <= 1030) && (AQ5_FW_TARGET >= 1028))
+	#define AQ5_TIME_LEN			4
 	#define AQ5_SOFT_SENSORS_LEN		16
 	#define AQ5_DATA_LEN			661
 	#define AQ5_FW_MIN			1028
