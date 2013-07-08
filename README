@@ -78,6 +78,8 @@ Note: Multiple software sensor values must be sent at once. If aerocli is run
 again and any sensor value is set, all other unspecified sensors are set to
 default (disconnected).
 
+To synchronize the Aquaero5(R) time with your system time use `-T`.
+ 
 
 BUGS / CONTACT
 ----------------
