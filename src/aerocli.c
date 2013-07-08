@@ -32,6 +32,7 @@ char *device = NULL;
 char *err_msg = NULL;
 char *dump_data_file = NULL;
 char *dump_settings_file = NULL;
+char quiet = 0;
 out_fmt_t out_format = F_STD;
 char out_all = 0;
 char set_time = 0;
@@ -69,8 +70,11 @@ void parse_cmdline(int argc, char *argv[])
 	char* argstr;
 	int index = 0;
 
-	while ((c = getopt(argc, argv, "d:o:as:D:S:hT")) != -1) {
+	while ((c = getopt(argc, argv, "d:o:aqs:D:S:hT")) != -1) {
 		switch (c) {
+			case 'q':
+				quiet = 1;
+				break;
 			case 'h':
 				print_help();
 				exit(EXIT_SUCCESS);
@@ -941,18 +945,20 @@ int main(int argc, char *argv[])
 		default:		flow_unit = "??"; break;
 	}
 
-	if (out_format == F_STD) {
-		/* Human-Readable Output, please */
-		print_system(&aquaero_data, &aquaero_settings);
-		print_sensors(&aquaero_data, &aquaero_settings);
-		print_fans(&aquaero_data, &aquaero_settings);
-		print_flow(&aquaero_data, &aquaero_settings);
-		print_levels(&aquaero_data, &aquaero_settings);
-		if (out_all)
-			print_settings(&aquaero_data, &aquaero_settings);
-	} else if (out_format == F_SCRIPT) {
+	if(!quiet ){
+		if (out_format == F_STD) {
+			/* Human-Readable Output, please */
+			print_system(&aquaero_data, &aquaero_settings);
+			print_sensors(&aquaero_data, &aquaero_settings);
+			print_fans(&aquaero_data, &aquaero_settings);
+			print_flow(&aquaero_data, &aquaero_settings);
+			print_levels(&aquaero_data, &aquaero_settings);
+			if (out_all)
+				print_settings(&aquaero_data, &aquaero_settings);
+		} else if (out_format == F_SCRIPT) {
 		/* Bunch of Bytes, please */
-		print_export(&aquaero_data, &aquaero_settings);
+			print_export(&aquaero_data, &aquaero_settings);
+		}
 	}
 
 	/* Shut down communications and clean up */

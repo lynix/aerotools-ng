@@ -41,3 +41,6 @@ obj/libaquaero5.o: src/libaquaero5.c src/libaquaero5.h \
 
 clean :
 	rm -f bin/aerocli obj/*.o
+	
+install :
+	install -C -groot -oroot bin/aerocli /usr/local/bin
