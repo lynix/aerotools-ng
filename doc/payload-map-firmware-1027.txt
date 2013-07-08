@@ -554,137 +554,137 @@ offset		type	value		description
 0x208		int16	power_consumption_4_temp1	Power consumption 4 temperature sensor 1
 0x20a		int16	power_consumption_4_temp2	Power consumption 4 temperature sensor 2
 
-0x20c		int16			Internal fan 1 Min RPM
-0x20e		int16			Internal fan 1 Max RPM
-0x210		int16			Internal fan 1 Min duty cycle
-0x212		int16			Internal fan 1 Max duty cycle
-0x214		int16			Internal fan 1 Startboost duty cycle
-0x216		int16			Internal fan 1 Startboost duration
-0x218		int16			Internal fan 1 Pulses per revolution
-0x21a		int16			Internal fan 1 Control mode
-0x21c		int16			Internal fan 1 Data source
-0x21e		int16			Internal fan 1 Programmable fuse setting in mA
+0x20d		int16			Internal fan 1 Min RPM
+0x20f		int16			Internal fan 1 Max RPM
+0x211		int16			Internal fan 1 Min duty cycle
+0x213		int16			Internal fan 1 Max duty cycle
+0x215		int16			Internal fan 1 Startboost duty cycle
+0x217		int16			Internal fan 1 Startboost duration
+0x219		int16			Internal fan 1 Pulses per revolution
+0x21b		int16			Internal fan 1 Control mode
+0x21d		int16			Internal fan 1 Data source
+0x21f		int16			Internal fan 1 Programmable fuse setting in mA
 
-0x220		int16			Internal fan 2 Min RPM
-0x222		int16			Internal fan 2 Max RPM
-0x224		int16			Internal fan 2 Min duty cycle
-0x226		int16			Internal fan 2 Max duty cycle
-0x228		int16			Internal fan 2 Startboost duty cycle
-0x22a		int16			Internal fan 2 Startboost duration
-0x22c		int16			Internal fan 2 Pulses per revolution
-0x22e		int16			Internal fan 2 Control mode
-0x230		int16			Internal fan 2 Data source
-0x232		int16			Internal fan 2 Programmable fuse setting in mA
+0x221		int16			Internal fan 2 Min RPM
+0x223		int16			Internal fan 2 Max RPM
+0x225		int16			Internal fan 2 Min duty cycle
+0x227		int16			Internal fan 2 Max duty cycle
+0x229		int16			Internal fan 2 Startboost duty cycle
+0x22b		int16			Internal fan 2 Startboost duration
+0x22d		int16			Internal fan 2 Pulses per revolution
+0x22f		int16			Internal fan 2 Control mode
+0x231		int16			Internal fan 2 Data source
+0x233		int16			Internal fan 2 Programmable fuse setting in mA
 
-0x234		int16			Internal fan 3 Min RPM
-0x236		int16			Internal fan 3 Max RPM
-0x238		int16			Internal fan 3 Min duty cycle
-0x23a		int16			Internal fan 3 Max duty cycle
-0x23c		int16			Internal fan 3 Startboost duty cycle
-0x23e		int16			Internal fan 3 Startboost duration
-0x240		int16			Internal fan 3 Pulses per revolution
-0x242		int16			Internal fan 3 Control mode
-0x244		int16			Internal fan 3 Data source
-0x246		int16			Internal fan 3 Programmable fuse setting in mA
+0x235		int16			Internal fan 3 Min RPM
+0x237		int16			Internal fan 3 Max RPM
+0x239		int16			Internal fan 3 Min duty cycle
+0x23b		int16			Internal fan 3 Max duty cycle
+0x23d		int16			Internal fan 3 Startboost duty cycle
+0x23f		int16			Internal fan 3 Startboost duration
+0x241		int16			Internal fan 3 Pulses per revolution
+0x243		int16			Internal fan 3 Control mode
+0x245		int16			Internal fan 3 Data source
+0x247		int16			Internal fan 3 Programmable fuse setting in mA
 
-0x248		int16			Internal fan 4 Min RPM
-0x24a		int16			Internal fan 4 Max RPM
-0x24c		int16			Internal fan 4 Min duty cycle
-0x24e		int16			Internal fan 4 Max duty cycle
-0x250		int16			Internal fan 4 Startboost duty cycle
-0x252		int16			Internal fan 4 Startboost duration
-0x254		int16			Internal fan 4 Pulses per revolution
-0x256		int16			Internal fan 4 Control mode
-0x258		int16			Internal fan 4 Data source
-0x25a		int16			Internal fan 4 Programmable fuse setting in mA
+0x249		int16			Internal fan 4 Min RPM
+0x24b		int16			Internal fan 4 Max RPM
+0x24d		int16			Internal fan 4 Min duty cycle
+0x24f		int16			Internal fan 4 Max duty cycle
+0x251		int16			Internal fan 4 Startboost duty cycle
+0x253		int16			Internal fan 4 Startboost duration
+0x255		int16			Internal fan 4 Pulses per revolution
+0x257		int16			Internal fan 4 Control mode
+0x259		int16			Internal fan 4 Data source
+0x25b		int16			Internal fan 4 Programmable fuse setting in mA
 
-0x25c		int16			External (aquabus) fan 5 Min RPM
-0x25e		int16			External (aquabus) fan 5 Max RPM
-0x260		int16			External (aquabus) fan 5 Min duty cycle
-0x262		int16			External (aquabus) fan 5 Max duty cycle
-0x264		int16			External (aquabus) fan 5 Startboost duty cycle
-0x266		int16			External (aquabus) fan 5 Startboost duration
-0x268		int16			External (aquabus) fan 5 Pulses per revolution
-0x26a		int16			External (aquabus) fan 5 Control mode
-0x26c		int16			External (aquabus) fan 5 Data source
-0x26e		int16			External (aquabus) fan 5 Programmable fuse setting in mA
+0x25d		int16			External (aquabus) fan 5 Min RPM
+0x25f		int16			External (aquabus) fan 5 Max RPM
+0x261		int16			External (aquabus) fan 5 Min duty cycle
+0x263		int16			External (aquabus) fan 5 Max duty cycle
+0x265		int16			External (aquabus) fan 5 Startboost duty cycle
+0x267		int16			External (aquabus) fan 5 Startboost duration
+0x269		int16			External (aquabus) fan 5 Pulses per revolution
+0x26b		int16			External (aquabus) fan 5 Control mode
+0x26d		int16			External (aquabus) fan 5 Data source
+0x26f		int16			External (aquabus) fan 5 Programmable fuse setting in mA
 
-0x25c		int16			External (aquabus) fan 6 Min RPM
-0x25e		int16			External (aquabus) fan 6 Max RPM
-0x260		int16			External (aquabus) fan 6 Min duty cycle
-0x262		int16			External (aquabus) fan 6 Max duty cycle
-0x264		int16			External (aquabus) fan 6 Startboost duty cycle
-0x266		int16			External (aquabus) fan 6 Startboost duration
-0x268		int16			External (aquabus) fan 6 Pulses per revolution
-0x26a		int16			External (aquabus) fan 6 Control mode
-0x26c		int16			External (aquabus) fan 6 Data source
-0x26e		int16			External (aquabus) fan 6 Programmable fuse setting in mA
+0x271		int16			External (aquabus) fan 6 Min RPM
+0x273		int16			External (aquabus) fan 6 Max RPM
+0x275		int16			External (aquabus) fan 6 Min duty cycle
+0x277		int16			External (aquabus) fan 6 Max duty cycle
+0x279		int16			External (aquabus) fan 6 Startboost duty cycle
+0x27b		int16			External (aquabus) fan 6 Startboost duration
+0x27d		int16			External (aquabus) fan 6 Pulses per revolution
+0x27f		int16			External (aquabus) fan 6 Control mode
+0x281		int16			External (aquabus) fan 6 Data source
+0x283		int16			External (aquabus) fan 6 Programmable fuse setting in mA
 
-0x270		int16			External (aquabus) fan 7 Min RPM
-0x272		int16			External (aquabus) fan 7 Max RPM
-0x274		int16			External (aquabus) fan 7 Min duty cycle
-0x276		int16			External (aquabus) fan 7 Max duty cycle
-0x278		int16			External (aquabus) fan 7 Startboost duty cycle
-0x27a		int16			External (aquabus) fan 7 Startboost duration
-0x27c		int16			External (aquabus) fan 7 Pulses per revolution
-0x27e		int16			External (aquabus) fan 7 Control mode
-0x280		int16			External (aquabus) fan 7 Data source
-0x282		int16			External (aquabus) fan 7 Programmable fuse setting in mA
+0x285		int16			External (aquabus) fan 7 Min RPM
+0x287		int16			External (aquabus) fan 7 Max RPM
+0x289		int16			External (aquabus) fan 7 Min duty cycle
+0x28b		int16			External (aquabus) fan 7 Max duty cycle
+0x28d		int16			External (aquabus) fan 7 Startboost duty cycle
+0x28f		int16			External (aquabus) fan 7 Startboost duration
+0x291		int16			External (aquabus) fan 7 Pulses per revolution
+0x293		int16			External (aquabus) fan 7 Control mode
+0x295		int16			External (aquabus) fan 7 Data source
+0x297		int16			External (aquabus) fan 7 Programmable fuse setting in mA
 
-0x284		int16			External (aquabus) fan 8 Min RPM
-0x286		int16			External (aquabus) fan 8 Max RPM
-0x288		int16			External (aquabus) fan 8 Min duty cycle
-0x28a		int16			External (aquabus) fan 8 Max duty cycle
-0x28c		int16			External (aquabus) fan 8 Startboost duty cycle
-0x28e		int16			External (aquabus) fan 8 Startboost duration
-0x290		int16			External (aquabus) fan 8 Pulses per revolution
-0x292		int16			External (aquabus) fan 8 Control mode
-0x294		int16			External (aquabus) fan 8 Data source
-0x296		int16			External (aquabus) fan 8 Programmable fuse setting in mA
+0x299		int16			External (aquabus) fan 8 Min RPM
+0x29b		int16			External (aquabus) fan 8 Max RPM
+0x29d		int16			External (aquabus) fan 8 Min duty cycle
+0x29f		int16			External (aquabus) fan 8 Max duty cycle
+0x2a1		int16			External (aquabus) fan 8 Startboost duty cycle
+0x2a3		int16			External (aquabus) fan 8 Startboost duration
+0x2a5		int16			External (aquabus) fan 8 Pulses per revolution
+0x2a7		int16			External (aquabus) fan 8 Control mode
+0x2a9		int16			External (aquabus) fan 8 Data source
+0x2ab		int16			External (aquabus) fan 8 Programmable fuse setting in mA
 
-0x298		int16			External (aquabus) fan 9 Min RPM
-0x29a		int16			External (aquabus) fan 9 Max RPM
-0x29c		int16			External (aquabus) fan 9 Min duty cycle
-0x29e		int16			External (aquabus) fan 9 Max duty cycle
-0x2a0		int16			External (aquabus) fan 9 Startboost duty cycle
-0x2a2		int16			External (aquabus) fan 9 Startboost duration
-0x2a4		int16			External (aquabus) fan 9 Pulses per revolution
-0x2a6		int16			External (aquabus) fan 9 Control mode
-0x2a8		int16			External (aquabus) fan 9 Data source
-0x2aa		int16			External (aquabus) fan 9 Programmable fuse setting in mA
+0x2ad		int16			External (aquabus) fan 9 Min RPM
+0x2af		int16			External (aquabus) fan 9 Max RPM
+0x2b1		int16			External (aquabus) fan 9 Min duty cycle
+0x2b3		int16			External (aquabus) fan 9 Max duty cycle
+0x2b5		int16			External (aquabus) fan 9 Startboost duty cycle
+0x2b7		int16			External (aquabus) fan 9 Startboost duration
+0x2b9		int16			External (aquabus) fan 9 Pulses per revolution
+0x2bb		int16			External (aquabus) fan 9 Control mode
+0x2bd		int16			External (aquabus) fan 9 Data source
+0x2bf		int16			External (aquabus) fan 9 Programmable fuse setting in mA
 
-0x2ac		int16			External (aquabus) fan 10 Min RPM
-0x2ae		int16			External (aquabus) fan 10 Max RPM
-0x2b0		int16			External (aquabus) fan 10 Min duty cycle
-0x2b2		int16			External (aquabus) fan 10 Max duty cycle
-0x2b4		int16			External (aquabus) fan 10 Startboost duty cycle
-0x2b6		int16			External (aquabus) fan 10 Startboost duration
-0x2b8		int16			External (aquabus) fan 10 Pulses per revolution
-0x2ba		int16			External (aquabus) fan 10 Control mode
-0x2bc		int16			External (aquabus) fan 10 Data source
-0x2be		int16			External (aquabus) fan 10 Programmable fuse setting in mA
+0x2c1		int16			External (aquabus) fan 10 Min RPM
+0x2c3		int16			External (aquabus) fan 10 Max RPM
+0x2c5		int16			External (aquabus) fan 10 Min duty cycle
+0x2c7		int16			External (aquabus) fan 10 Max duty cycle
+0x2c9		int16			External (aquabus) fan 10 Startboost duty cycle
+0x2cb		int16			External (aquabus) fan 10 Startboost duration
+0x2cd		int16			External (aquabus) fan 10 Pulses per revolution
+0x2cf		int16			External (aquabus) fan 10 Control mode
+0x2d1		int16			External (aquabus) fan 10 Data source
+0x2d3		int16			External (aquabus) fan 10 Programmable fuse setting in mA
 
-0x2c0		int16			External (aquabus) fan 11 Min RPM
-0x2c2		int16			External (aquabus) fan 11 Max RPM
-0x2c4		int16			External (aquabus) fan 11 Min duty cycle
-0x2c6		int16			External (aquabus) fan 11 Max duty cycle
-0x2c8		int16			External (aquabus) fan 11 Startboost duty cycle
-0x2ca		int16			External (aquabus) fan 11 Startboost duration
-0x2cc		int16			External (aquabus) fan 11 Pulses per revolution
-0x2ce		int16			External (aquabus) fan 11 Control mode
-0x2d0		int16			External (aquabus) fan 11 Data source
-0x2d2		int16			External (aquabus) fan 11 Programmable fuse setting in mA
+0x2d5		int16			External (aquabus) fan 11 Min RPM
+0x2d7		int16			External (aquabus) fan 11 Max RPM
+0x2d9		int16			External (aquabus) fan 11 Min duty cycle
+0x2db		int16			External (aquabus) fan 11 Max duty cycle
+0x2dd		int16			External (aquabus) fan 11 Startboost duty cycle
+0x2df		int16			External (aquabus) fan 11 Startboost duration
+0x2e1		int16			External (aquabus) fan 11 Pulses per revolution
+0x2e3		int16			External (aquabus) fan 11 Control mode
+0x2e5		int16			External (aquabus) fan 11 Data source
+0x2e7		int16			External (aquabus) fan 11 Programmable fuse setting in mA
 
-0x2c0		int16			External (aquabus) fan 12 Min RPM
-0x2c2		int16			External (aquabus) fan 12 Max RPM
-0x2c4		int16			External (aquabus) fan 12 Min duty cycle
-0x2c6		int16			External (aquabus) fan 12 Max duty cycle
-0x2c8		int16			External (aquabus) fan 12 Startboost duty cycle
-0x2ca		int16			External (aquabus) fan 12 Startboost duration
-0x2cc		int16			External (aquabus) fan 12 Pulses per revolution
-0x2ce		int16			External (aquabus) fan 12 Control mode
-0x2d0		int16			External (aquabus) fan 12 Data source
-0x2d2		int16			External (aquabus) fan 12 Programmable fuse setting in mA
+0x2e9		int16			External (aquabus) fan 12 Min RPM
+0x2eb		int16			External (aquabus) fan 12 Max RPM
+0x2ed		int16			External (aquabus) fan 12 Min duty cycle
+0x2ef		int16			External (aquabus) fan 12 Max duty cycle
+0x2f1		int16			External (aquabus) fan 12 Startboost duty cycle
+0x2f3		int16			External (aquabus) fan 12 Startboost duration
+0x2f5		int16			External (aquabus) fan 12 Pulses per revolution
+0x2f7		int16			External (aquabus) fan 12 Control mode
+0x2f9		int16			External (aquabus) fan 12 Data source
+0x2fb		int16			External (aquabus) fan 12 Programmable fuse setting in mA
 
 0x30c		int16	power_output_1_min_power	Power ouput 1 minimum power 
 0x30e		int16	power_output_1_max_power	Power ouput 1 maximum power 
@@ -699,6 +699,8 @@ offset		type	value		description
 0x31a		int16	power_output_aq_relay_ds	Power ouput Aquaero relay data source
 0x31c		int8	power_output_aq_relay_config	Power ouput Aquaero relay configuration
 0x31d		int16	power_output_aq_relay_switch_thresh	Power ouput Aquaero relay switch threshold
+
+0x31f-0x3C3 looks like 33 more relays (Ae5 slave + 4 multiswitch?)
 
 0x3e8		int16	two_point_controller_1_ds		Two point controller 1 data source
 0x3ea		int16	two_point_controller_1_upper_limit	Two point controller 1 upper limit

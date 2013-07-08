@@ -823,6 +823,10 @@ int	libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg);
 int	libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **err_msg);
 void	libaquaero5_exit();
 char	*libaquaero5_get_string(int id, val_str_opt_t opt);
+void 	libaquaero5_init_soft_sensors();
+int	libaquaero5_set_soft_sensor(int sensor_id, double value);
+int 	libaquaero5_commit_soft_sensors(char *device, char **err_msg);
+int	libaquaero5_set_time(char *device, time_t time, char **err_msg);
 
 /* helpful for debugging */
 int 	libaquaero5_dump_data(char *file);
