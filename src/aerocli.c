@@ -34,6 +34,8 @@ char *dump_data_file = NULL;
 char *dump_settings_file = NULL;
 out_fmt_t out_format = F_STD;
 char out_all = 0;
+char set_time = 0;
+char set_software_sensors = 0;
 char *temp_unit;
 char *flow_unit;
 
@@ -42,10 +44,15 @@ void print_help()
 {
 	printf("Usage: aerocli [OPTIONS]\n\n");
 
-	printf("Options:\n");
+	printf("Reading Options:\n");
 	printf("  -d  DEVICE  use given DEVICE (no auto-discovery)\n");
 	printf("  -o  FORMAT  output format (default, export)\n");
 	printf("  -a          print all available data (default: summary)\n");
+
+	printf("Writing Options:\n");
+	printf("  -s  SENSOR:VALUE   set the given sofware SENSOR to the specified VALUE\n");
+	printf("  -T                 synchronize time\n\n");
+
 	printf("  -D  FILE    dump data to FILE\n");
 	printf("  -S  FILE    dump settings to FILE\n");
 	printf("  -h          display this usage information\n");
@@ -59,8 +66,10 @@ void parse_cmdline(int argc, char *argv[])
 {
 	char c;
 	extern int optind, optopt, opterr;
+	char* argstr;
+	int index = 0;
 
-	while ((c = getopt(argc, argv, "d:o:aD:S:h")) != -1) {
+	while ((c = getopt(argc, argv, "d:o:as:D:S:hT")) != -1) {
 		switch (c) {
 			case 'h':
 				print_help();
@@ -87,6 +96,31 @@ void parse_cmdline(int argc, char *argv[])
 				break;
 			case 'a':
 				out_all = 1;
+				break;
+			case 's':
+				/* Split the arguments */
+				for (int i=0; i<2; i++) {
+					argstr = strsep(&optarg, ":");
+					/* Sanity check the given arguments */
+					if (argstr == NULL) {
+						fprintf(stderr, "option -s requires SENSOR:VALUE (i.e. -s 1:30.00)\n");
+						exit(EXIT_FAILURE);
+					}
+					if (i == 0) {
+						index = (int)strtol(argstr, (char **) NULL, 10);
+					} 
+					else {
+						if (libaquaero5_set_soft_sensor(index, strtod(argstr, (char **) NULL)) == -1) {
+							fprintf(stderr, "Illegal sensor value. Must be in the range of 1-8 for SENSOR and 0.00-99.00 for VALUE\n");
+							exit(EXIT_FAILURE);
+						} else {
+							set_software_sensors = 1;
+						}
+					}
+				}
+				break;
+			case 'T':
+				set_time = 1;
 				break;
 			case '?':
 				if (optopt == 'd'|| optopt == 'o')
@@ -841,10 +875,29 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 
 int main(int argc, char *argv[])
 {
+	/* The array needs to be initialized now so we can set values in the cmdline */
+	libaquaero5_init_soft_sensors();
+	
 	parse_cmdline(argc, argv);
 
 	aq5_data_t aquaero_data;
 	aq5_settings_t aquaero_settings;
+
+	/* Set the device time */
+	if (set_time == 1) {
+		if (libaquaero5_set_time(device, time(NULL), &err_msg) < 0) {
+			fprintf(stderr, "failed to set time: %s (%s)\n", err_msg, strerror(errno));
+			exit(EXIT_FAILURE);
+		} 
+	}
+
+	/* Send the software sensor settings */
+	if (set_software_sensors == 1) {
+		if (libaquaero5_commit_soft_sensors(device, &err_msg) < 0) {
+			fprintf(stderr, "failed to commit soft sensors: %s (%s)\n", err_msg, strerror(errno));
+			exit(EXIT_FAILURE);
+		}
+	}
 
 	if (libaquaero5_poll(device, &aquaero_data, &err_msg) < 0) {
 		fprintf(stderr, "failed to poll: %s (%s)\n", err_msg, strerror(errno));
