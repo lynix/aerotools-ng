@@ -75,13 +75,13 @@ int aq5_fd = -1;
 
 /* helper functions */
 
-inline uint16_t aq5_get_int16(unsigned char *buffer, short offset)
+static inline uint16_t aq5_get_int16(unsigned char *buffer, short offset)
 {
 	return (uint16_t)((buffer[offset] << 8) | buffer[offset + 1]);
 }
 
 
-inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
+static inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
 {
 	return (buffer[offset] << 24) | (buffer[offset + 1] << 16) |
 			(buffer[offset + 2] << 8) | buffer[offset + 3];
@@ -102,7 +102,7 @@ inline void aq5_set_int32(unsigned char *buffer, short offset, uint32_t val)
 }
 
 /* get the uptime for the given value in seconds */
-inline void aq5_get_uptime(uint32_t timeval, struct tm *uptime)
+static inline void aq5_get_uptime(uint32_t timeval, struct tm *uptime)
 {
 	uptime->tm_sec = timeval;
 	uptime->tm_min = uptime->tm_sec / 60;
@@ -117,7 +117,7 @@ inline void aq5_get_uptime(uint32_t timeval, struct tm *uptime)
 }
 
 
-inline void aq5_get_time(uint32_t timeval, struct tm *time)
+static inline void aq5_get_time(uint32_t timeval, struct tm *time)
 {
 	time->tm_min = 0;
 	time->tm_hour = 0;
@@ -130,7 +130,7 @@ inline void aq5_get_time(uint32_t timeval, struct tm *time)
 }
 
 
-char *aq5_strcat(char *str1, char *str2)
+static char *aq5_strcat(char *str1, char *str2)
 {
 	char *ret;
 
@@ -142,7 +142,7 @@ char *aq5_strcat(char *str1, char *str2)
 	return ret;
 }
 
-int aq5_open(char *device, char **err_msg)
+static int aq5_open(char *device, char **err_msg)
 {
 	struct hiddev_devinfo dinfo;
 
@@ -244,7 +244,7 @@ int aq5_open(char *device, char **err_msg)
 
 
 /* Get the specified HID report */
-int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data)
+static int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data)
 {
 	struct hiddev_report_info rinfo;
 	struct hiddev_field_info finfo;
