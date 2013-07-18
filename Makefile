@@ -25,8 +25,9 @@ ifdef DEBUG
 	CFLAGS += -g
 endif
 
+LIB_OBJS=obj/libaquaero5.o
 
-all : bin/aerocli
+all : bin/aerocli lib/libaquaero.a lib/libaquaero.so
 
 bin/aerocli: obj/aerocli.o obj/libaquaero5.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
@@ -36,8 +37,15 @@ obj/aerocli.o: src/aerocli.c src/libaquaero5.h
 	
 obj/libaquaero5.o: src/libaquaero5.c src/libaquaero5.h \
 		src/aquaero5-user-strings.h src/aquaero5-offsets.h
-	$(CC) $(CFLAGS) -o $@ -c $<
-	
+	$(CC) $(CFLAGS) -fPIC -o $@ -c $<
+
+# Static library file
+lib/libaquaero.a: $(LIB_OBJS)
+	ar cr $@ $^
+
+# Dynamic library file
+lib/libaquaero.so: $(LIB_OBJS)
+	$(CC) -shared -o $@ $^
 
 clean :
-	rm -f bin/aerocli obj/*.o
+	rm -f bin/aerocli obj/*.o lib/*.a lib/*.so
