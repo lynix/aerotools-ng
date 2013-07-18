@@ -22,6 +22,7 @@
 
 /* libs */
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <string.h>
 #include <unistd.h>
@@ -172,6 +173,7 @@ static int aq5_open(char *device, char **err_msg)
 #ifdef DEBUG
 				printf("failed to open '%s', skipping\n", full_path);
 #endif
+				free(full_path);
 				continue;
 			}
 			ioctl(aq5_fd, HIDIOCGDEVINFO, &dinfo);
@@ -181,12 +183,14 @@ static int aq5_open(char *device, char **err_msg)
 				printf("no Aquaero 5 found on '%s'\n", full_path);
 #endif
 				close(aq5_fd);
+				free(full_path);
 				continue;
 			} else {
 				/* we found the first Aquaero 5 device */
 #ifdef DEBUG
 				printf("found Aquaero 5 device on '%s'!\n", full_path);
 #endif
+				free(full_path);
 				break;
 			}
 		}
