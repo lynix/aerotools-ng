@@ -47,10 +47,33 @@
 #define AQ5_NUM_FILL_ALARMS				4
 #define AQ5_NUM_TIMERS					32
 #define AQ5_NUM_IR_COMMANDS				16
+#define AQ5_NUM_AQUASTREAM		2
 
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
 
+
+typedef enum { FALSE, TRUE } boolean_t;
+
+typedef enum {
+	AQASTREAM_MODE_AUTO	=	0x00,
+	AQASTREAM_MODE_MANUAL	=	0x01,
+	AQASTREAM_MODE_DEARATION	=	0x02,
+	AQASTREAM_MODE_OFFLINE	=	0xff
+} aquastream_freqmode_t;
+
+typedef struct {
+	boolean_t	available;
+	boolean_t	alarm;
+} aquastream_status_t;	
+
+typedef struct {
+	aquastream_status_t	status;
+	aquastream_freqmode_t	freqmode;
+	uint16_t	frequency;
+	double		voltage;
+	uint16_t	current;
+} aquastream_data_t;
 
 /* structures holding device data */
 typedef struct {
@@ -74,14 +97,13 @@ typedef struct {
 	double		flow[AQ5_NUM_FLOW];
 	double		cpu_temp[AQ5_NUM_CPU];
 	double		level[AQ5_NUM_LEVEL];
+	aquastream_data_t	aquastream[AQ5_NUM_AQUASTREAM];
 } aq5_data_t;
 
 typedef enum { 
 	M_OUTPUT 	= 0x0000, 
 	M_RPM 		= 0x0001 
 } fan_regulation_mode_t;
-
-typedef enum { FALSE, TRUE } boolean_t;
 
 typedef enum {
 	NONE		=	0xffff,
@@ -324,7 +346,8 @@ typedef enum {
 	PAGE_DISPLAY_MODE,
 	DISABLE_KEYS,
 	ILLUM_MODE,
-	KEY_TONE
+	KEY_TONE,
+	AQUASTREAM_FREQMODE
 } val_str_opt_t;
 
 typedef enum {
@@ -737,6 +760,12 @@ typedef struct {
 } switch_pc_via_ir_t;
 
 typedef struct {
+	aquastream_freqmode_t	freqmode;
+	uint16_t		frequency;
+} aquastream_settings_t;
+
+typedef struct {
+	aquastream_settings_t	aquastream[AQ5_NUM_AQUASTREAM];
 	disable_keys_t		allow_output_override;
 	infrared_functions_t	infrared_functions;
 	language_t		infrared_keyboard_layout;

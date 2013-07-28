@@ -174,6 +174,18 @@ offset		type	value		description
 0x1c5		int16	fan12 voltage	External (aquabus) fan 12 Voltage
 0x1c7		int16	fan12 current	External (aquabus) fan 12 VRM current
 
+0x1c9		int8	aquastream1 status	Aquastream 1 status
+0x1ca		int8	aquastream1 freqmode	Aquastream 1 frequency mode
+0x1cb		int16	aquastream1 frequency	Aquastream 1 frequency
+0x1cd		int16	aquastream1 voltage	Aquastream 1 voltage
+0x1cf		int16	aquastream1 current	Aquastream 1 current
+
+0x1d1		int8	aquastream2 status	Aquastream 2 status
+0x1d2		int8	aquastream2 freqmode	Aquastream 2 frequency mode
+0x1d3		int16	aquastream2 frequency	Aquastream 2 frequency
+0x1d5		int16	aquastream2 voltage	Aquastream 2 voltage
+0x1d7		int16	aquastream2 current	Aquastream 2 current
+
 
 
 Settings
@@ -685,6 +697,12 @@ offset		type	value		description
 0x2f7		int16			External (aquabus) fan 12 Control mode
 0x2f9		int16			External (aquabus) fan 12 Data source
 0x2fb		int16			External (aquabus) fan 12 Programmable fuse setting in mA
+
+0x2fd		int8	aquastream1 freqmode		Aquastream 1 frequency mode
+0x2fe		int16	aquastream1 frequency		Aquastream 1 frequency
+
+0x300		int8	aquastream2 freqmode		Aquastream 2 frequency mode
+0x301		int16	aquastream2 frequency		Aquastream 2 frequency
 
 0x30c		int16	power_output_1_min_power	Power ouput 1 minimum power 
 0x30e		int16	power_output_1_max_power	Power ouput 1 maximum power 
