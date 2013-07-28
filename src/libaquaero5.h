@@ -52,6 +52,9 @@
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
 
+
+typedef enum { FALSE, TRUE } boolean_t;
+
 typedef enum {
 	AQASTREAM_MODE_AUTO	=	0x00,
 	AQASTREAM_MODE_MANUAL	=	0x01,
@@ -60,7 +63,12 @@ typedef enum {
 } aquastream_freqmode_t;
 
 typedef struct {
-	uint8_t		status;
+	boolean_t	available;
+	boolean_t	alarm;
+} aquastream_status_t;	
+
+typedef struct {
+	aquastream_status_t	status;
 	aquastream_freqmode_t	freqmode;
 	uint16_t	frequency;
 	double		voltage;
@@ -96,8 +104,6 @@ typedef enum {
 	M_OUTPUT 	= 0x0000, 
 	M_RPM 		= 0x0001 
 } fan_regulation_mode_t;
-
-typedef enum { FALSE, TRUE } boolean_t;
 
 typedef enum {
 	NONE		=	0xffff,
@@ -754,6 +760,12 @@ typedef struct {
 } switch_pc_via_ir_t;
 
 typedef struct {
+	aquastream_freqmode_t	freqmode;
+	uint16_t		frequency;
+} aquastream_settings_t;
+
+typedef struct {
+	aquastream_settings_t	aquastream[AQ5_NUM_AQUASTREAM];
 	disable_keys_t		allow_output_override;
 	infrared_functions_t	infrared_functions;
 	language_t		infrared_keyboard_layout;

@@ -39,6 +39,10 @@
 /* device data and formatting constants */
 #include "aquaero5-offsets.h"
 
+/* Aquastream data status masks */
+#define AQ5_DATA_AQUASTREAM_STATUS_AVAILABLE	0x01
+#define AQ5_DATA_AQUASTREAM_STATUS_ALARM	0x02
+
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_RPM	0x0001
@@ -534,6 +538,12 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		settings_dest->fan_programmable_fuse[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 18 + i * AQ5_SETTINGS_FAN_DIST);
 	}
 
+	/* Aquastream settings */
+	for (int i=0; i<AQ5_NUM_FAN; i++) {
+		settings_dest->aquastream[i].freqmode = aq5_buf_settings[AQ5_SETTINGS_AQUASTREAM_OFFS + i * AQ5_SETTINGS_AQUASTREAM_DIST];
+		settings_dest->aquastream[i].frequency = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_AQUASTREAM_OFFS + 1 + i * AQ5_SETTINGS_AQUASTREAM_DIST);
+	}
+
 	/* Power and relay output settings  */
 	settings_dest->power_output_1_config.min_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS) /100;
 	settings_dest->power_output_1_config.max_power = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_POWER_OUTPUT_OFFS + 2) /100;
@@ -834,6 +844,25 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg)
 		data_dest->level[i] = (double)aq5_get_int16(aq5_buf_data, AQ5_LEVEL_OFFS + i * AQ5_LEVEL_DIST) / 100.0;
 	}
 
+	/* Aquastreams */
+	for (int i=0; i<AQ5_NUM_AQUASTREAM; i++) {
+		n = aq5_buf_data[AQ5_AQUASTREAM_OFFS + i * AQ5_AQUASTREAM_DIST];
+		if ((n & AQ5_DATA_AQUASTREAM_STATUS_AVAILABLE) == AQ5_DATA_AQUASTREAM_STATUS_AVAILABLE) {
+			data_dest->aquastream[i].status.available = TRUE;
+		} else {
+			data_dest->aquastream[i].status.available = FALSE;
+		}
+		if ((n & AQ5_DATA_AQUASTREAM_STATUS_ALARM) == AQ5_DATA_AQUASTREAM_STATUS_ALARM) {
+			data_dest->aquastream[i].status.alarm = TRUE;
+		} else {
+			data_dest->aquastream[i].status.alarm = FALSE;
+		}
+		data_dest->aquastream[i].freqmode = aq5_buf_data[AQ5_AQUASTREAM_OFFS + 1 + i * AQ5_AQUASTREAM_DIST];
+		data_dest->aquastream[i].frequency = aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_OFFS + 2 + i * AQ5_AQUASTREAM_DIST);
+		data_dest->aquastream[i].voltage = (double)aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_OFFS + 4 + i * AQ5_AQUASTREAM_DIST) / 100.0;
+		data_dest->aquastream[i].current = aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_OFFS + 6 + i * AQ5_AQUASTREAM_DIST);
+	}
+
 	/* firmware compatibility check */
 	if ((data_dest->firmware_version < AQ5_FW_MIN) || (data_dest->firmware_version > AQ5_FW_MAX))
 		*err_msg = "unsupported firmware version";
@@ -962,8 +991,11 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 			val_str = illumination_mode_strings;
 			break;
 		case KEY_TONE:
-		default:
 			val_str = key_tone_strings;
+			break;
+		case AQUASTREAM_FREQMODE:
+		default:
+			val_str = aquastream_freqmode_strings;
 	}
 	/* We have to search for it */
 	for (i=0; val_str[i].val != -1; i++) {
