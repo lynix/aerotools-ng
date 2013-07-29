@@ -1,4 +1,5 @@
 # Copyright 2012 lynix <lynix47@gmail.com>
+# Copyright 2013 JinTu <JinTu@praecogito.com>, lynix <lynix47@gmail.com>
 #
 # This file is part of aerotools-ng.
 #
@@ -27,7 +28,7 @@ endif
 
 LIB_OBJS=obj/libaquaero5.o
 
-all : bin/aerocli lib/libaquaero.a lib/libaquaero.so
+all : bin/aerocli lib/libaquaero5.a lib/libaquaero5.so
 
 bin/aerocli: obj/aerocli.o obj/libaquaero5.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
@@ -40,15 +41,15 @@ obj/libaquaero5.o: src/libaquaero5.c src/libaquaero5.h \
 	$(CC) $(CFLAGS) -fPIC -o $@ -c $<
 
 # Static library file
-lib/libaquaero.a: $(LIB_OBJS)
+lib/libaquaero5.a: $(LIB_OBJS)
 	ar cr $@ $^
 
 # Dynamic library file
-lib/libaquaero.so: $(LIB_OBJS)
+lib/libaquaero5.so: $(LIB_OBJS)
 	$(CC) -shared -o $@ $^
 
 clean :
 	rm -f bin/aerocli obj/*.o lib/*.a lib/*.so
 
 install :
-	install -C -groot -oroot bin/aerocli /usr/local/bin
+	install -C -groot -oroot bin/aerocli /usr/local/sbin
