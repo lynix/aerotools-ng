@@ -130,6 +130,27 @@ static inline void aq5_get_time(uint32_t timeval, struct tm *time)
 	mktime(time);
 }
 
+static inline int aq5_check_and_strip_name_report_watermarks(unsigned char *dirtybuffer, unsigned char *cleanbuffer)
+{
+	for (int i=0; i<48; i++) {
+		if (aq5_get_int16(dirtybuffer, name_report_watermarks[i].offset) != name_report_watermarks[i].value) {
+			/* printf("Oops watermark at offset %02X is %02X (index %d), but should be %02X!\n", name_report_watermarks[i].offset, aq5_get_int16(dirtybuffer, name_report_watermarks[i].offset), i, name_report_watermarks[i].value); */
+			return -1;
+		} else {
+			/* printf("i=%d\n",i); */
+		}
+	}
+
+	/* Initialize cleanbuffer */
+	memset(cleanbuffer, 0, 8 * 512 * sizeof(char));
+
+	for (int i=0; i<8; i++) {
+		memcpy(cleanbuffer + (512 * i), dirtybuffer + 9 + (i * 523), 512 * sizeof(char));
+	}
+
+	return 0;
+}
+
 
 static char *aq5_strcat(char *str1, char *str2)
 {
