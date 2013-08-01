@@ -169,6 +169,7 @@ void print_system(aq5_data_t *aq_data, aq5_settings_t *aq_sett) {
 		printf("CPU Temp:%18.2f %s\n", aq_data->cpu_temp[0], temp_unit);
 	} else {
 		char time_utc_str[21], uptime_total_str[51];
+		printf("Name          = '%s'\n", libaquaero5_get_name(NAME_AQ5, 0));
 		strftime(time_utc_str, 20, "%Y-%m-%d %H:%M:%S", &aq_data->time_utc);
 		strftime(uptime_total_str, 50, "%yy %dd %H:%M:%S", &aq_data->total_time);
 		printf("Time (UTC)    = %s\n", time_utc_str);
@@ -965,6 +966,12 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	
+	if (libaquaero5_get_all_names(device, 31, &err_msg) < 0) {
+		fprintf(stderr, "failed to get names: %s (%s)\n", err_msg,
+				strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+
 
 	if (dump_data_file != NULL) {
 		if (libaquaero5_dump_data(dump_data_file) != 0)

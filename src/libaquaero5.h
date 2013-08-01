@@ -923,6 +923,8 @@ void 	libaquaero5_init_soft_sensors();
 int	libaquaero5_set_soft_sensor(int sensor_id, double value);
 int 	libaquaero5_commit_soft_sensors(char *device, char **err_msg);
 int	libaquaero5_set_time(char *device, time_t time, char **err_msg);
+int	libaquaero5_get_all_names(char *device, int max_attempts, char **err_msg);
+char	*libaquaero5_get_name(name_enum_t type, uint8_t index);
 
 /* helpful for debugging */
 int 	libaquaero5_dump_data(char *file);

@@ -1188,7 +1188,7 @@ int libaquaero5_set_time(char *device, time_t time, char **err_msg)
 }
 
 /* Send report 0x09, then read back report 0x0c 8x for all the device names */
-int libaquaero5_get_names(char *device, int max_attempts, char **err_msg)
+int libaquaero5_get_all_names(char *device, int max_attempts, char **err_msg)
 {
 	unsigned char *name_buffer = (unsigned char*)malloc(AQ5_REPORT_NAME_LEN * 8);
 	unsigned char *rname_buffer = (unsigned char*)malloc(AQ5_REPORT_NAME_LEN);
@@ -1200,10 +1200,10 @@ int libaquaero5_get_names(char *device, int max_attempts, char **err_msg)
 		return -1;
 	}
 
-	for (int i=0; i<31; i++) {
+	for (int i=0; i<max_attempts; i++) {
+#ifdef DEBUG
 		printf("Attempt %d\n", i);
-		printf("Sending the following request in report 0x9:\n");
-		/* Define the report 9 request */
+#endif
 		/* We need to ensure that the buffer is initialized with 0s for each attempt */
 		for (int j=0; j<AQ5_REPORT_NAME_LEN; j++) {
 			rname_buffer[j] = 0;
@@ -1212,6 +1212,7 @@ int libaquaero5_get_names(char *device, int max_attempts, char **err_msg)
 		for (int j=0; j<(AQ5_REPORT_NAME_LEN * 8); j++) {
 			name_buffer[j] = 0;
 		}
+		/* Define the report 9 request */
 		aq5_set_int16(rname_buffer, 0, 0x0100);
 		aq5_set_int16(rname_buffer, 2, 0x09c0);
 		aq5_set_int16(rname_buffer, 4, 0x0000);
@@ -1219,16 +1220,9 @@ int libaquaero5_get_names(char *device, int max_attempts, char **err_msg)
 		aq5_set_int16(rname_buffer, AQ5_REPORT_NAME_LEN - 2, 0xdd82);
 		aq5_send_report(aq5_fd, 0x9, HID_REPORT_TYPE_OUTPUT, rname_buffer);
 
-		printf("\n\n** getting the 8x 0xC reports:\n");
-		/* interruptRead(fd, 0xff000001, name_buffer, REPORT_NAME_LEN * 8); */
-		aq5_interruptRead(device, 0xc, name_buffer, 523, 8, err_msg);
+		/* Now read out the 8x report 0xC */
+		aq5_interruptRead(device, 0xc, name_buffer, AQ5_REPORT_NAME_LEN, 8, err_msg);
 		if (aq5_check_and_strip_name_report_watermarks(name_buffer, clean_name_buffer) == 0) {
-			printf("watermarks match!\n");
-			for (int j=0; j<AQ5_CLEAN_NAME_LEN; j++) {
-				if (((j) % 16 == 0 )) printf("%08X  ", j);
-				printf("%02X ", clean_name_buffer[j]);
-				if((j+1) % 16 == 0 ) printf( "\n" );
-			}
 			for (int j=0; j<181; j++) {
 				aq5_buf_device_names[j] = malloc(23 * sizeof(char));
 				/* Copy the non 0 values to the array */
@@ -1249,24 +1243,26 @@ int libaquaero5_get_names(char *device, int max_attempts, char **err_msg)
 			}
 			break;
 		} else {
-			if (i == 30) {
-				printf("Doh! Failed for the %dth time, bailing out\n", i);
+			if (i == (max_attempts - 1)) {
+				*err_msg = "Failed to read the names for the last time time, aborting";
 				return -1;
 			} else {
+#ifdef DEBUG
 				printf("Trying again...\n");
+#endif
 			}
 		}
 	}
 
-	printf("Printing device names...\n");
-	for (int j=0; j<181; j++) {
-		printf("%d:%s (%d bytes)\n", j, aq5_buf_device_names[j], (int)strlen(aq5_buf_device_names[j]));
-	}
-
-	printf("\nPrinting just the sensor names...\n");
-	for (int j=name_positions[NAME_SENSOR].address; j<(name_positions[NAME_SENSOR].address + name_positions[NAME_SENSOR].count); j++) {
-		printf("%d:%s (%d bytes)\n", j, aq5_buf_device_names[j], (int)strlen(aq5_buf_device_names[j]));
-	}
-
 	return 0;
+}
+
+/* Return the human readable string for the given enum */
+char *libaquaero5_get_name(name_enum_t type, uint8_t index)
+{
+	if (index < name_positions[type].count) {
+		return aq5_buf_device_names[name_positions[type].address + index];
+	} else {
+		return "Unknown";
+	}
 }
