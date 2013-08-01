@@ -204,7 +204,7 @@ void print_sensors(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 	}
 
 	for (int n=0; n<AQ5_NUM_TEMP; n++) {
-		printf("Sensor %2d     = ", n+1);
+		printf("Sensor %2d '%s'\t= ", n+1, libaquaero5_get_name(NAME_SENSOR, n));
 		if (aq_data->temp[n] != AQ5_FLOAT_UNDEF)
 			print_with_offset(aq_data->temp[n], aq_sett->temp_offset[n], temp_unit);
 		else
@@ -214,7 +214,7 @@ void print_sensors(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 
 	printf("---- Virtual Sensors -----\n");
 	for (int n=0; n<AQ5_NUM_VIRT_SENSORS; n++) {
-		printf("Sensor %2d     = ", n+1);
+		printf("Sensor %2d '%s'\t= ", n+1, libaquaero5_get_name(NAME_VIRTUAL_SENSOR, n));
 		if (aq_data->vtemp[n] != AQ5_FLOAT_UNDEF)
 			print_with_offset(aq_data->vtemp[n], aq_sett->vtemp_offset[n], temp_unit);
 		else
@@ -224,7 +224,7 @@ void print_sensors(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 
 	printf("---- Software Sensors -----\n");
 	for (int n=0; n<AQ5_NUM_SOFT_SENSORS; n++) {
-		printf("Sensor %2d     = ", n+1);
+		printf("Sensor %2d '%s'\t= ", n+1, libaquaero5_get_name(NAME_SOFTWARE_SENSOR, n));
 		if (aq_data->stemp[n] != AQ5_FLOAT_UNDEF)
 			print_with_offset(aq_data->stemp[n], aq_sett->stemp_offset[n], temp_unit);
 		else
@@ -258,13 +258,13 @@ void print_fans(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 	} else {
 		for (int n=0; n<AQ5_NUM_FAN; n++) {
 			if (aq_data->fan_vrm_temp[n] != AQ5_FLOAT_UNDEF) {
-				printf("Fan %2d:   %4drpm @ %3.0f%% %5.2f V\n", n+1,
-					aq_data->fan_rpm[n], aq_data->fan_duty[n],
-					aq_data->fan_voltage[n]);
-				printf("               %4d mA  %5.2f %s\n", aq_data->fan_current[n],
-						aq_data->fan_vrm_temp[n], temp_unit);
+				printf("Fan %2d '%s':\t%4drpm @ %3.0f%% %5.2f V\n", n+1,
+					libaquaero5_get_name(NAME_FAN, n), aq_data->fan_rpm[n], 
+					aq_data->fan_duty[n], aq_data->fan_voltage[n]);
+				printf("'%s'\t%4d mA  %5.2f %s\n", libaquaero5_get_name(NAME_FAN_AMPLIFIER, n),
+						aq_data->fan_current[n], aq_data->fan_vrm_temp[n], temp_unit);
 			} else {
-				printf("Fan %2d:            not connected\n", n+1);
+				printf("Fan %2d '%s': \tnot connected\n", n+1, libaquaero5_get_name(NAME_FAN, n));
 			}
 		}
 	}
@@ -274,18 +274,30 @@ void print_fans(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 void print_flow(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 {
 	printf("-------- Flow Sensors --------\n");
-	for (int n=0; n<AQ5_NUM_FLOW; n++)
-		if (aq_data->flow[n] != 0 || out_all)
+	for (int n=0; n<AQ5_NUM_FLOW; n++) {
+		if ((aq_data->flow[n] != 0) && (!out_all))
 			printf("Flow %2d:%18.0f %s\n", n+1, aq_data->flow[n], flow_unit);
+		if (out_all) {
+			printf("Flow %2d '%s':\t%2.0f %s\n", n+1, 
+				libaquaero5_get_name(NAME_FLOW, n),
+				aq_data->flow[n], flow_unit);
+		}
+	}
 }
 
 
 void print_levels(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 {
 	printf("------- Liquid Levels --------\n");
-	for (int n=0; n<AQ5_NUM_LEVEL; n++)
-			if (aq_data->level[n] != 0 || out_all)
+	for (int n=0; n<AQ5_NUM_LEVEL; n++) {
+			if ((aq_data->level[n] != 0) && (!out_all)) 
 				printf("Level %2d:%20.0f%%\n", n+1, aq_data->level[n]);
+			if (out_all) {
+				printf("Level %2d '%s':\t%2.0f%%\n", n+1, 
+					libaquaero5_get_name(NAME_FILL_LEVEL, n),
+					aq_data->level[n]);
+			}
+	}
 }
 
 void print_aquastreams(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
@@ -301,7 +313,8 @@ void print_aquastreams(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 	} else {
 		for (int n=0; n<AQ5_NUM_AQUASTREAM; n++) {
 			if (aq_data->aquastream[n].status.available != FALSE) {
-				printf("Aquastream %2d: %d Hz @ %5.2f V %4d mA\n", n+1, 
+				printf("Aquastream %2d '%s': %d Hz @ %5.2f V %4d mA\n", n+1,
+						libaquaero5_get_name(NAME_AQUASTREAM, n),
 						aq_data->aquastream[n].frequency, 
 						aq_data->aquastream[n].voltage,
 						aq_data->aquastream[n].current);
