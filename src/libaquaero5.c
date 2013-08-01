@@ -72,6 +72,7 @@ unsigned char aq5_buf_data[AQ5_DATA_LEN];
 unsigned char aq5_buf_settings[AQ5_SETTINGS_LEN];
 unsigned char aq5_buf_soft_sensors[AQ5_SOFT_SENSORS_LEN];
 unsigned char aq5_buf_time[AQ5_TIME_LEN];
+char **aq5_buf_device_names;
 int aq5_fd = -1;
 
 /* helper functions */
@@ -167,6 +168,7 @@ static char *aq5_strcat(char *str1, char *str2)
 static int aq5_open(char *device, char **err_msg)
 {
 	struct hiddev_devinfo dinfo;
+	int flag = HIDDEV_FLAG_UREF | HIDDEV_FLAG_REPORT;
 
 	/* Only open the device if we need to */
 	if (fcntl(aq5_fd, F_GETFL) != -1)
@@ -211,6 +213,11 @@ static int aq5_open(char *device, char **err_msg)
 #ifdef DEBUG
 				printf("found Aquaero 5 device on '%s'!\n", full_path);
 #endif
+				/* Change the default behavior of read() to yeild hiddev_usage_ref instead */
+				if (ioctl(aq5_fd, HIDIOCSFLAG, &flag) != 0) {
+					*err_msg = "Oops, HIDIOCSFLAG failed!";
+					return -1;
+				}
 				free(full_path);
 				break;
 			}
@@ -267,6 +274,92 @@ static int aq5_open(char *device, char **err_msg)
 	return 0;
 }
 
+
+/* Dumb read function for doing interrupt reads */
+static void aq5_interruptRead(char *device, int report_id, unsigned char *buffer, int len, int count, char **err_msg)
+{
+	struct hiddev_usage_ref uref;
+	struct hiddev_usage_ref muref[len];
+	int i = 0;
+	int j = 0;
+	int wrong_reports = 0;
+
+	/* Allow the device to be disconnected and open only if the fd is undefined */
+	if (aq5_open(device, err_msg) != 0) {
+		printf("Failed to open device. Exiting...\n");
+		exit(1);
+	}
+
+	while(read(aq5_fd, &uref, sizeof(struct hiddev_usage_ref)) > 0) {
+		if (uref.report_id == report_id) {
+#ifdef DEBUG
+				printf("uref: report_type=%u, report_id=%02X, field_index=%u, usage_index=%u, usage_code=%u, value=%02X, i=%d\n", uref.report_type, uref.report_id, uref.field_index, uref.usage_index, uref.usage_code, uref.value, i);
+#endif
+				if (uref.usage_index != 0) {
+#ifdef DEBUG
+					printf("Something is messed up with hiddev right now (uref.usage_index != 0). Attempting reset...\n");
+#endif
+					close(aq5_fd);
+
+					/* Open our device */
+#ifdef DEBUG
+					printf("Reopening the device.\n");
+#endif
+					/* Allow the device to be disconnected and open only if the fd is undefined */
+				        if (aq5_open(device, err_msg) != 0) {
+						printf("Failed to open device. Exiting...\n");
+						exit(1);
+					}
+
+					/* Initing all feature and input reports */
+#ifdef DEBUG
+					printf("Initing all input and feature reports.\n");
+#endif
+					if (ioctl(aq5_fd, HIDIOCINITREPORT, 0) < 0) {
+						printf("Failed to init reports!\n");
+						exit(1);
+					}
+					break;
+				}
+				/* Read the whole report in quickly */
+				if (read(aq5_fd, &muref, sizeof(struct hiddev_usage_ref) * len) > 0) { 
+					for (j = 0; j<len; j++) {
+						if (muref[j].report_id != report_id) {
+#ifdef DEBUG
+							printf("We got something other than report 0xC. Breaking and starting over\n");
+#endif
+							i--;
+							break;
+						}
+						buffer[(i*len)+j] = muref[muref[j].usage_index].value;
+						/* printf("uref: report_type=%u, report_id=%02X, field_index=%u, usage_index=%u, usage_code=%u, value=%02X, i=%d, j=%d, arrayindex=%d\n", muref[j].report_type, muref[j].report_id, muref[j].field_index, muref[j].usage_index, muref[j].usage_code, muref[j].value, i, j, (i*523)+j); */
+					}
+
+					if (i == (count - 1)) {
+#ifdef DEBUG
+						printf("Last array index was %d\n", (i*len)+j);
+#endif
+						break;
+					}
+					i++;
+				} else {
+#ifdef DEBUG
+					printf("Epic read() failure!\n");
+#endif
+					break;
+				}
+		} else {
+			/* printf("skipping report %02X\n", uref.report_id); */
+			if (wrong_reports > 659 ) {
+#ifdef DEBUG
+				printf("Too many wrong reports read (%d)! Last array index was %d. Bailing out.\n", wrong_reports, (i*len)+j);
+#endif
+				break;
+			}
+			wrong_reports++;
+		}
+	}
+}
 
 /* Get the specified HID report */
 static int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data)
@@ -1053,7 +1146,7 @@ int libaquaero5_set_soft_sensor(int sensor_id, double value)
 }
 
 /* Send the software sensor buffer to the Aq5 */
-int libaquaero5_commit_soft_sensors(char *device,char **err_msg)
+int libaquaero5_commit_soft_sensors(char *device, char **err_msg)
 {
 	/* Allow the device to be disconnected and open only if the fd is undefined */
 	if (aq5_open(device, err_msg) != 0) {
@@ -1089,6 +1182,90 @@ int libaquaero5_set_time(char *device, time_t time, char **err_msg)
 	if (aq5_send_report(aq5_fd, 0x5, HID_REPORT_TYPE_OUTPUT, aq5_buf_time) != 0) {
 		*err_msg = "libaquaero5_set_time() failed!";
 		return -1;
+	}
+
+	return 0;
+}
+
+/* Send report 0x09, then read back report 0x0c 8x for all the device names */
+int libaquaero5_get_names(char *device, int max_attempts, char **err_msg)
+{
+	unsigned char *name_buffer = (unsigned char*)malloc(AQ5_REPORT_NAME_LEN * 8);
+	unsigned char *rname_buffer = (unsigned char*)malloc(AQ5_REPORT_NAME_LEN);
+	unsigned char *clean_name_buffer = (unsigned char*)malloc(AQ5_CLEAN_NAME_LEN);
+	aq5_buf_device_names = malloc(181 * sizeof(char*));
+
+	/* Allow the device to be disconnected and open only if the fd is undefined */
+	if (aq5_open(device, err_msg) != 0) {
+		return -1;
+	}
+
+	for (int i=0; i<31; i++) {
+		printf("Attempt %d\n", i);
+		printf("Sending the following request in report 0x9:\n");
+		/* Define the report 9 request */
+		/* We need to ensure that the buffer is initialized with 0s for each attempt */
+		for (int j=0; j<AQ5_REPORT_NAME_LEN; j++) {
+			rname_buffer[j] = 0;
+		}
+
+		for (int j=0; j<(AQ5_REPORT_NAME_LEN * 8); j++) {
+			name_buffer[j] = 0;
+		}
+		aq5_set_int16(rname_buffer, 0, 0x0100);
+		aq5_set_int16(rname_buffer, 2, 0x09c0);
+		aq5_set_int16(rname_buffer, 4, 0x0000);
+		aq5_set_int16(rname_buffer, 6, 0x0010);
+		aq5_set_int16(rname_buffer, AQ5_REPORT_NAME_LEN - 2, 0xdd82);
+		aq5_send_report(aq5_fd, 0x9, HID_REPORT_TYPE_OUTPUT, rname_buffer);
+
+		printf("\n\n** getting the 8x 0xC reports:\n");
+		/* interruptRead(fd, 0xff000001, name_buffer, REPORT_NAME_LEN * 8); */
+		aq5_interruptRead(device, 0xc, name_buffer, 523, 8, err_msg);
+		if (aq5_check_and_strip_name_report_watermarks(name_buffer, clean_name_buffer) == 0) {
+			printf("watermarks match!\n");
+			for (int j=0; j<AQ5_CLEAN_NAME_LEN; j++) {
+				if (((j) % 16 == 0 )) printf("%08X  ", j);
+				printf("%02X ", clean_name_buffer[j]);
+				if((j+1) % 16 == 0 ) printf( "\n" );
+			}
+			for (int j=0; j<181; j++) {
+				aq5_buf_device_names[j] = malloc(23 * sizeof(char));
+				/* Copy the non 0 values to the array */
+				for (int a=0; a<23; a++) {
+					if (a == 22) {
+						strncpy(aq5_buf_device_names[j] + a, "\0", sizeof(char));
+						break;
+					}
+					else {
+						if (clean_name_buffer[(j * 22) + a] != 0) {
+							strncpy(aq5_buf_device_names[j] + a, (const char *)clean_name_buffer + (j * 22) + a, sizeof(char));
+						} else {
+							strncpy(aq5_buf_device_names[j] + a, "\0", sizeof(char));
+							break;
+						}
+					}
+				}
+			}
+			break;
+		} else {
+			if (i == 30) {
+				printf("Doh! Failed for the %dth time, bailing out\n", i);
+				return -1;
+			} else {
+				printf("Trying again...\n");
+			}
+		}
+	}
+
+	printf("Printing device names...\n");
+	for (int j=0; j<181; j++) {
+		printf("%d:%s (%d bytes)\n", j, aq5_buf_device_names[j], (int)strlen(aq5_buf_device_names[j]));
+	}
+
+	printf("\nPrinting just the sensor names...\n");
+	for (int j=name_positions[NAME_SENSOR].address; j<(name_positions[NAME_SENSOR].address + name_positions[NAME_SENSOR].count); j++) {
+		printf("%d:%s (%d bytes)\n", j, aq5_buf_device_names[j], (int)strlen(aq5_buf_device_names[j]));
 	}
 
 	return 0;
