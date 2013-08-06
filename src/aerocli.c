@@ -979,7 +979,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	
-	if (libaquaero5_get_all_names(device, 31, &err_msg) < 0) {
+	if (libaquaero5_get_all_names(device, 10, &err_msg) < 0) {
 		fprintf(stderr, "failed to get names: %s (%s)\n", err_msg,
 				strerror(errno));
 		exit(EXIT_FAILURE);

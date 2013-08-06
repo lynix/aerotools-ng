@@ -279,78 +279,59 @@ static int aq5_open(char *device, char **err_msg)
 static void aq5_interruptRead(char *device, int report_id, unsigned char *buffer, int len, int count, char **err_msg)
 {
 	struct hiddev_usage_ref uref;
-	struct hiddev_usage_ref muref[len];
+	struct hiddev_report_info rinfo;
+	struct hiddev_usage_ref_multi ref_multi_i;
 	int i = 0;
 	int j = 0;
 	int wrong_reports = 0;
 
 	/* Allow the device to be disconnected and open only if the fd is undefined */
 	if (aq5_open(device, err_msg) != 0) {
-		printf("Failed to open device. Exiting...\n");
-		exit(1);
+		*err_msg = "Failed to open device. Exiting...";
+		return;
 	}
 
 	while(read(aq5_fd, &uref, sizeof(struct hiddev_usage_ref)) > 0) {
 		if (uref.report_id == report_id) {
+			if (uref.field_index == HID_FIELD_INDEX_NONE) {
 #ifdef DEBUG
 				printf("uref: report_type=%u, report_id=%02X, field_index=%u, usage_index=%u, usage_code=%u, value=%02X, i=%d\n", uref.report_type, uref.report_id, uref.field_index, uref.usage_index, uref.usage_code, uref.value, i);
 #endif
-				if (uref.usage_index != 0) {
-#ifdef DEBUG
-					printf("Something is messed up with hiddev right now (uref.usage_index != 0). Attempting reset...\n");
-#endif
-					close(aq5_fd);
-
-					/* Open our device */
-#ifdef DEBUG
-					printf("Reopening the device.\n");
-#endif
-					/* Allow the device to be disconnected and open only if the fd is undefined */
-				        if (aq5_open(device, err_msg) != 0) {
-						printf("Failed to open device. Exiting...\n");
-						exit(1);
-					}
-
-					/* Initing all feature and input reports */
-#ifdef DEBUG
-					printf("Initing all input and feature reports.\n");
-#endif
-					if (ioctl(aq5_fd, HIDIOCINITREPORT, 0) < 0) {
-						printf("Failed to init reports!\n");
-						exit(1);
-					}
-					break;
+				rinfo.report_type = HID_REPORT_TYPE_INPUT;
+				rinfo.report_id = report_id;
+				rinfo.num_fields = 1;
+				/* request report */
+				if (ioctl(aq5_fd, HIDIOCGREPORT, &rinfo) != 0) {
+					*err_msg = "HIDIOCGREPORT failed!";
+					return;
 				}
-				/* Read the whole report in quickly */
-				if (read(aq5_fd, &muref, sizeof(struct hiddev_usage_ref) * len) > 0) { 
+
+				ref_multi_i.uref.report_type = HID_REPORT_TYPE_INPUT;
+				ref_multi_i.uref.report_id = report_id;
+				ref_multi_i.uref.field_index = 0;
+				ref_multi_i.uref.usage_index = 0; /* byte index??? */
+				ref_multi_i.num_values = len;
+
+				if (ioctl(aq5_fd, HIDIOCGUSAGES, &ref_multi_i) != 0) {
+					*err_msg = "HIDIOCGUSAGES failed";
+					return;
+				} else {
 					for (j = 0; j<len; j++) {
-						if (muref[j].report_id != report_id) {
-#ifdef DEBUG
-							printf("We got something other than report 0xC. Breaking and starting over\n");
-#endif
-							i--;
-							break;
-						}
-						buffer[(i*len)+j] = muref[muref[j].usage_index].value;
-						/* printf("uref: report_type=%u, report_id=%02X, field_index=%u, usage_index=%u, usage_code=%u, value=%02X, i=%d, j=%d, arrayindex=%d\n", muref[j].report_type, muref[j].report_id, muref[j].field_index, muref[j].usage_index, muref[j].usage_code, muref[j].value, i, j, (i*523)+j); */
+						buffer[(i*len)+j] = ref_multi_i.values[j];
 					}
 
 					if (i == (count - 1)) {
 #ifdef DEBUG
-						printf("Last array index was %d\n", (i*len)+j);
+						printf("Last array index was %d, number of wrong reports was %d\n", (i*len)+j, wrong_reports);
 #endif
 						break;
 					}
 					i++;
-				} else {
-#ifdef DEBUG
-					printf("Epic read() failure!\n");
-#endif
-					break;
-				}
+				} 
+			}
 		} else {
 			/* printf("skipping report %02X\n", uref.report_id); */
-			if (wrong_reports > 659 ) {
+			if (wrong_reports > (AQ5_DATA_LEN + 8)) {
 #ifdef DEBUG
 				printf("Too many wrong reports read (%d)! Last array index was %d. Bailing out.\n", wrong_reports, (i*len)+j);
 #endif
