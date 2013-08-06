@@ -60,7 +60,7 @@
 	#define AQ5_FLOW_OFFS				0x0fb
 	#define AQ5_LEVEL_OFFS				0x147
 	#define AQ5_FAN_OFFS				0x169
-	#define AQ5_AQUASTREAM_OFFS			0x1c9
+	#define AQ5_AQUASTREAM_XT_OFFS			0x1c9
 #elif ((AQ5_FW_TARGET <= 1030) && (AQ5_FW_TARGET >= 1028))
 	#define AQ5_CURRENT_TIME_OFFS		0x001
 	#define AQ5_SERIAL_MAJ_OFFS			0x007
@@ -79,7 +79,7 @@
 	#define AQ5_FLOW_OFFS				0x0fd
 	#define AQ5_LEVEL_OFFS				0x149
 	#define AQ5_FAN_OFFS				0x16b
-	#define AQ5_AQUASTREAM_OFFS			0x1cb
+	#define AQ5_AQUASTREAM_XT_OFFS			0x1cb
 #endif
 
 #define AQ5_TEMP_DIST			2
@@ -90,7 +90,7 @@
 #define AQ5_FLOW_DIST			2
 #define AQ5_CPU_TEMP_DIST		2
 #define AQ5_LEVEL_DIST			2
-#define AQ5_AQUASTREAM_DIST		8
+#define AQ5_AQUASTREAM_XT_DIST		8
 
 /* data offsets for HID feature report 0xB */
 #define AQ5_SETTINGS_FAN_OFFS					0x20d
@@ -138,7 +138,7 @@
 #define AQ5_SETTINGS_SOFT_SENSOR_OFFS			0x178
 #define AQ5_SETTINGS_FLOW_SENSOR_OFFS			0x1a0
 #define AQ5_SETTINGS_POWER_SENSOR_OFFS			0x1f4
-#define AQ5_SETTINGS_AQUASTREAM_OFFS			0x2fd
+#define AQ5_SETTINGS_AQUASTREAM_XT_OFFS			0x2fd
 #define AQ5_SETTINGS_CURVE_CONTROLLER_OFFS		0x4f8
 #define AQ5_SETTINGS_TARGET_VAL_CONTRLR_OFFS	0x488
 #define AQ5_SETTINGS_TWO_POINT_CONTRLR_OFFS		0x3e8
@@ -176,7 +176,7 @@
 #define AQ5_SETTINGS_FILL_ALARM_DIST			9
 #define AQ5_SETTINGS_TIMER_DIST					7
 #define AQ5_SETTINGS_INFRARED_DIST				12
-#define AQ5_SETTINGS_AQUASTREAM_DIST			3
+#define AQ5_SETTINGS_AQUASTREAM_XT_DIST			3
 
 /* Definitions for name reports */
 typedef struct {

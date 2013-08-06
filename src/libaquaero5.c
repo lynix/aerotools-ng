@@ -41,8 +41,8 @@
 #include "aquaero5-offsets.h"
 
 /* Aquastream data status masks */
-#define AQ5_DATA_AQUASTREAM_STATUS_AVAILABLE	0x01
-#define AQ5_DATA_AQUASTREAM_STATUS_ALARM	0x02
+#define AQ5_DATA_AQUASTREAM_XT_STATUS_AVAILABLE	0x01
+#define AQ5_DATA_AQUASTREAM_XT_STATUS_ALARM	0x02
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -639,8 +639,8 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 
 	/* Aquastream settings */
 	for (int i=0; i<AQ5_NUM_FAN; i++) {
-		settings_dest->aquastream[i].freqmode = aq5_buf_settings[AQ5_SETTINGS_AQUASTREAM_OFFS + i * AQ5_SETTINGS_AQUASTREAM_DIST];
-		settings_dest->aquastream[i].frequency = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_AQUASTREAM_OFFS + 1 + i * AQ5_SETTINGS_AQUASTREAM_DIST);
+		settings_dest->aquastream_xt[i].freqmode = aq5_buf_settings[AQ5_SETTINGS_AQUASTREAM_XT_OFFS + i * AQ5_SETTINGS_AQUASTREAM_XT_DIST];
+		settings_dest->aquastream_xt[i].frequency = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_AQUASTREAM_XT_OFFS + 1 + i * AQ5_SETTINGS_AQUASTREAM_XT_DIST);
 	}
 
 	/* Power and relay output settings  */
@@ -944,22 +944,22 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg)
 	}
 
 	/* Aquastreams */
-	for (int i=0; i<AQ5_NUM_AQUASTREAM; i++) {
-		n = aq5_buf_data[AQ5_AQUASTREAM_OFFS + i * AQ5_AQUASTREAM_DIST];
-		if ((n & AQ5_DATA_AQUASTREAM_STATUS_AVAILABLE) == AQ5_DATA_AQUASTREAM_STATUS_AVAILABLE) {
-			data_dest->aquastream[i].status.available = TRUE;
+	for (int i=0; i<AQ5_NUM_AQUASTREAM_XT; i++) {
+		n = aq5_buf_data[AQ5_AQUASTREAM_XT_OFFS + i * AQ5_AQUASTREAM_XT_DIST];
+		if ((n & AQ5_DATA_AQUASTREAM_XT_STATUS_AVAILABLE) == AQ5_DATA_AQUASTREAM_XT_STATUS_AVAILABLE) {
+			data_dest->aquastream_xt[i].status.available = TRUE;
 		} else {
-			data_dest->aquastream[i].status.available = FALSE;
+			data_dest->aquastream_xt[i].status.available = FALSE;
 		}
-		if ((n & AQ5_DATA_AQUASTREAM_STATUS_ALARM) == AQ5_DATA_AQUASTREAM_STATUS_ALARM) {
-			data_dest->aquastream[i].status.alarm = TRUE;
+		if ((n & AQ5_DATA_AQUASTREAM_XT_STATUS_ALARM) == AQ5_DATA_AQUASTREAM_XT_STATUS_ALARM) {
+			data_dest->aquastream_xt[i].status.alarm = TRUE;
 		} else {
-			data_dest->aquastream[i].status.alarm = FALSE;
+			data_dest->aquastream_xt[i].status.alarm = FALSE;
 		}
-		data_dest->aquastream[i].freqmode = aq5_buf_data[AQ5_AQUASTREAM_OFFS + 1 + i * AQ5_AQUASTREAM_DIST];
-		data_dest->aquastream[i].frequency = aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_OFFS + 2 + i * AQ5_AQUASTREAM_DIST);
-		data_dest->aquastream[i].voltage = (double)aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_OFFS + 4 + i * AQ5_AQUASTREAM_DIST) / 100.0;
-		data_dest->aquastream[i].current = aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_OFFS + 6 + i * AQ5_AQUASTREAM_DIST);
+		data_dest->aquastream_xt[i].freqmode = aq5_buf_data[AQ5_AQUASTREAM_XT_OFFS + 1 + i * AQ5_AQUASTREAM_XT_DIST];
+		data_dest->aquastream_xt[i].frequency = aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_XT_OFFS + 2 + i * AQ5_AQUASTREAM_XT_DIST);
+		data_dest->aquastream_xt[i].voltage = (double)aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_XT_OFFS + 4 + i * AQ5_AQUASTREAM_XT_DIST) / 100.0;
+		data_dest->aquastream_xt[i].current = aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_XT_OFFS + 6 + i * AQ5_AQUASTREAM_XT_DIST);
 	}
 
 	/* firmware compatibility check */
@@ -1092,9 +1092,9 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 		case KEY_TONE:
 			val_str = key_tone_strings;
 			break;
-		case AQUASTREAM_FREQMODE:
+		case AQUASTREAM_XT_FREQMODE:
 		default:
-			val_str = aquastream_freqmode_strings;
+			val_str = aquastream_xt_freqmode_strings;
 	}
 	/* We have to search for it */
 	for (i=0; val_str[i].val != -1; i++) {

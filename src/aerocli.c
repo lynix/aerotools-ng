@@ -300,29 +300,29 @@ void print_levels(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 	}
 }
 
-void print_aquastreams(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
+void print_aquastream_xts(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 {
-	printf("-------- Aquastreams ---------\n");
+	printf("------- Aquastream XTs -------\n");
 	if (!out_all) {
-		for (int n=0; n<AQ5_NUM_AQUASTREAM; n++) {
-			if (aq_data->aquastream[n].status.available != FALSE) {
-				printf("Aquastream %2d: %dHz @ %5.2fV\n", n+1, 
-						aq_data->aquastream[n].frequency, aq_data->aquastream[n].voltage);
+		for (int n=0; n<AQ5_NUM_AQUASTREAM_XT; n++) {
+			if (aq_data->aquastream_xt[n].status.available != FALSE) {
+				printf("Aquastream XT %2d: %dHz @ %5.2fV\n", n+1, 
+						aq_data->aquastream_xt[n].frequency, aq_data->aquastream_xt[n].voltage);
 			}
 		}
 	} else {
-		for (int n=0; n<AQ5_NUM_AQUASTREAM; n++) {
-			if (aq_data->aquastream[n].status.available != FALSE) {
-				printf("Aquastream %2d '%s': %d Hz @ %5.2f V %4d mA\n", n+1,
-						libaquaero5_get_name(NAME_AQUASTREAM, n),
-						aq_data->aquastream[n].frequency, 
-						aq_data->aquastream[n].voltage,
-						aq_data->aquastream[n].current);
-				printf("\tavailable\t%s\n", libaquaero5_get_string(aq_data->aquastream[n].status.available, BOOLEAN));
-				printf("\talarm\t\t%s\n", libaquaero5_get_string(aq_data->aquastream[n].status.alarm, BOOLEAN));
-				printf("\tfreqmode\t%s\n", libaquaero5_get_string(aq_data->aquastream[n].freqmode, AQUASTREAM_FREQMODE));
+		for (int n=0; n<AQ5_NUM_AQUASTREAM_XT; n++) {
+			if (aq_data->aquastream_xt[n].status.available != FALSE) {
+				printf("Aquastream XT %2d '%s': %d Hz @ %5.2f V %4d mA\n", n+1,
+						libaquaero5_get_name(NAME_AQUASTREAM_XT, n),
+						aq_data->aquastream_xt[n].frequency, 
+						aq_data->aquastream_xt[n].voltage,
+						aq_data->aquastream_xt[n].current);
+				printf("\tavailable\t%s\n", libaquaero5_get_string(aq_data->aquastream_xt[n].status.available, BOOLEAN));
+				printf("\talarm\t\t%s\n", libaquaero5_get_string(aq_data->aquastream_xt[n].status.alarm, BOOLEAN));
+				printf("\tfreqmode\t%s\n", libaquaero5_get_string(aq_data->aquastream_xt[n].freqmode, AQUASTREAM_XT_FREQMODE));
 			} else {
-				printf("Aquastream %2d:\tnot connected\n", n+1);
+				printf("Aquastream XT %2d:\tnot connected\n", n+1);
 			}
 		}
 	}
@@ -397,11 +397,11 @@ void print_settings(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 		printf("\tlower limit: %.1f %s\n", aq_sett->flow_sensor_lower_limit[n], flow_unit);
 		printf("\tupper limit: %.1f %s\n", aq_sett->flow_sensor_upper_limit[n], flow_unit);
 	}
-	for (int n=0; n<AQ5_NUM_AQUASTREAM; n++) {
-		if (aq_data->aquastream[n].status.available != FALSE) {
-			printf("Aquastream %d\n", n+1);
-			printf("\tfrequency mode: %s\n", libaquaero5_get_string(aq_sett->aquastream[n].freqmode, AQUASTREAM_FREQMODE));
-			printf("\tfrequency setting: %d\n", aq_sett->aquastream[n].frequency);
+	for (int n=0; n<AQ5_NUM_AQUASTREAM_XT; n++) {
+		if (aq_data->aquastream_xt[n].status.available != FALSE) {
+			printf("Aquastream XT %d\n", n+1);
+			printf("\tfrequency mode: %s\n", libaquaero5_get_string(aq_sett->aquastream_xt[n].freqmode, AQUASTREAM_XT_FREQMODE));
+			printf("\tfrequency setting: %d\n", aq_sett->aquastream_xt[n].frequency);
 		}
 	}
 	for (int n=0; n<AQ5_NUM_POWER_SENSORS; n++) {
@@ -692,10 +692,10 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("FLOW%d=%.1f\n", n+1, aq_data->flow[n]);
 	}
 
-	for (int n=0; n<AQ5_NUM_AQUASTREAM; n++) {
-		if (aq_data->aquastream[n].status.available != FALSE) {
-			printf("AQUASTREAM%d_FREQUENCY=%d\n", n+1, aq_data->aquastream[n].frequency);
-			printf("AQUASTREAM%d_VOLTAGE=%.2f\n", n+1, aq_data->aquastream[n].voltage);
+	for (int n=0; n<AQ5_NUM_AQUASTREAM_XT; n++) {
+		if (aq_data->aquastream_xt[n].status.available != FALSE) {
+			printf("AQUASTREAM_XT%d_FREQUENCY=%d\n", n+1, aq_data->aquastream_xt[n].frequency);
+			printf("AQUASTREAM_XT%d_VOLTAGE=%.2f\n", n+1, aq_data->aquastream_xt[n].voltage);
 		}
 	}
 
@@ -763,14 +763,14 @@ void print_export(aq5_data_t *aq_data, aq5_settings_t *aq_sett)
 			printf("FLOW_SENSOR%d_LOWER_LIMIT=%.1f\n", n+1, aq_sett->flow_sensor_lower_limit[n]);
 			printf("FLOW_SENSOR%d_UPPER_LIMIT=%.1f\n", n+1, aq_sett->flow_sensor_upper_limit[n]);
 		}
-		for (int n=0; n<AQ5_NUM_AQUASTREAM; n++) {
-			if (aq_data->aquastream[n].status.available != FALSE) {
-				printf("AQUASTREAM%d_STATUS_AVAILABLE='%s'\n", n+1, libaquaero5_get_string(aq_data->aquastream[n].status.available, BOOLEAN));
-				printf("AQUASTREAM%d_STATUS_ALARM='%s'\n", n+1, libaquaero5_get_string(aq_data->aquastream[n].status.alarm, BOOLEAN));
-				printf("AQUASTREAM%d_FREQMODE='%s'\n", n+1, libaquaero5_get_string(aq_data->aquastream[n].freqmode, AQUASTREAM_FREQMODE));
-				printf("AQUASTREAM%d_FREQMODE_SETTING='%s'\n", n+1, libaquaero5_get_string(aq_sett->aquastream[n].freqmode, AQUASTREAM_FREQMODE));
-				printf("AQUASTREAM%d_FREQUENCY_SETTING=%d\n", n+1, aq_sett->aquastream[n].frequency);
-				printf("AQUASTREAM%d_CURRENT=%d\n", n+1, aq_data->aquastream[n].current);
+		for (int n=0; n<AQ5_NUM_AQUASTREAM_XT; n++) {
+			if (aq_data->aquastream_xt[n].status.available != FALSE) {
+				printf("AQUASTREAM_XT%d_STATUS_AVAILABLE='%s'\n", n+1, libaquaero5_get_string(aq_data->aquastream_xt[n].status.available, BOOLEAN));
+				printf("AQUASTREAM_XT%d_STATUS_ALARM='%s'\n", n+1, libaquaero5_get_string(aq_data->aquastream_xt[n].status.alarm, BOOLEAN));
+				printf("AQUASTREAM_XT%d_FREQMODE='%s'\n", n+1, libaquaero5_get_string(aq_data->aquastream_xt[n].freqmode, AQUASTREAM_XT_FREQMODE));
+				printf("AQUASTREAM_XT%d_FREQMODE_SETTING='%s'\n", n+1, libaquaero5_get_string(aq_sett->aquastream_xt[n].freqmode, AQUASTREAM_XT_FREQMODE));
+				printf("AQUASTREAM_XT%d_FREQUENCY_SETTING=%d\n", n+1, aq_sett->aquastream_xt[n].frequency);
+				printf("AQUASTREAM_XT%d_CURRENT=%d\n", n+1, aq_data->aquastream_xt[n].current);
 			}
 		}
 		for (int n=0; n<AQ5_NUM_POWER_SENSORS; n++) {
@@ -1022,7 +1022,7 @@ int main(int argc, char *argv[])
 			print_fans(&aquaero_data, &aquaero_settings);
 			print_flow(&aquaero_data, &aquaero_settings);
 			print_levels(&aquaero_data, &aquaero_settings);
-			print_aquastreams(&aquaero_data, &aquaero_settings);
+			print_aquastream_xts(&aquaero_data, &aquaero_settings);
 			if (out_all)
 				print_settings(&aquaero_data, &aquaero_settings);
 		} else if (out_format == F_SCRIPT) {
