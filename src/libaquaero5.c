@@ -215,7 +215,7 @@ static int aq5_open(char *device, char **err_msg)
 #endif
 				/* Change the default behavior of read() to yeild hiddev_usage_ref instead */
 				if (ioctl(aq5_fd, HIDIOCSFLAG, &flag) != 0) {
-					*err_msg = "Oops, HIDIOCSFLAG failed!";
+					*err_msg = "failed to set the flags with HIDIOCSFLAG";
 					return -1;
 				}
 				free(full_path);
@@ -263,6 +263,12 @@ static int aq5_open(char *device, char **err_msg)
 		return -1;
 	}
 
+	/* Change the default behavior of read() to yeild hiddev_usage_ref instead */
+	if (ioctl(aq5_fd, HIDIOCSFLAG, &flag) != 0) {
+		*err_msg = "failed to set the flags with HIDIOCSFLAG";
+		return -1;
+	}
+
 #ifdef DEBUG
 	struct hiddev_string_descriptor hStr;
 	hStr.index = 2; /* Vendor = 1, Product = 2 */
@@ -276,7 +282,7 @@ static int aq5_open(char *device, char **err_msg)
 
 
 /* Dumb read function for doing interrupt reads */
-static void aq5_interruptRead(char *device, int report_id, unsigned char *buffer, int len, int count, char **err_msg)
+static int aq5_interruptRead(int fd, int report_id, unsigned char *buffer, int len, int count, char **err_msg)
 {
 	struct hiddev_usage_ref uref;
 	struct hiddev_report_info rinfo;
@@ -284,62 +290,80 @@ static void aq5_interruptRead(char *device, int report_id, unsigned char *buffer
 	int i = 0;
 	int j = 0;
 	int wrong_reports = 0;
+	fd_set set;
+	struct timeval timeout;
+	int select_result;
 
-	/* Allow the device to be disconnected and open only if the fd is undefined */
-	if (aq5_open(device, err_msg) != 0) {
-		*err_msg = "Failed to open device. Exiting...";
-		return;
-	}
+	/* Initialize the file descriptor set. */
+	FD_ZERO (&set);
+	FD_SET (fd, &set);
 
-	while(read(aq5_fd, &uref, sizeof(struct hiddev_usage_ref)) > 0) {
-		if (uref.report_id == report_id) {
-			if (uref.field_index == HID_FIELD_INDEX_NONE) {
+	/* Initialize the timeout data structure. */
+	timeout.tv_sec = 5; /* 5 seconds */
+	timeout.tv_usec = 0;
+
+	/* Wait for data, or timeout */
+	select_result = select (FD_SETSIZE, &set, NULL, NULL, &timeout);
+	if (select_result == 1) {
+		while(read(fd, &uref, sizeof(struct hiddev_usage_ref)) > 0) {
+			if (uref.report_id == report_id) {
+				if (uref.field_index == HID_FIELD_INDEX_NONE) {
 #ifdef DEBUG
-				printf("uref: report_type=%u, report_id=%02X, field_index=%u, usage_index=%u, usage_code=%u, value=%02X, i=%d\n", uref.report_type, uref.report_id, uref.field_index, uref.usage_index, uref.usage_code, uref.value, i);
+					printf("uref: report_type=%u, report_id=%02X, field_index=%u, usage_index=%u, usage_code=%u, value=%02X, i=%d\n", uref.report_type, uref.report_id, uref.field_index, uref.usage_index, uref.usage_code, uref.value, i);
 #endif
-				rinfo.report_type = HID_REPORT_TYPE_INPUT;
-				rinfo.report_id = report_id;
-				rinfo.num_fields = 1;
-				/* request report */
-				if (ioctl(aq5_fd, HIDIOCGREPORT, &rinfo) != 0) {
-					*err_msg = "HIDIOCGREPORT failed!";
-					return;
+					rinfo.report_type = HID_REPORT_TYPE_INPUT;
+					rinfo.report_id = report_id;
+					rinfo.num_fields = 1;
+					/* request report */
+					if (ioctl(fd, HIDIOCGREPORT, &rinfo) != 0) {
+						*err_msg = "HIDIOCGREPORT failed!";
+						return -1;
+					}
+
+					ref_multi_i.uref.report_type = HID_REPORT_TYPE_INPUT;
+					ref_multi_i.uref.report_id = report_id;
+					ref_multi_i.uref.field_index = 0;
+					ref_multi_i.uref.usage_index = 0; /* byte index??? */
+					ref_multi_i.num_values = len;
+
+					if (ioctl(fd, HIDIOCGUSAGES, &ref_multi_i) != 0) {
+						*err_msg = "HIDIOCGUSAGES failed";
+						return -1;
+					} else {
+						for (j = 0; j<len; j++) {
+							buffer[(i*len)+j] = ref_multi_i.values[j];
+						}
+
+						if (i == (count - 1)) {
+#ifdef DEBUG
+							printf("Last array index was %d, number of wrong reports was %d\n", (i*len)+j, wrong_reports);
+#endif
+							break;
+						}
+						i++;
+					} 
 				}
-
-				ref_multi_i.uref.report_type = HID_REPORT_TYPE_INPUT;
-				ref_multi_i.uref.report_id = report_id;
-				ref_multi_i.uref.field_index = 0;
-				ref_multi_i.uref.usage_index = 0; /* byte index??? */
-				ref_multi_i.num_values = len;
-
-				if (ioctl(aq5_fd, HIDIOCGUSAGES, &ref_multi_i) != 0) {
-					*err_msg = "HIDIOCGUSAGES failed";
-					return;
-				} else {
-					for (j = 0; j<len; j++) {
-						buffer[(i*len)+j] = ref_multi_i.values[j];
-					}
-
-					if (i == (count - 1)) {
+			} else {
+				/* printf("skipping report %02X\n", uref.report_id); */
+				if (wrong_reports > (AQ5_DATA_LEN + 8)) {
 #ifdef DEBUG
-						printf("Last array index was %d, number of wrong reports was %d\n", (i*len)+j, wrong_reports);
+					printf("Too many wrong reports read (%d)! Last array index was %d. Bailing out.\n", wrong_reports, (i*len)+j);
 #endif
-						break;
-					}
-					i++;
-				} 
+					break;
+				}
+				wrong_reports++;
 			}
-		} else {
-			/* printf("skipping report %02X\n", uref.report_id); */
-			if (wrong_reports > (AQ5_DATA_LEN + 8)) {
-#ifdef DEBUG
-				printf("Too many wrong reports read (%d)! Last array index was %d. Bailing out.\n", wrong_reports, (i*len)+j);
-#endif
-				break;
-			}
-			wrong_reports++;
 		}
+	} else {
+		if (select_result == 0) {
+			*err_msg = "aq5_interruptRead timeout on read!";
+		} else {
+			*err_msg = "aq5_interruptRead read error!";
+		}
+		return -1;
 	}
+	
+	return 0;
 }
 
 /* Get the specified HID report */
@@ -1199,10 +1223,15 @@ int libaquaero5_get_all_names(char *device, int max_attempts, char **err_msg)
 		aq5_set_int16(rname_buffer, 4, 0x0000);
 		aq5_set_int16(rname_buffer, 6, 0x0010);
 		aq5_set_int16(rname_buffer, AQ5_REPORT_NAME_LEN - 2, 0xdd82);
-		aq5_send_report(aq5_fd, 0x9, HID_REPORT_TYPE_OUTPUT, rname_buffer);
+		if (aq5_send_report(aq5_fd, 0x9, HID_REPORT_TYPE_OUTPUT, rname_buffer) != 0) {
+			*err_msg = "sending name report request failed!";
+			return -1;
+		}
 
 		/* Now read out the 8x report 0xC */
-		aq5_interruptRead(device, 0xc, name_buffer, AQ5_REPORT_NAME_LEN, 8, err_msg);
+		if (aq5_interruptRead(aq5_fd, 0xc, name_buffer, AQ5_REPORT_NAME_LEN, 8, err_msg) != 0) {
+			return -1;
+		}
 		if (aq5_check_and_strip_name_report_watermarks(name_buffer, clean_name_buffer) == 0) {
 			for (int j=0; j<181; j++) {
 				aq5_buf_device_names[j] = malloc(23 * sizeof(char));

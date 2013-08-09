@@ -973,7 +973,7 @@ int main(int argc, char *argv[])
 	if (err_msg != NULL)
 		fprintf(stderr, "WARNING: %s\n", err_msg);
 
-	if (libaquaero5_getsettings(NULL, &aquaero_settings, &err_msg) < 0) {
+	if (libaquaero5_getsettings(device, &aquaero_settings, &err_msg) < 0) {
 		fprintf(stderr, "failed to get settings: %s (%s)\n", err_msg,
 				strerror(errno));
 		exit(EXIT_FAILURE);
