@@ -18,6 +18,11 @@
 CC = gcc
 CFLAGS = -Wall -ansi -std=gnu99 -pedantic -I /usr/include -O2
 
+# location of external library: jsonrpc-c
+ifndef JRPCC_PREFIX
+	JRPCC_PREFIX = /usr
+endif
+
 # Uncomment the following line if using firmware 1027.
 # CFLAGS += -D'AQ5_FW_TARGET=1027'
 
@@ -25,8 +30,13 @@ ifdef DEBUG
 	CFLAGS += -g
 endif
 
+.PHONY: all default clean
 
-all : bin/aerocli
+
+default : bin/aerocli
+
+all : bin/aerocli bin/aq5rpcd
+
 
 bin/aerocli: obj/aerocli.o obj/libaquaero5.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
@@ -38,6 +48,12 @@ obj/libaquaero5.o: src/libaquaero5.c src/libaquaero5.h \
 		src/aquaero5-user-strings.h src/aquaero5-offsets.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 	
+bin/aq5rpcd: obj/aq5rpcd.o obj/libaquaero5.o
+	$(CC) $(CFLAGS) -L $(JRPCC_PREFIX)/lib -ljsonrpcc -o $@ $^
+	
+obj/aq5rpcd.o: src/aq5rpcd.c $(JRPCC_PREFIX)/include/jsonrpc-c.h
+	$(CC) $(CFLAGS) -I $(JRPCC_PREFIX)/include -o $@ -c $<
+	
 
 clean :
-	rm -f bin/aerocli obj/*.o
+	rm -f bin/aerocli bin/aq5rpcd obj/*.o
