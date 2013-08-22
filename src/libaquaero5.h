@@ -52,6 +52,9 @@
 /* constant for unknown value */
 #define AQ5_FLOAT_UNDEF			-99.0
 
+/* The intrapage delay for name reports */
+#define AQ5_NAME_REPORT_INTRAPAGE_DELAY 7
+
 
 typedef enum { FALSE, TRUE } boolean_t;
 

@@ -27,11 +27,13 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <sys/ioctl.h>
 #include <linux/hiddev.h>
 #include <dirent.h>
+
 
 /* usb communication related constants */
 #define AQ5_USB_VID				0x0c70
@@ -168,7 +170,6 @@ static char *aq5_strcat(char *str1, char *str2)
 static int aq5_open(char *device, char **err_msg)
 {
 	struct hiddev_devinfo dinfo;
-	int flag = HIDDEV_FLAG_UREF | HIDDEV_FLAG_REPORT;
 
 	/* Only open the device if we need to */
 	if (fcntl(aq5_fd, F_GETFL) != -1)
@@ -213,11 +214,6 @@ static int aq5_open(char *device, char **err_msg)
 #ifdef DEBUG
 				printf("found Aquaero 5 device on '%s'!\n", full_path);
 #endif
-				/* Change the default behavior of read() to yeild hiddev_usage_ref instead */
-				if (ioctl(aq5_fd, HIDIOCSFLAG, &flag) != 0) {
-					*err_msg = "failed to set the flags with HIDIOCSFLAG";
-					return -1;
-				}
 				free(full_path);
 				break;
 			}
@@ -263,12 +259,6 @@ static int aq5_open(char *device, char **err_msg)
 		return -1;
 	}
 
-	/* Change the default behavior of read() to yeild hiddev_usage_ref instead */
-	if (ioctl(aq5_fd, HIDIOCSFLAG, &flag) != 0) {
-		*err_msg = "failed to set the flags with HIDIOCSFLAG";
-		return -1;
-	}
-
 #ifdef DEBUG
 	struct hiddev_string_descriptor hStr;
 	hStr.index = 2; /* Vendor = 1, Product = 2 */
@@ -289,81 +279,72 @@ static int aq5_interruptRead(int fd, int report_id, unsigned char *buffer, int l
 	struct hiddev_usage_ref_multi ref_multi_i;
 	int i = 0;
 	int j = 0;
+	int c = 0;
 	int wrong_reports = 0;
-	fd_set set;
-	struct timeval timeout;
-	int select_result;
-
-	/* Initialize the file descriptor set. */
-	FD_ZERO (&set);
-	FD_SET (fd, &set);
+	int page_position_offset = 3;
+	int report_pages[] = {
+		0xc0,
+		0xc2,
+		0xc4,
+		0xc6,
+		0xc8,
+		0xca,
+		0xcc,
+		0xce
+	}; 
 
 	/* Initialize the timeout data structure. */
-	timeout.tv_sec = 5; /* 5 seconds */
-	timeout.tv_usec = 0;
+	struct timespec req={0};
+	req.tv_sec = 0;
+	req.tv_nsec = AQ5_NAME_REPORT_INTRAPAGE_DELAY * 1000000L; /* 0.007 seconds */
 
-	/* Wait for data, or timeout */
-	select_result = select (FD_SETSIZE, &set, NULL, NULL, &timeout);
-	if (select_result == 1) {
-		while(read(fd, &uref, sizeof(struct hiddev_usage_ref)) > 0) {
-			if (uref.report_id == report_id) {
-				if (uref.field_index == HID_FIELD_INDEX_NONE) {
+	for (c=0; c<50; c++) {
+		/* Wait for a short while so we don't thrash and hang */
+		while((nanosleep(&req,&req) == -1) && (errno == EINTR))
+			continue;
+
+		rinfo.report_type = HID_REPORT_TYPE_INPUT;
+		rinfo.report_id = report_id;
+		rinfo.num_fields = 1;
+		/* request report */
+		if (ioctl(fd, HIDIOCGREPORT, &rinfo) != 0) {
+			*err_msg = "HIDIOCGREPORT failed!";
+			return -1;
+		}
+
+		ref_multi_i.uref.report_type = HID_REPORT_TYPE_INPUT;
+		ref_multi_i.uref.report_id = report_id;
+		ref_multi_i.uref.field_index = 0;
+		ref_multi_i.uref.usage_index = 0; /* byte index??? */
+		ref_multi_i.num_values = len;
+
+		if (ioctl(fd, HIDIOCGUSAGES, &ref_multi_i) != 0) {
+			*err_msg = "HIDIOCGUSAGES failed";
+			return -1;
+		} else {
+			if (ref_multi_i.values[page_position_offset] == report_pages[i]) {
 #ifdef DEBUG
-					printf("uref: report_type=%u, report_id=%02X, field_index=%u, usage_index=%u, usage_code=%u, value=%02X, i=%d\n", uref.report_type, uref.report_id, uref.field_index, uref.usage_index, uref.usage_code, uref.value, i);
+				printf("Value at %d on page %d matches (%02X). Loop iteration %d\n", page_position_offset, i, ref_multi_i.values[page_position_offset], c);
 #endif
-					rinfo.report_type = HID_REPORT_TYPE_INPUT;
-					rinfo.report_id = report_id;
-					rinfo.num_fields = 1;
-					/* request report */
-					if (ioctl(fd, HIDIOCGREPORT, &rinfo) != 0) {
-						*err_msg = "HIDIOCGREPORT failed!";
-						return -1;
-					}
-
-					ref_multi_i.uref.report_type = HID_REPORT_TYPE_INPUT;
-					ref_multi_i.uref.report_id = report_id;
-					ref_multi_i.uref.field_index = 0;
-					ref_multi_i.uref.usage_index = 0; /* byte index??? */
-					ref_multi_i.num_values = len;
-
-					if (ioctl(fd, HIDIOCGUSAGES, &ref_multi_i) != 0) {
-						*err_msg = "HIDIOCGUSAGES failed";
-						return -1;
-					} else {
-						for (j = 0; j<len; j++) {
-							buffer[(i*len)+j] = ref_multi_i.values[j];
-						}
-
-						if (i == (count - 1)) {
-#ifdef DEBUG
-							printf("Last array index was %d, number of wrong reports was %d\n", (i*len)+j, wrong_reports);
-#endif
-							break;
-						}
-						i++;
-					} 
+				for (j = 0; j<len; j++) {
+					buffer[(i*len)+j] = ref_multi_i.values[j];
 				}
+
+				if (i == (count - 1)) {
+#ifdef DEBUG
+					printf("Last array index was %d, number of wrong reports was %d\n", (i*len)+j, wrong_reports);
+#endif
+					return 0;
+				}
+				i++;
 			} else {
-				/* printf("skipping report %02X\n", uref.report_id); */
-				if (wrong_reports > (AQ5_DATA_LEN + 8)) {
-#ifdef DEBUG
-					printf("Too many wrong reports read (%d)! Last array index was %d. Bailing out.\n", wrong_reports, (i*len)+j);
-#endif
-					break;
-				}
 				wrong_reports++;
 			}
 		}
-	} else {
-		if (select_result == 0) {
-			*err_msg = "aq5_interruptRead timeout on read!";
-		} else {
-			*err_msg = "aq5_interruptRead read error!";
-		}
-		return -1;
 	}
-	
-	return 0;
+	/* If we have gone this far it means we didn't get what we are looking for */
+	*err_msg = "Failed to find enough matching report pages!";
+	return -1;
 }
 
 /* Get the specified HID report */
