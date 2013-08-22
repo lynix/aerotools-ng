@@ -274,7 +274,6 @@ static int aq5_open(char *device, char **err_msg)
 /* Dumb read function for doing interrupt reads */
 static int aq5_interruptRead(int fd, int report_id, unsigned char *buffer, int len, int count, char **err_msg)
 {
-	struct hiddev_usage_ref uref;
 	struct hiddev_report_info rinfo;
 	struct hiddev_usage_ref_multi ref_multi_i;
 	int i = 0;
