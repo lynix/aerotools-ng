@@ -26,14 +26,14 @@ offset		type	value		description
 0x073		int16	temp7	Internal temp sensor 7
 0x075		int16	temp8	Internal temp sensor 8
 
-0x077		int16	temp9	External (aquabus) temp sensor 9
-0x079		int16	temp10	External (aquabus) temp sensor 10
-0x07b		int16	temp11	External (aquabus) temp sensor 11 
-0x07d		int16	temp12	External (aquabus) temp sensor 12
-0x07f		int16	temp13	External (aquabus) temp sensor 13
-0x081		int16	temp14	External (aquabus) temp sensor 14
-0x083		int16	temp15	External (aquabus) temp sensor 15
-0x085		int16	temp16	External (aquabus) temp sensor 16
+0x077		int16	temp9	Poweradjust 1 ext (9)
+0x079		int16	temp10	Poweradjust 2 ext (10)
+0x07b		int16	temp11	Poweradjust 3 ext (11)
+0x07d		int16	temp12	Poweradjust 4 ext (12)
+0x07f		int16	temp13	Poweradjust 5 ext (13)
+0x081		int16	temp14	Poweradjust 6 ext (14)
+0x083		int16	temp15	Poweradjust 7 ext (15)
+0x085		int16	temp16	Poweradjust 8 ext (16)
 
 0x087		int16	temp17	Software temp sensor 1 (17)
 0x089		int16	temp18	Software temp sensor 2 (18)
@@ -48,20 +48,21 @@ offset		type	value		description
 0x099		int16	temp26	Virtual temp sensor 2 (26)
 0x09b		int16	temp27	Virtual temp sensor 3 (27)
 0x09d		int16	temp28	Virtual temp sensor 4 (28)
-0x09f		int16	temp29	External (aquabus?) temp sensor 29
-0x0a1		int16	temp30	External (aquabus?) temp sensor 30
-0x0a3		int16	temp31	External (aquabus?) temp sensor 31
-0x0a5		int16	temp32	External (aquabus?) temp sensor 32
 
-0x0a7		int16	temp33	External (aquabus?) temp sensor 33
-0x0a9		int16	temp34	External (aquabus?) temp sensor 34
-0x0ab		int16	temp35	External (aquabus?) temp sensor 35
-0x0ad		int16	temp36	External (aquabus?) temp sensor 36
-0x0af		int16	temp37	External (aquabus?) temp sensor 37
-0x0b1		int16	temp38	External (aquabus?) temp sensor 38
+0x09f		int16	temp29	MPS 1 external (29)
+0x0a1		int16	temp30	MPS 1 internal (30)
+0x0a3		int16	temp31	MPS 2 external (31)
+0x0a5		int16	temp32	MPS 2 internal (32)
+0x0a7		int16	temp33	MPS 3 external (33)
+0x0a9		int16	temp34	MPS 3 internal (34)
+0x0ab		int16	temp35	MPS 4 external (35)
+0x0ad		int16	temp36	MPS 4 internal (36)
+
+0x0af		int16	temp37	Aquastream 1 (37)
+0x0b1		int16	temp38	Aquastream 2 (38)
+
 0x0b3		int16	temp39	External (aquabus?) temp sensor 39
 0x0b5		int16	temp40	External (aquabus?) temp sensor 40
-
 0x0b7		int16	temp41	External (aquabus?) temp sensor 41
 0x0b9		int16	temp42	External (aquabus?) temp sensor 42
 0x0bb		int16	temp43	External (aquabus?) temp sensor 43
@@ -82,13 +83,13 @@ offset		type	value		description
 0x0d5		int16	fan12 vrm_temp	External (aquabus) fan VRM temp 12
 
 0x0d7		int16	cpu1_temp	Internal CPU temp1 
-0x0d9		int16	cpu2_temp	External CPU temp2?
-0x0db		int16	cpu3_temp	External CPU temp3?
-0x0dd		int16	cpu4_temp	External CPU temp4? 
-0x0df		int16	cpu5_temp	External CPU temp5? 
-0x0e1		int16	cpu6_temp	External CPU temp6? 
-0x0e3		int16	cpu7_temp	External CPU temp7? 
-0x0e5		int16	cpu8_temp	External CPU temp8? 
+0x0d9		int16	cpu2_temp	External CPU temp2? (58)
+0x0db		int16	cpu3_temp	External CPU temp3? (59)
+0x0dd		int16	cpu4_temp	External CPU temp4? (60)
+0x0df		int16	cpu5_temp	External CPU temp5? (61)
+0x0e1		int16	cpu6_temp	External CPU temp6? (62)
+0x0e3		int16	cpu7_temp	External CPU temp7? (63)
+0x0e5		int16	cpu8_temp	External CPU temp8? (64)
 
 0x0fb		int16	flow1		Internal flow sensor 1
 0x0fd		int16	flow2		Internal flow sensor 2
@@ -174,17 +175,17 @@ offset		type	value		description
 0x1c5		int16	fan12 voltage	External (aquabus) fan 12 Voltage
 0x1c7		int16	fan12 current	External (aquabus) fan 12 VRM current
 
-0x1c9		int8	aquastream1 status	Aquastream 1 status
-0x1ca		int8	aquastream1 freqmode	Aquastream 1 frequency mode
-0x1cb		int16	aquastream1 frequency	Aquastream 1 frequency
-0x1cd		int16	aquastream1 voltage	Aquastream 1 voltage
-0x1cf		int16	aquastream1 current	Aquastream 1 current
+0x1c9		int8	aquastream_xt_1 status		Aquastream XT 1 status
+0x1ca		int8	aquastream_xt_1 freqmode	Aquastream XT 1 frequency mode
+0x1cb		int16	aquastream_xt_1 frequency	Aquastream XT 1 frequency
+0x1cd		int16	aquastream_xt_1 voltage		Aquastream XT 1 voltage
+0x1cf		int16	aquastream_xt_1 current		Aquastream XT 1 current
 
-0x1d1		int8	aquastream2 status	Aquastream 2 status
-0x1d2		int8	aquastream2 freqmode	Aquastream 2 frequency mode
-0x1d3		int16	aquastream2 frequency	Aquastream 2 frequency
-0x1d5		int16	aquastream2 voltage	Aquastream 2 voltage
-0x1d7		int16	aquastream2 current	Aquastream 2 current
+0x1d1		int8	aquastream_xt_2 status		Aquastream XT 2 status
+0x1d2		int8	aquastream_xt_2 freqmode	Aquastream XT 2 frequency mode
+0x1d3		int16	aquastream_xt_2 frequency	Aquastream XT 2 frequency
+0x1d5		int16	aquastream_xt_2 voltage		Aquastream XT 2 voltage
+0x1d7		int16	aquastream_xt_2 current		Aquastream XT 2 current
 
 
 
@@ -698,11 +699,11 @@ offset		type	value		description
 0x2f9		int16			External (aquabus) fan 12 Data source
 0x2fb		int16			External (aquabus) fan 12 Programmable fuse setting in mA
 
-0x2fd		int8	aquastream1 freqmode		Aquastream 1 frequency mode
-0x2fe		int16	aquastream1 frequency		Aquastream 1 frequency
+0x2fd		int8	aquastream_xt_1 freqmode	Aquastream XT 1 frequency mode
+0x2fe		int16	aquastream_xt_1 frequency	Aquastream XT 1 frequency
 
-0x300		int8	aquastream2 freqmode		Aquastream 2 frequency mode
-0x301		int16	aquastream2 frequency		Aquastream 2 frequency
+0x300		int8	aquastream_xt_2 freqmode	Aquastream XT 2 frequency mode
+0x301		int16	aquastream_xt_2 frequency	Aquastream XT 2 frequency
 
 0x30c		int16	power_output_1_min_power	Power ouput 1 minimum power 
 0x30e		int16	power_output_1_max_power	Power ouput 1 maximum power 
