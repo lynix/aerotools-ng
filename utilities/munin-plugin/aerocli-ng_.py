@@ -44,14 +44,17 @@ import os,subprocess,re,sys
 
 from subprocess import call
 
+pattern_lookup_name = "%s_NAME='(.*)'";
+
 pattern_temp_alarm = "TEMP_ALARM(\d+)_DATA_SOURCE='%s'"
 pattern_temp_alarm_warn = "TEMP_ALARM%s_LIMIT_FOR_WARNING=(\d{1,2}\.\d{2})"
 pattern_temp_alarm_crit = "TEMP_ALARM%s_LIMIT_FOR_ALARM=(\d{1,2}\.\d{2})"
+
 pattern_fan_rpmLine = "%s_RPM=(\d{1,4})";
 pattern_fan_loadLine = "%s_DUTY_CYCLE=(\d{1,3}\.\d{2})";
 
 regex_sensorLine = re.compile("^(((VIRT|SYS)_){0,1}TEMP(\d+){0,1}(_CPU\d){0,1})=(\d{1,2}\.\d{2})$");
-
+regex_detect_temp_unit = re.compile("SYS_UNIT_TEMP='(.*)'");
 regex_detectActiveFan = re.compile("^((FAN(\d+))_DATA_SRC)='(.*)'$");
 
 
@@ -65,7 +68,7 @@ if os.getenv("AEROCLI") is not None:
   aerocli = os.getenv("AEROCLI");
 else:
   aerocli = "/usr/local/bin/aerocli";
-
+  
 device = os.getenv("DEVICE");
 
 
@@ -89,9 +92,13 @@ class SensorConfig:
     self.sensorId = sensorId
     if os.getenv("%s_NAME"%sensorId) is not None:
       self.name = os.getenv("%s_NAME"%sensorId)
-    #TODO do a lookup for the name in the command-output
     else:
-      self.name = sensorId;
+      match = re.search(pattern_lookup_name%sensorId,output);
+      if(match is not None):
+        self.name = match.group(1);
+      else:
+        self.name = sensorId;
+      
     self.warnLevel = None;
     self.critLevel = None;
     if(internalName is not None):
@@ -102,25 +109,34 @@ class SensorConfig:
         self.warnLevel = match.group(1);
         match = re.search(pattern_temp_alarm_crit%alarmNumber,output);
         self.critLevel = match.group(1);
+
 class FanConfig:
-  def __init__(self, fanId):
+  def __init__(self, fanId, output):
     self.fanId = fanId
     if os.getenv("%s_NAME"%fanId) is not None:
       self.name = os.getenv("%s_NAME"%fanId)
-    #TODO do a lookup for the name in the command-output
     else:
-      self.name = fanId;
+      match = re.search(pattern_lookup_name%fanId,output);
+      if(match is not None):
+        self.name = match.group(1);
+      else:
+        self.name = fanId;
 
 
 
 def DecodeTempConfig():
+  output=AeroCli(True);
+  
   print "graph_title Aquaero Temperatures";
   print "graph_args --base 1000";
-  print "graph_vlabel °C";
+  
+  match = regex_detect_temp_unit.search(output);
+  if (match is not None):
+    print "graph_vlabel %s"%match.group(1);
   print "graph_scale yes";
   print "graph_category %s"%(category);
 
-  output=AeroCli(True);
+  
 
   for line in output.splitlines():
     match = regex_sensorLine.search(line);
@@ -158,13 +174,15 @@ def DecodeFanRpmConfig():
   print "graph_vlabel RPM";
   print "graph_scale no";
   print "graph_category %s"%(category);
-
-  for line in AeroCli(True).splitlines():
+  
+  output = AeroCli(True);
+  
+  for line in output.splitlines():
     match = regex_detectActiveFan.search(line);
     if(match is not None):
       if match.group(4) != "No data source":
         fanId = match.group(2);
-        config = FanConfig(fanId);
+        config = FanConfig(fanId, output);
         print "%s.label %s"%(config.fanId,config.name);
         print "%s.type GAUGE"%(config.fanId);
 
@@ -185,13 +203,15 @@ def DecodeFanLoadConfig():
   print "graph_vlabel Load in %";
   print "graph_scale no";
   print "graph_category %s"%(category);
-
-  for line in AeroCli(True).splitlines():
+  
+  output = AeroCli(True)
+  
+  for line in output.splitlines():
     match = regex_detectActiveFan.search(line);
     if(match is not None):
       if match.group(4) != "No data source":
         fanId = match.group(2);
-        config = FanConfig(fanId);
+        config = FanConfig(fanId, output);
         print "%s.label %s"%(config.fanId,config.name);
         print "%s.type GAUGE"%(config.fanId);
 
