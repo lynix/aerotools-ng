@@ -22,15 +22,18 @@
 
 /* libs */
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <sys/ioctl.h>
 #include <linux/hiddev.h>
 #include <dirent.h>
+
 
 /* usb communication related constants */
 #define AQ5_USB_VID				0x0c70
@@ -38,6 +41,10 @@
 
 /* device data and formatting constants */
 #include "aquaero5-offsets.h"
+
+/* Aquastream data status masks */
+#define AQ5_DATA_AQUASTREAM_XT_STATUS_AVAILABLE	0x01
+#define AQ5_DATA_AQUASTREAM_XT_STATUS_ALARM	0x02
 
 /* Fan settings control mode masks */
 #define AQ5_SETTINGS_CTRL_MODE_REG_MODE_OUTPUT	0x0000	
@@ -67,17 +74,18 @@ unsigned char aq5_buf_data[AQ5_DATA_LEN];
 unsigned char aq5_buf_settings[AQ5_SETTINGS_LEN];
 unsigned char aq5_buf_soft_sensors[AQ5_SOFT_SENSORS_LEN];
 unsigned char aq5_buf_time[AQ5_TIME_LEN];
+char **aq5_buf_device_names;
 int aq5_fd = -1;
 
 /* helper functions */
 
-inline uint16_t aq5_get_int16(unsigned char *buffer, short offset)
+static inline uint16_t aq5_get_int16(unsigned char *buffer, short offset)
 {
 	return (uint16_t)((buffer[offset] << 8) | buffer[offset + 1]);
 }
 
 
-inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
+static inline uint32_t aq5_get_int32(unsigned char *buffer, short offset)
 {
 	return (buffer[offset] << 24) | (buffer[offset + 1] << 16) |
 			(buffer[offset + 2] << 8) | buffer[offset + 3];
@@ -98,7 +106,7 @@ inline void aq5_set_int32(unsigned char *buffer, short offset, uint32_t val)
 }
 
 /* get the uptime for the given value in seconds */
-inline void aq5_get_uptime(uint32_t timeval, struct tm *uptime)
+static inline void aq5_get_uptime(uint32_t timeval, struct tm *uptime)
 {
 	uptime->tm_sec = timeval;
 	uptime->tm_min = uptime->tm_sec / 60;
@@ -113,7 +121,7 @@ inline void aq5_get_uptime(uint32_t timeval, struct tm *uptime)
 }
 
 
-inline void aq5_get_time(uint32_t timeval, struct tm *time)
+static inline void aq5_get_time(uint32_t timeval, struct tm *time)
 {
 	time->tm_min = 0;
 	time->tm_hour = 0;
@@ -125,8 +133,29 @@ inline void aq5_get_time(uint32_t timeval, struct tm *time)
 	mktime(time);
 }
 
+static inline int aq5_check_and_strip_name_report_watermarks(unsigned char *dirtybuffer, unsigned char *cleanbuffer)
+{
+	for (int i=0; i<48; i++) {
+		if (aq5_get_int16(dirtybuffer, name_report_watermarks[i].offset) != name_report_watermarks[i].value) {
+			/* printf("Oops watermark at offset %02X is %02X (index %d), but should be %02X!\n", name_report_watermarks[i].offset, aq5_get_int16(dirtybuffer, name_report_watermarks[i].offset), i, name_report_watermarks[i].value); */
+			return -1;
+		} else {
+			/* printf("i=%d\n",i); */
+		}
+	}
 
-char *aq5_strcat(char *str1, char *str2)
+	/* Initialize cleanbuffer */
+	memset(cleanbuffer, 0, 8 * 512 * sizeof(char));
+
+	for (int i=0; i<8; i++) {
+		memcpy(cleanbuffer + (512 * i), dirtybuffer + 9 + (i * 523), 512 * sizeof(char));
+	}
+
+	return 0;
+}
+
+
+static char *aq5_strcat(char *str1, char *str2)
 {
 	char *ret;
 
@@ -138,7 +167,7 @@ char *aq5_strcat(char *str1, char *str2)
 	return ret;
 }
 
-int aq5_open(char *device, char **err_msg)
+static int aq5_open(char *device, char **err_msg)
 {
 	struct hiddev_devinfo dinfo;
 
@@ -168,6 +197,7 @@ int aq5_open(char *device, char **err_msg)
 #ifdef DEBUG
 				printf("failed to open '%s', skipping\n", full_path);
 #endif
+				free(full_path);
 				continue;
 			}
 			ioctl(aq5_fd, HIDIOCGDEVINFO, &dinfo);
@@ -177,12 +207,14 @@ int aq5_open(char *device, char **err_msg)
 				printf("no Aquaero 5 found on '%s'\n", full_path);
 #endif
 				close(aq5_fd);
+				free(full_path);
 				continue;
 			} else {
 				/* we found the first Aquaero 5 device */
 #ifdef DEBUG
 				printf("found Aquaero 5 device on '%s'!\n", full_path);
 #endif
+				free(full_path);
 				break;
 			}
 		}
@@ -239,8 +271,83 @@ int aq5_open(char *device, char **err_msg)
 }
 
 
+/* Dumb read function for doing interrupt reads */
+static int aq5_interruptRead(int fd, int report_id, unsigned char *buffer, int len, int count, char **err_msg)
+{
+	struct hiddev_report_info rinfo;
+	struct hiddev_usage_ref_multi ref_multi_i;
+	int i = 0;
+	int j = 0;
+	int c = 0;
+	int wrong_reports = 0;
+	int page_position_offset = 3;
+	int report_pages[] = {
+		0xc0,
+		0xc2,
+		0xc4,
+		0xc6,
+		0xc8,
+		0xca,
+		0xcc,
+		0xce
+	}; 
+
+	/* Initialize the timeout data structure. */
+	struct timespec req={0};
+	req.tv_sec = 0;
+	req.tv_nsec = AQ5_NAME_REPORT_INTRAPAGE_DELAY * 1000000L; /* 0.007 seconds */
+
+	for (c=0; c<50; c++) {
+		/* Wait for a short while so we don't thrash and hang */
+		while((nanosleep(&req,&req) == -1) && (errno == EINTR))
+			continue;
+
+		rinfo.report_type = HID_REPORT_TYPE_INPUT;
+		rinfo.report_id = report_id;
+		rinfo.num_fields = 1;
+		/* request report */
+		if (ioctl(fd, HIDIOCGREPORT, &rinfo) != 0) {
+			*err_msg = "HIDIOCGREPORT failed!";
+			return -1;
+		}
+
+		ref_multi_i.uref.report_type = HID_REPORT_TYPE_INPUT;
+		ref_multi_i.uref.report_id = report_id;
+		ref_multi_i.uref.field_index = 0;
+		ref_multi_i.uref.usage_index = 0; /* byte index??? */
+		ref_multi_i.num_values = len;
+
+		if (ioctl(fd, HIDIOCGUSAGES, &ref_multi_i) != 0) {
+			*err_msg = "HIDIOCGUSAGES failed";
+			return -1;
+		} else {
+			if (ref_multi_i.values[page_position_offset] == report_pages[i]) {
+#ifdef DEBUG
+				printf("Value at %d on page %d matches (%02X). Loop iteration %d\n", page_position_offset, i, ref_multi_i.values[page_position_offset], c);
+#endif
+				for (j = 0; j<len; j++) {
+					buffer[(i*len)+j] = ref_multi_i.values[j];
+				}
+
+				if (i == (count - 1)) {
+#ifdef DEBUG
+					printf("Last array index was %d, number of wrong reports was %d\n", (i*len)+j, wrong_reports);
+#endif
+					return 0;
+				}
+				i++;
+			} else {
+				wrong_reports++;
+			}
+		}
+	}
+	/* If we have gone this far it means we didn't get what we are looking for */
+	*err_msg = "Failed to find enough matching report pages!";
+	return -1;
+}
+
 /* Get the specified HID report */
-int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data)
+static int aq5_get_report(int fd, int report_id, unsigned report_type, unsigned char *report_data)
 {
 	struct hiddev_report_info rinfo;
 	struct hiddev_field_info finfo;
@@ -532,6 +639,12 @@ int libaquaero5_getsettings(char *device, aq5_settings_t *settings_dest, char **
 		}
 		settings_dest->fan_data_source[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 16 + i * AQ5_SETTINGS_FAN_DIST);
 		settings_dest->fan_programmable_fuse[i] = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_FAN_OFFS + 18 + i * AQ5_SETTINGS_FAN_DIST);
+	}
+
+	/* Aquastream settings */
+	for (int i=0; i<AQ5_NUM_FAN; i++) {
+		settings_dest->aquastream_xt[i].freqmode = aq5_buf_settings[AQ5_SETTINGS_AQUASTREAM_XT_OFFS + i * AQ5_SETTINGS_AQUASTREAM_XT_DIST];
+		settings_dest->aquastream_xt[i].frequency = aq5_get_int16(aq5_buf_settings, AQ5_SETTINGS_AQUASTREAM_XT_OFFS + 1 + i * AQ5_SETTINGS_AQUASTREAM_XT_DIST);
 	}
 
 	/* Power and relay output settings  */
@@ -834,6 +947,25 @@ int libaquaero5_poll(char *device, aq5_data_t *data_dest, char **err_msg)
 		data_dest->level[i] = (double)aq5_get_int16(aq5_buf_data, AQ5_LEVEL_OFFS + i * AQ5_LEVEL_DIST) / 100.0;
 	}
 
+	/* Aquastreams */
+	for (int i=0; i<AQ5_NUM_AQUASTREAM_XT; i++) {
+		n = aq5_buf_data[AQ5_AQUASTREAM_XT_OFFS + i * AQ5_AQUASTREAM_XT_DIST];
+		if ((n & AQ5_DATA_AQUASTREAM_XT_STATUS_AVAILABLE) == AQ5_DATA_AQUASTREAM_XT_STATUS_AVAILABLE) {
+			data_dest->aquastream_xt[i].status.available = TRUE;
+		} else {
+			data_dest->aquastream_xt[i].status.available = FALSE;
+		}
+		if ((n & AQ5_DATA_AQUASTREAM_XT_STATUS_ALARM) == AQ5_DATA_AQUASTREAM_XT_STATUS_ALARM) {
+			data_dest->aquastream_xt[i].status.alarm = TRUE;
+		} else {
+			data_dest->aquastream_xt[i].status.alarm = FALSE;
+		}
+		data_dest->aquastream_xt[i].freqmode = aq5_buf_data[AQ5_AQUASTREAM_XT_OFFS + 1 + i * AQ5_AQUASTREAM_XT_DIST];
+		data_dest->aquastream_xt[i].frequency = aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_XT_OFFS + 2 + i * AQ5_AQUASTREAM_XT_DIST);
+		data_dest->aquastream_xt[i].voltage = (double)aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_XT_OFFS + 4 + i * AQ5_AQUASTREAM_XT_DIST) / 100.0;
+		data_dest->aquastream_xt[i].current = aq5_get_int16(aq5_buf_data, AQ5_AQUASTREAM_XT_OFFS + 6 + i * AQ5_AQUASTREAM_XT_DIST);
+	}
+
 	/* firmware compatibility check */
 	if ((data_dest->firmware_version < AQ5_FW_MIN) || (data_dest->firmware_version > AQ5_FW_MAX))
 		*err_msg = "unsupported firmware version";
@@ -962,8 +1094,11 @@ char *libaquaero5_get_string(int id, val_str_opt_t opt)
 			val_str = illumination_mode_strings;
 			break;
 		case KEY_TONE:
-		default:
 			val_str = key_tone_strings;
+			break;
+		case AQUASTREAM_XT_FREQMODE:
+		default:
+			val_str = aquastream_xt_freqmode_strings;
 	}
 	/* We have to search for it */
 	for (i=0; val_str[i].val != -1; i++) {
@@ -996,7 +1131,7 @@ int libaquaero5_set_soft_sensor(int sensor_id, double value)
 }
 
 /* Send the software sensor buffer to the Aq5 */
-int libaquaero5_commit_soft_sensors(char *device,char **err_msg)
+int libaquaero5_commit_soft_sensors(char *device, char **err_msg)
 {
 	/* Allow the device to be disconnected and open only if the fd is undefined */
 	if (aq5_open(device, err_msg) != 0) {
@@ -1035,4 +1170,89 @@ int libaquaero5_set_time(char *device, time_t time, char **err_msg)
 	}
 
 	return 0;
+}
+
+/* Send report 0x09, then read back report 0x0c 8x for all the device names */
+int libaquaero5_get_all_names(char *device, int max_attempts, char **err_msg)
+{
+	unsigned char *name_buffer = (unsigned char*)malloc(AQ5_REPORT_NAME_LEN * 8);
+	unsigned char *rname_buffer = (unsigned char*)malloc(AQ5_REPORT_NAME_LEN);
+	unsigned char *clean_name_buffer = (unsigned char*)malloc(AQ5_CLEAN_NAME_LEN);
+	aq5_buf_device_names = malloc(181 * sizeof(char*));
+
+	/* Allow the device to be disconnected and open only if the fd is undefined */
+	if (aq5_open(device, err_msg) != 0) {
+		return -1;
+	}
+
+	for (int i=0; i<max_attempts; i++) {
+#ifdef DEBUG
+		printf("Attempt %d\n", i);
+#endif
+		/* We need to ensure that the buffer is initialized with 0s for each attempt */
+		for (int j=0; j<AQ5_REPORT_NAME_LEN; j++) {
+			rname_buffer[j] = 0;
+		}
+
+		for (int j=0; j<(AQ5_REPORT_NAME_LEN * 8); j++) {
+			name_buffer[j] = 0;
+		}
+		/* Define the report 9 request */
+		aq5_set_int16(rname_buffer, 0, 0x0100);
+		aq5_set_int16(rname_buffer, 2, 0x09c0);
+		aq5_set_int16(rname_buffer, 4, 0x0000);
+		aq5_set_int16(rname_buffer, 6, 0x0010);
+		aq5_set_int16(rname_buffer, AQ5_REPORT_NAME_LEN - 2, 0xdd82);
+		if (aq5_send_report(aq5_fd, 0x9, HID_REPORT_TYPE_OUTPUT, rname_buffer) != 0) {
+			*err_msg = "sending name report request failed!";
+			return -1;
+		}
+
+		/* Now read out the 8x report 0xC */
+		if (aq5_interruptRead(aq5_fd, 0xc, name_buffer, AQ5_REPORT_NAME_LEN, 8, err_msg) != 0) {
+			return -1;
+		}
+		if (aq5_check_and_strip_name_report_watermarks(name_buffer, clean_name_buffer) == 0) {
+			for (int j=0; j<181; j++) {
+				aq5_buf_device_names[j] = malloc(23 * sizeof(char));
+				/* Copy the non 0 values to the array */
+				for (int a=0; a<23; a++) {
+					if (a == 22) {
+						strncpy(aq5_buf_device_names[j] + a, "\0", sizeof(char));
+						break;
+					}
+					else {
+						if (clean_name_buffer[(j * 22) + a] != 0) {
+							strncpy(aq5_buf_device_names[j] + a, (const char *)clean_name_buffer + (j * 22) + a, sizeof(char));
+						} else {
+							strncpy(aq5_buf_device_names[j] + a, "\0", sizeof(char));
+							break;
+						}
+					}
+				}
+			}
+			break;
+		} else {
+			if (i == (max_attempts - 1)) {
+				*err_msg = "Failed to read the names for the last time time, aborting";
+				return -1;
+			} else {
+#ifdef DEBUG
+				printf("Trying again...\n");
+#endif
+			}
+		}
+	}
+
+	return 0;
+}
+
+/* Return the human readable string for the given enum */
+char *libaquaero5_get_name(name_enum_t type, uint8_t index)
+{
+	if (index < name_positions[type].count) {
+		return aq5_buf_device_names[name_positions[type].address + index];
+	} else {
+		return "Unknown";
+	}
 }

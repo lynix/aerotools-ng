@@ -1,4 +1,5 @@
 # Copyright 2012 lynix <lynix47@gmail.com>
+# Copyright 2013 JinTu <JinTu@praecogito.com>, lynix <lynix47@gmail.com>
 #
 # This file is part of aerotools-ng.
 #
@@ -18,15 +19,30 @@
 CC = gcc
 CFLAGS = -Wall -ansi -std=gnu99 -pedantic -I /usr/include -O2
 
+# location of external library: jsonrpc-c
+ifndef JRPCC_PREFIX
+	#JRPCC_PREFIX = /usr
+	JRPCC_PREFIX = /usr/local
+endif
+
 # Uncomment the following line if using firmware 1027.
-# CFLAGS += -D'AQ5_FW_TARGET=1027'
+#CFLAGS += -D'AQ5_FW_TARGET=1027'
+
+# Uncomment this if you want to debug
+#CFLAGS += -D'DEBUG=TRUE'
 
 ifdef DEBUG  
 	CFLAGS += -g
 endif
 
+LIB_OBJS=obj/libaquaero5.o
 
-all : bin/aerocli
+
+.PHONY: all default clean
+
+default : bin/aerocli
+
+all : bin/aerocli bin/aq5rpcd lib/libaquaero5.a lib/libaquaero5.so
 
 bin/aerocli: obj/aerocli.o obj/libaquaero5.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
@@ -36,8 +52,25 @@ obj/aerocli.o: src/aerocli.c src/libaquaero5.h
 	
 obj/libaquaero5.o: src/libaquaero5.c src/libaquaero5.h \
 		src/aquaero5-user-strings.h src/aquaero5-offsets.h
-	$(CC) $(CFLAGS) -o $@ -c $<
-	
+	$(CC) $(CFLAGS) -fPIC -o $@ -c $<
+
+bin/aq5rpcd: obj/aq5rpcd.o obj/libaquaero5.o
+	$(CC) $(CFLAGS) -L $(JRPCC_PREFIX)/lib -ljsonrpcc -o $@ $^
+  
+obj/aq5rpcd.o: src/aq5rpcd.c $(JRPCC_PREFIX)/include/jsonrpc-c.h
+	$(CC) $(CFLAGS) -I $(JRPCC_PREFIX)/include -I /usr/include/libev/ -o $@ -c $<
+
+
+# Static library file
+lib/libaquaero5.a: $(LIB_OBJS)
+	ar cr $@ $^
+
+# Dynamic library file
+lib/libaquaero5.so: $(LIB_OBJS)
+	$(CC) -shared -o $@ $^
 
 clean :
-	rm -f bin/aerocli obj/*.o
+	rm -f bin/aerocli bin/aq5rpcd obj/*.o lib/*.a lib/*.so
+
+install :
+	install -C -groot -oroot bin/aerocli /usr/local/sbin
