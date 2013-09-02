@@ -536,4 +536,14 @@ val_str_t boolean_strings[] = {
 	{ -1,						"Unknown" }
 };
 
+/* Aquastream frequency mode strings */
+val_str_t aquastream_xt_freqmode_strings[] = {
+	{ (aquastream_xt_freqmode_t)AQASTREAM_XT_MODE_AUTO,		"Auto" },
+	{ (aquastream_xt_freqmode_t)AQASTREAM_XT_MODE_MANUAL,		"Manual" },
+	{ (aquastream_xt_freqmode_t)AQASTREAM_XT_MODE_DEARATION,	"Dearation" },
+	{ (aquastream_xt_freqmode_t)AQASTREAM_XT_MODE_OFFLINE,		"Offline" },
+	{ -1,								"Unknown" }
+};
+
+
 #endif /* AQUAERO5_USER_STRINGS_H_ */
