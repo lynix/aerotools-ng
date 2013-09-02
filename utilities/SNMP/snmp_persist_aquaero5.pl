@@ -46,6 +46,9 @@
 # Revision history
 ####
 #
+# v0.03 9/1/2013 JinTu <JinTu@praecogito.com>
+# 	Added support for device names.
+#
 # v0.02 4/13/2013 JinTu <JinTu@praecogito.com>
 # 	Adding support for virtual, software and other sensors.
 #
@@ -64,6 +67,8 @@
 #
 # Temperature sensors
 # .1.3.6.1.4.1.2021.255.65.67.1.1.2
+#   Device
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.2.0
 #   Name
 #   .1.3.6.1.4.1.2021.255.65.67.1.1.2.1
 #   Temp value
@@ -71,6 +76,8 @@
 #
 # Fans
 # .1.3.6.1.4.1.2021.255.65.67.1.1.3
+#   Device
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.3.0
 #   Name
 #   .1.3.6.1.4.1.2021.255.65.67.1.1.3.1
 #   VRM temp
@@ -86,6 +93,8 @@
 #
 # Flow sensors
 # .1.3.6.1.4.1.2021.255.65.67.1.1.4
+#   Device
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.4.0
 #   Name
 #   .1.3.6.1.4.1.2021.255.65.67.1.1.4.1
 #   Flow value
@@ -93,6 +102,8 @@
 #
 # CPU temperatures
 # .1.3.6.1.4.1.2021.255.65.67.1.1.5
+#   Device
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.5.0
 #   Name
 #   .1.3.6.1.4.1.2021.255.65.67.1.1.5.1
 #   CPU temp
@@ -100,13 +111,17 @@
 
 # Level sensors
 # .1.3.6.1.4.1.2021.255.65.67.1.1.6
+#   Device
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.6.0
 #   Name
-#   .1.3.6.1.4.1.2021.255.65.67.1.1.6
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.6.1
 #   Level value
-#   .1.3.6.1.4.1.2021.255.65.67.1.1.6
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.6.2
 #
 # Virtual sensors
 # .1.3.6.1.4.1.2021.255.65.67.1.1.7
+#   Device
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.7.0
 #   Name
 #   .1.3.6.1.4.1.2021.255.65.67.1.1.7.1
 #   Virtual sensor value
@@ -114,6 +129,8 @@
 #
 # Software sensors
 # .1.3.6.1.4.1.2021.255.65.67.1.1.8
+#   Device
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.8.0
 #   Name
 #   .1.3.6.1.4.1.2021.255.65.67.1.1.8.1
 #   Software sensor value
@@ -121,6 +138,8 @@
 #
 # Other sensors
 # .1.3.6.1.4.1.2021.255.65.67.1.1.9
+#   Device
+#   .1.3.6.1.4.1.2021.255.65.67.1.1.9.0
 #   Name
 #   .1.3.6.1.4.1.2021.255.65.67.1.1.9.1
 #   Other sensor value
@@ -240,14 +259,19 @@ sub create_mib {
 			print "Line->$line<-\n" if $debug;
 			$tempval = 0 if ($tempval < 0);
 			print "Temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
-			$tmpmib{"1.1.2.1.0.$tempnum"} = [ "string", "Temp$tempnum" ];
+			$tmpmib{"1.1.2.0.0.$tempnum"} = [ "string", "Temp$tempnum" ];
 			$tmpmib{"1.1.2.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
+		} elsif ($line =~ /^TEMP\d+_NAME=/) {
+			my ($tempnum,$tempname) = $line =~ /^TEMP(\d+)_NAME='(.*)'$/i;
+			print "Line->$line<-\n" if $debug;
+			print "Temp $tempnum name = \"$tempname\"\n" if $debug;
+			$tmpmib{"1.1.2.1.0.$tempnum"} = [ "string", "$tempname" ];
 		} elsif ($line =~ /^FAN\d+_VRM_TEMP=/) {
 			my ($fannum,$tempval) = $line =~ /^FAN(\d+)_VRM_TEMP=(-?\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			$tempval = 0 if ($tempval < 0);
 			print "Fan $fannum VRM temp = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
-			$tmpmib{"1.1.3.1.0.$fannum"} = [ "string", "Fan$fannum" ];
+			$tmpmib{"1.1.3.0.0.$fannum"} = [ "string", "Fan$fannum" ];
 			$tmpmib{"1.1.3.2.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
 		} elsif ($line =~ /^FAN\d+_CURRENT=/) {
 			my ($fannum,$currentval) = $line =~ /^FAN(\d+)_CURRENT=(\d+)/i;
@@ -269,38 +293,68 @@ sub create_mib {
 			print "Line->$line<-\n" if $debug;
 			print "Fan $fannum duty cycle = $voltageval (" . strip_decimal($voltageval) . ")\n" if $debug;
 			$tmpmib{"1.1.3.6.0.$fannum"} = [ "gauge", adjust_to_32bit(strip_decimal($voltageval)) ];
+		} elsif ($line =~ /^FAN\d+_NAME=/) {
+			my ($fannum,$fanname) = $line =~ /^FAN(\d+)_NAME='(.*)'$/i;
+			print "Line->$line<-\n" if $debug;
+			print "Fan $fannum name = \"$fanname\"\n" if $debug;
+			$tmpmib{"1.1.3.1.0.$fannum"} = [ "string", "$fanname" ];
 		} elsif ($line =~ /^FLOW\d+=/) {
 			my ($flownum,$flowval) = $line =~ /^FLOW(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Flow sensor $flownum = $flowval (" . strip_decimal($flowval) . ")\n" if $debug;
-			$tmpmib{"1.1.4.1.0.$flownum"} = [ "string", "Flow$flownum" ];
+			$tmpmib{"1.1.4.0.0.$flownum"} = [ "string", "Flow$flownum" ];
 			$tmpmib{"1.1.4.2.0.$flownum"} = [ "gauge", adjust_to_32bit(strip_decimal($flowval)) ];
+		} elsif ($line =~ /^FLOW\d+_NAME=/) {
+			my ($flownum,$flowname) = $line =~ /^FLOW(\d+)_NAME='(.*)'$/i;
+			print "Line->$line<-\n" if $debug;
+			print "Flow sensor $flownum name = \"$flowname\"\n" if $debug;
+			$tmpmib{"1.1.4.1.0.$flownum"} = [ "string", "$flowname" ];
 		} elsif ($line =~ /^SYS_TEMP_CPU\d+=/) {
 			my ($cpunum,$tempval) = $line =~ /^SYS_TEMP_CPU(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "CPU $cpunum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
-			$tmpmib{"1.1.5.1.0.$cpunum"} = [ "string", "CPUTemp$cpunum" ];
+			$tmpmib{"1.1.5.0.0.$cpunum"} = [ "string", "CPUTemp$cpunum" ];
 			$tmpmib{"1.1.5.2.0.$cpunum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
+		} elsif ($line =~ /^SYS_TEMP_CPU\d+_NAME=/) {
+			my ($cpunum,$cpuname) = $line =~ /^SYS_TEMP_CPU(\d+)_NAME='(.*)'$/i;
+			print "Line->$line<-\n" if $debug;
+			print "CPU $cpunum name = \"$cpuname\"\n" if $debug;
+			$tmpmib{"1.1.5.1.0.$cpunum"} = [ "string", "$cpuname" ];
 		} elsif ($line =~ /^LEVEL\d+=/) {
 			my ($levelnum,$levelval) = $line =~ /^LEVEL(\d+)=(\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			print "Level sensor $levelnum = $levelval (" . strip_decimal($levelval) . ")\n" if $debug;
-			$tmpmib{"1.1.6.1.0.$levelnum"} = [ "string", "Level$levelnum" ];
+			$tmpmib{"1.1.6.0.0.$levelnum"} = [ "string", "Level$levelnum" ];
 			$tmpmib{"1.1.6.2.0.$levelnum"} = [ "gauge", adjust_to_32bit(strip_decimal($levelval)) ];
+		} elsif ($line =~ /^LEVEL\d+_NAME=/) {
+			my ($levelnum,$levelname) = $line =~ /^LEVEL(\d+)_NAME='(.*)'$/i;
+			print "Line->$line<-\n" if $debug;
+			print "Level $levelnum name = \"$levelname\"\n" if $debug;
+			$tmpmib{"1.1.6.1.0.$levelnum"} = [ "string", "$levelname" ];
 		} elsif ($line =~ /^VIRT_TEMP\d+=/) {
 			my ($tempnum,$tempval) = $line =~ /^VIRT_TEMP(\d+)=(-?\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			$tempval = 0 if ($tempval < 0);
 			print "Virtual sensor temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
-			$tmpmib{"1.1.7.1.0.$tempnum"} = [ "string", "VirtualTemp$tempnum" ];
+			$tmpmib{"1.1.7.0.0.$tempnum"} = [ "string", "VirtualTemp$tempnum" ];
 			$tmpmib{"1.1.7.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
+		} elsif ($line =~ /^VIRT_TEMP\d+_NAME=/) {
+			my ($tempnum,$tempname) = $line =~ /^VIRT_TEMP(\d+)_NAME='(.*)'$/i;
+			print "Line->$line<-\n" if $debug;
+			print "Virtual sensor temp $tempnum name = \"$tempname\"\n" if $debug;
+			$tmpmib{"1.1.7.1.0.$tempnum"} = [ "string", "$tempname" ];
 		} elsif ($line =~ /^SOFT_TEMP\d+=/) {
 			my ($tempnum,$tempval) = $line =~ /^SOFT_TEMP(\d+)=(-?\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
 			$tempval = 0 if ($tempval < 0);
 			print "Software sensor temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
-			$tmpmib{"1.1.8.1.0.$tempnum"} = [ "string", "SoftwareTemp$tempnum" ];
+			$tmpmib{"1.1.8.0.0.$tempnum"} = [ "string", "SoftwareTemp$tempnum" ];
 			$tmpmib{"1.1.8.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
+		} elsif ($line =~ /^SOFT_TEMP\d+_NAME=/) {
+			my ($tempnum,$tempname) = $line =~ /^SOFT_TEMP(\d+)_NAME='(.*)'$/i;
+			print "Line->$line<-\n" if $debug;
+			print "Software sensor temp $tempnum name = \"$tempname\"\n" if $debug;
+			$tmpmib{"1.1.8.1.0.$tempnum"} = [ "string", "$tempname" ];
 		} elsif ($line =~ /^OTHER_TEMP\d+=/) {
 			my ($tempnum,$tempval) = $line =~ /^OTHER_TEMP(\d+)=(-?\d+\.\d+)/i;
 			print "Line->$line<-\n" if $debug;
@@ -308,6 +362,11 @@ sub create_mib {
 			print "Other sensor temp $tempnum = $tempval (" . strip_decimal($tempval) . ")\n" if $debug;
 			$tmpmib{"1.1.9.1.0.$tempnum"} = [ "string", "OtherTemp$tempnum" ];
 			$tmpmib{"1.1.9.2.0.$tempnum"} = [ "gauge", adjust_to_32bit(strip_decimal($tempval)) ];
+		} elsif ($line =~ /^OTHER_TEMP\d+_NAME=/) {
+			my ($tempnum,$tempname) = $line =~ /^OTHER_TEMP(\d+)_NAME='(.*)'$/i;
+			print "Line->$line<-\n" if $debug;
+			print "Other sensor temp $tempnum name = \"$tempname\"\n" if $debug;
+			$tmpmib{"1.1.9.1.0.$tempnum"} = [ "string", "$tempname" ];
 		}
 	}
 	$mib = \%tmpmib;
