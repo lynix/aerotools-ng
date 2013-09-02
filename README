@@ -19,16 +19,23 @@ REQUIREMENTS
 ----------------
 Unlike its predecessor, aerotools (which targets the Aquaero(R) 4.00),
 aerotools-ng currently uses the USB HIDDEV interface provided by the Linux
-kernel via the /dev/usb/hiddev? device nodes.
+kernel via the /dev/usb/hiddev? device nodes, so no dependencies for this.
 
-Therefore, there currently are no noteworthy dependencies.
+To be able to build and run the JSON RPC server, 'aq5rpcd', you need the JSON
+RPC server 'jsonrpc-c' by Henrique Gomes (hmng). It is available under MIT
+license on GitHub: https://github.com/hmng/jsonrpc-c.
 
 
 BUILDING
 ----------------
-To build all components of the project simply issue `make` in the project root.
-Compiled binaries will reside in the 'bin' subdirectory. If building for 
-firmware version 1027, you must uncomment the appropriate line in the Makefile. 
+To build the main components of the project simply issue `make` in the project
+root. Compiled binaries will reside in the 'bin' subdirectory. If building for 
+firmware version 1027, you must uncomment the appropriate line in the Makefile.
+
+To build optional components such as the JSON RPC server 'aq5rpcd', issue
+`make all` in the project root. Be sure to install 'jsonrpc-c' first, and point
+to its prefix using the JRPC_PREFIX environment variable if not installing to
+/usr.
 
 
 SETUP
@@ -54,7 +61,7 @@ always the first one. Just try as stated under USAGE - if you choose the wrong
 one there will simply be no output at all.
 
 
-USAGE
+USAGE: aerocli
 ----------------
 aerocli, as stated above, is the example implementation of a command-line tool
 that uses the provided query- and format conversion functions provided by 
@@ -79,6 +86,17 @@ again and any sensor value is set, all other unspecified sensors are set to
 default (disconnected).
 
 To synchronize the Aquaero5(R) time with your system time use `-T`.
+
+
+USAGE: aq5rpcd
+----------------
+aq5rpcd, as stated above, is a JSON RPC server that allows for easy data polling
+in third party applications, possibly over a network connection.
+
+To start it, simply call the binary (`./bin/aq5rpcd` from project root).
+
+To change the TCP port 'aq5rpcd' listens on (default: 9090), use the '-p'
+parameter.
  
 
 BUGS / CONTACT
