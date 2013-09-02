@@ -85,7 +85,7 @@ def AeroCli(listAll):
     
   p = subprocess.Popen(parameters, stdout=subprocess.PIPE);
   (output, err) = p.communicate();
-  return output;
+  return output.decode('iso-8859-1').encode('utf8');
 
 class SensorConfig:
   def __init__(self, sensorId, internalName, output):
