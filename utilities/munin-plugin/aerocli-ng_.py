@@ -41,9 +41,11 @@
 #%# family=manual
 #%# capabilities=autoconf
 import os,subprocess,re,sys
-
+import chardet
 from subprocess import call
-
+import sys
+import codecs
+sys.stdout = codecs.getwriter('iso-8859-1')(sys.stdout)
 pattern_lookup_name = "%s_NAME='(.*)'";
 
 pattern_temp_alarm = "TEMP_ALARM(\d+)_DATA_SOURCE='%s'"
@@ -54,7 +56,7 @@ pattern_fan_rpmLine = "%s_RPM=(\d{1,4})";
 pattern_fan_loadLine = "%s_DUTY_CYCLE=(\d{1,3}\.\d{2})";
 
 regex_sensorLine = re.compile("^(((VIRT|SYS)_){0,1}TEMP(\d+){0,1}(_CPU\d){0,1})=(\d{1,2}\.\d{2})$");
-regex_detect_temp_unit = re.compile("SYS_UNIT_TEMP='(.*)'");
+regex_detect_temp_unit = re.compile("SYS_UNIT_TEMP='.{0,1}(.{1,2})'");
 regex_detectActiveFan = re.compile("^((FAN(\d+))_DATA_SRC)='(.*)'$");
 
 
@@ -85,7 +87,7 @@ def AeroCli(listAll):
     
   p = subprocess.Popen(parameters, stdout=subprocess.PIPE);
   (output, err) = p.communicate();
-  return output.decode('iso-8859-1').encode('utf8');
+  return output.decode('iso-8859-1');
 
 class SensorConfig:
   def __init__(self, sensorId, internalName, output):
@@ -132,7 +134,7 @@ def DecodeTempConfig():
   
   match = regex_detect_temp_unit.search(output);
   if (match is not None):
-    print "graph_vlabel %s"%match.group(1);
+    print "graph_vlabel Temp in %s"%match.group(1)
   print "graph_scale yes";
   print "graph_category %s"%(category);
 
